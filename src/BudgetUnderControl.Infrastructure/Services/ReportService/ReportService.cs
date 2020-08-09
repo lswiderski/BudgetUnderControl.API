@@ -1,4 +1,5 @@
-﻿using BudgetUnderControl.Common.Contracts;
+﻿using BudgetUnderControl.ApiInfrastructure.Services;
+using BudgetUnderControl.Common.Contracts;
 using BudgetUnderControl.CommonInfrastructure;
 using BudgetUnderControl.Domain;
 using BudgetUnderControl.Domain.Repositiories;
@@ -18,17 +19,17 @@ namespace BudgetUnderControl.Infrastructure.Services
         private readonly ITransactionService transactionService;
         private readonly ICurrencyRepository currencyRepository;
         private readonly IAccountService accountService;
-        private readonly ICurrencyService currencyService;
+        private readonly IExpensesReportService expensesReportService;
 
         public ReportService(ITransactionService transactionService 
             ,ICurrencyRepository currencyRepository
             , IAccountService accountService
-            , ICurrencyService currencyService)
+            , IExpensesReportService expensesReportService)
         {
             this.transactionService = transactionService;
             this.currencyRepository = currencyRepository;
             this.accountService = accountService;
-            this.currencyService = currencyService;
+            this.expensesReportService = expensesReportService;
         }
 
         public async Task<ICollection<MovingSumItemDTO>> MovingSum(TransactionsFilter filter = null)
@@ -103,7 +104,15 @@ namespace BudgetUnderControl.Infrastructure.Services
             dashboard.ActualStatus = this.CalculateActualStatus(accounts);
             dashboard.Total = this.CalculateTotalSum(dashboard.ActualStatus, exchangeRates, userMainCurrency);
 
+            dashboard.ExpensesChart = await this.GetExpensesChartDataAsync(new TransactionsFilter { FromDate = now.AddDays(-3) });
+
             return dashboard;
+        }
+
+        public async Task<List<ExpensesColumnChartSeriesDto>> GetExpensesChartDataAsync(TransactionsFilter filter)
+        {
+            var report = await this.expensesReportService.GetExpensesChartDataAsync(filter);
+            return report;
         }
 
         private decimal CalculateTotalSum(List<CurrencyStatusDTO> actualStatus, List<ExchangeRate> exchangeRates, string userMainCurrency)

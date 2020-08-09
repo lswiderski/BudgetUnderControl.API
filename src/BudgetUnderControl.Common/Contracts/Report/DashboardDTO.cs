@@ -20,6 +20,8 @@ namespace BudgetUnderControl.Common.Contracts
 
         public List<SummaryDTO> Expenses { get; set; }
 
+        public List<ExpensesColumnChartSeriesDto> ExpensesChart { get; set; }
+
         public DashboardDTO()
         {
             this.Transactions = new List<TransactionListItemDTO>();
@@ -28,6 +30,7 @@ namespace BudgetUnderControl.Common.Contracts
             this.ThisMonthCategoryChart = new List<CategoryShareDTO>();
             this.LastMonthCategoryChart = new List<CategoryShareDTO>();
             this.ActualStatus = new List<CurrencyStatusDTO>();
+            this.ExpensesChart = new List<ExpensesColumnChartSeriesDto>();
         }
     }
 }

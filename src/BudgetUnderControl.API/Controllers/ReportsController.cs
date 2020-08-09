@@ -33,5 +33,12 @@ namespace BudgetUnderControl.API.Controllers
             var dashboard = await this.reportService.GetDashboard();
             return Ok(dashboard);
         }
+
+        [HttpGet("expenseschart")]
+        public async Task<IActionResult> ExpensesChart([FromQuery] TransactionsFilter filter)
+        {
+            var days = await this.reportService.GetExpensesChartDataAsync(filter);
+            return Ok(days.ToList());
+        }
     }
 }

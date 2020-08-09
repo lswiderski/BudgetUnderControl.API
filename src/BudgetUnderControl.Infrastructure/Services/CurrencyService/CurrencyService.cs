@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BudgetUnderControl.CommonInfrastructure;
+using static MoreLinq.Extensions.MinByExtension;
 
 namespace BudgetUnderControl.Infrastructure.Services
 {
@@ -135,6 +136,46 @@ namespace BudgetUnderControl.Infrastructure.Services
             var fromCurrency = await this.currencyRepository.GetCurrencyAsync(fromCurrencyCode);
             var toCurrency = await this.currencyRepository.GetCurrencyAsync(toCurrencyCode);
             return await this.TransformAmountAsync(amount, fromCurrency.Id, toCurrency.Id);
+        }
+
+        public async Task<decimal> GetValueInCurrencyAsync(IList<ExchangeRateDTO> rates, string currentCurrency, string targetCurrency, decimal value, DateTime date)
+        {
+            if (rates == null)
+            {
+                rates = (await this.currencyRepository.GetExchangeRatesAsync())
+                    .Select(x => new ExchangeRateDTO
+                    {
+                        ToCurrencyCode = x.ToCurrency.Code,
+                        FromCurrencyCode = x.FromCurrency.Code,
+                        Date = x.Date,
+                        Rate = x.Rate
+                    }).ToList();
+            }
+            if (currentCurrency == targetCurrency)
+            {
+                return value;
+            }
+
+            var exchangeRate = rates.Where(x => x.ToCurrencyCode == currentCurrency || x.FromCurrencyCode == currentCurrency)
+                                   .Where(x => x.ToCurrencyCode == targetCurrency || x.FromCurrencyCode == targetCurrency)
+                                   .MinBy(x => Math.Abs((x.Date - date).Ticks))
+                                    .FirstOrDefault();
+            decimal result = 0;
+
+            if (exchangeRate == null)
+            {
+                result = 0;
+            }
+            else if (exchangeRate.FromCurrencyCode == currentCurrency)
+            {
+                result = value * (decimal)exchangeRate.Rate;
+            }
+            else if (exchangeRate.ToCurrencyCode == currentCurrency)
+            {
+                result = value / ((decimal)exchangeRate.Rate != 0 ? (decimal)exchangeRate.Rate : 1);
+            }
+
+            return result;
         }
     }
 }

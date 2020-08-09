@@ -4,14 +4,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BudgetUnderControl.CommonInfrastructure
+namespace BudgetUnderControl.ApiInfrastructure.Services
 {
-    public interface IReportService
+    public interface IExpensesReportService
     {
-        Task<ICollection<MovingSumItemDTO>> MovingSum(TransactionsFilter filter = null);
-
         Task<List<ExpensesColumnChartSeriesDto>> GetExpensesChartDataAsync(TransactionsFilter filter);
-
-        Task<DashboardDTO> GetDashboard();
     }
 }

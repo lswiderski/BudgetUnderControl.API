@@ -26,11 +26,16 @@ namespace BudgetUnderControl.Infrastructure.Services
         private readonly IValidator<AddTransaction> addTransactionValidator;
         private readonly IValidator<EditTransaction> editTransactionValidator;
         private readonly IFileService fileService;
+        private readonly ICurrencyService currencyService;
+        private readonly ICurrencyRepository currencyRepository;
+
         public TransactionService(IContextFacade context,
             ITransactionRepository transactionRepository,
             IUserRepository userRepository,
             ITagRepository tagRepository,
             IFileService fileService,
+            ICurrencyService currencyService,
+            ICurrencyRepository currencyRepository,
             IValidator<AddTransaction> addTransactionValidator,
             IValidator<EditTransaction> editTransactionValidator) : base(context)
         {
@@ -40,12 +45,25 @@ namespace BudgetUnderControl.Infrastructure.Services
             this.addTransactionValidator = addTransactionValidator;
             this.editTransactionValidator = editTransactionValidator;
             this.fileService = fileService;
+            this.currencyService = currencyService;
+            this.currencyRepository = currencyRepository;
         }
 
         public async Task<ICollection<TransactionListItemDTO>> GetTransactionsAsync(TransactionsFilter filter = null)
         {
+            var exchangeRates = (await this.currencyRepository.GetExchangeRatesAsync())
+               .Select(x => new ExchangeRateDTO
+               {
+                   ToCurrencyCode = x.ToCurrency.Code,
+                   FromCurrencyCode = x.FromCurrency.Code,
+                   Date = x.Date,
+                   Rate = x.Rate
+               }).ToList();
+
+            var mainCurrency = "PLN";
+
             var transactions = await this.transactionRepository.GetTransactionsAsync(filter);
-            var dtos = transactions.Select(t => new TransactionListItemDTO
+            var dtos = transactions.Select(async t => new TransactionListItemDTO
             {
                 AccountId = t.AccountId,
                 Date = t.Date,
@@ -53,6 +71,7 @@ namespace BudgetUnderControl.Infrastructure.Services
                 Value = t.Amount,
                 Account = t.Account.Name,
                 ValueWithCurrency = t.Amount + t.Account.Currency.Symbol,
+                ValueInMainCurrency = await this.currencyService.GetValueInCurrencyAsync(exchangeRates, t.Account.Currency.Code, mainCurrency, t.Amount, t.Date),
                 Type = t.Type,
                 Name = t.Name,
                 CurrencyCode = t.Account.Currency.Code,
@@ -64,7 +83,8 @@ namespace BudgetUnderControl.Infrastructure.Services
                 Category = t.Category?.Name,
                 Tags = t.TagsToTransaction.Where(x => !x.Tag.IsDeleted).Select(x => new TagDTO {ExternalId =x.Tag.ExternalId, Id = x.Tag.Id, IsDeleted = x.Tag.IsDeleted, Name = x.Tag.Name}).ToList()
 
-            }).OrderByDescending(t => t.Date)
+            }).Select(t => t.Result)
+                .OrderByDescending(t => t.Date)
             .ToList();
 
             return dtos;
