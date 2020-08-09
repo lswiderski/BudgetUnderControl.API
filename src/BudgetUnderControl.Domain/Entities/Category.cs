@@ -16,6 +16,7 @@ namespace BudgetUnderControl.Domain
         [StringLength(100)]
         public string Name { get; set; }
         public bool IsDefault { get; set; }
+        public string Icon { get; set; }
 
         public int OwnerId { get; protected set; }
         public DateTime? ModifiedOn { get; protected set; }
@@ -34,7 +35,7 @@ namespace BudgetUnderControl.Domain
             }
         }
 
-        public static Category Create(string name, int ownerId, Guid? externalId)
+        public static Category Create(string name, int ownerId, Guid? externalId, string icon = null)
         {
             return new Category
             {
@@ -43,14 +44,16 @@ namespace BudgetUnderControl.Domain
                 ExternalId = externalId ?? Guid.NewGuid(),
                 ModifiedOn = DateTime.UtcNow,
                 IsDeleted = false,
-                IsDefault = false
+                IsDefault = false,
+                Icon = icon,
             };
         }
 
-        public void Edit(string name, int ownerId)
+        public void Edit(string name, int ownerId, string icon = null)
         {
             this.Name = name;
             this.OwnerId = ownerId;
+            this.Icon = icon;
             this.UpdateModify();
         }
 

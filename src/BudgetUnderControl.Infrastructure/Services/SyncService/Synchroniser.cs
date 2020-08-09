@@ -299,7 +299,7 @@ namespace BudgetUnderControl.Infrastructure.Services
                 {
                     if(categoryToUpdate.ModifiedOn < category.ModifiedOn)
                     {
-                        categoryToUpdate.Edit(category.Name, userId);
+                        categoryToUpdate.Edit(category.Name, userId, category.Icon);
                         categoryToUpdate.Delete(category.IsDeleted);
                         categoryToUpdate.SetModifiedOn(category.ModifiedOn);
                         await this.categoryRepository.UpdateAsync(categoryToUpdate);
@@ -309,7 +309,7 @@ namespace BudgetUnderControl.Infrastructure.Services
                 }
                 else
                 {
-                    var categoryToAdd = Category.Create(category.Name, userId, category.ExternalId);
+                    var categoryToAdd = Category.Create(category.Name, userId, category.ExternalId, category.Icon);
                     categoryToAdd.Delete(category.IsDeleted);
                     categoryToAdd.SetModifiedOn(category.ModifiedOn);
                     await this.categoryRepository.AddCategoryAsync(categoryToAdd);
@@ -337,7 +337,7 @@ namespace BudgetUnderControl.Infrastructure.Services
                 {
                     if(accountToUpdate.ModifiedOn < account.ModifiedOn)
                     {
-                        accountToUpdate.Edit(account.Name, account.CurrencyId, accountGroupId, account.IsIncludedToTotal, account.Comment, account.Order, account.Type, parentAccountId, !account.IsDeleted, userId);
+                        accountToUpdate.Edit(account.Name, account.CurrencyId, accountGroupId, account.IsIncludedToTotal, account.Comment, account.Order, account.Type, parentAccountId, !account.IsDeleted, userId, account.Icon);
                         accountToUpdate.Delete(account.IsDeleted);
                         accountToUpdate.SetModifiedOn(account.ModifiedOn);
                         await this.accountRepository.UpdateAsync(accountToUpdate);
@@ -345,7 +345,7 @@ namespace BudgetUnderControl.Infrastructure.Services
                 }
                 else
                 {
-                    var accountToAdd = Account.Create(account.Name, account.CurrencyId, accountGroupId, account.IsIncludedToTotal, account.Comment, account.Order, account.Type, parentAccountId, !account.IsDeleted, userId, account.ExternalId);
+                    var accountToAdd = Account.Create(account.Name, account.CurrencyId, accountGroupId, account.IsIncludedToTotal, account.Comment, account.Order, account.Type, parentAccountId, !account.IsDeleted, userId, account.ExternalId, account.Icon);
                     accountToAdd.Delete(account.IsDeleted);
                     accountToAdd.SetModifiedOn(account.ModifiedOn);
                     await this.accountRepository.AddAccountAsync(accountToAdd);

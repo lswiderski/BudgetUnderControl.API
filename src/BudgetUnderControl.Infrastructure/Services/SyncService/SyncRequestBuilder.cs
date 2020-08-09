@@ -184,6 +184,7 @@ namespace BudgetUnderControl.Infrastructure.Services
                     ParentAccountId = x.ParentAccountId,
                     Type = x.Type,
                     ModifiedOn = x.ModifiedOn,
+                    Icon = x.Icon,
                     IsDeleted = x.IsDeleted
                 }).ToList();
 
@@ -258,6 +259,7 @@ namespace BudgetUnderControl.Infrastructure.Services
                     Name = x.Name,
                     ModifiedOn = x.ModifiedOn,
                     IsDeleted = x.IsDeleted,
+                    Icon = x.Icon,
                     OwnerId = x.OwnerId,
                 }).ToList();
 

@@ -23,6 +23,8 @@ namespace BudgetUnderControl.Domain
         public int Order { get; protected set; }
         public AccountType Type { get; protected set; }
         public int? ParentAccountId { get; protected set; }
+        public string Icon { get; set; }
+
         public bool IsActive { get; protected set; }
         public int OwnerId { get; protected set; }
         public DateTime? ModifiedOn { get; protected set; }
@@ -43,7 +45,7 @@ namespace BudgetUnderControl.Domain
 
         public static Account Create(string name, int currencyId, int accountGroupId,
             bool isIncludedToTotal, string comment, int order, AccountType type, 
-            int? parentAccountId, bool isActive, int ownerId, Guid? externalId = null)
+            int? parentAccountId, bool isActive, int ownerId, Guid? externalId = null, string icon = null)
         {
             return new Account()
             {
@@ -60,12 +62,13 @@ namespace BudgetUnderControl.Domain
                 OwnerId = ownerId,
                 ModifiedOn = DateTime.UtcNow,
                 IsDeleted = !isActive,
+                Icon = icon,
             };
         }
 
         public void Edit(string name, int currencyId, int accountGroupId,
             bool isIncludedToTotal, string comment, int order, AccountType type,
-            int? parentAccountId, bool isActive, int? ownerId = null )
+            int? parentAccountId, bool isActive, int? ownerId = null, string icon = null )
         {
             this.Name = name;
             this.CurrencyId = currencyId;
@@ -77,6 +80,7 @@ namespace BudgetUnderControl.Domain
             this.Type = type;
             this.ParentAccountId = parentAccountId;
             this.IsDeleted = !isActive;
+            this.Icon = icon;
             if(ownerId != null)
             {
                 this.OwnerId = ownerId.Value;
