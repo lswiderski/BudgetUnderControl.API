@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BudgetUnderControl.CommonInfrastructure;
 using Microsoft.AspNetCore.Http;
+using BudgetUnderControl.Common.Enums;
 
 namespace BudgetUnderControl.API.Controllers
 {
@@ -27,6 +28,7 @@ namespace BudgetUnderControl.API.Controllers
 
         // GET api/transactions
         [HttpGet]
+        [Authorize(Policy = UsersPolicy.AllUsers)]
         public async Task<ActionResult<IEnumerable<TransactionListItemDTO>>> Get([FromQuery] TransactionsFilter filter)
         {
             var transactions = await this.transactionService.GetTransactionsAsync(filter);
@@ -35,6 +37,7 @@ namespace BudgetUnderControl.API.Controllers
 
         // GET api/transactions/552cbd7c-e9d9-46c9-ab7e-2b10ae38ab4a
         [HttpGet("{id}")]
+        [Authorize(Policy = UsersPolicy.AllUsers)]
         public async Task<ActionResult<EditTransactionDTO>> GetById(Guid id)
         {
             var transaction = await this.transactionService.GetTransactionAsync(id);

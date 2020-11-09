@@ -10,7 +10,13 @@ namespace BudgetUnderControl.Common.Enums
         [StringValue("User")]
         User = 1,
 
+        [StringValue("LimitedUser")]
+        LimitedUser = 2,
+
+        [StringValue("PremiumUser")]
+        PremiumUser = 3,
+
         [StringValue("Admin")]
-        Admin = 2
+        Admin = 99
     }
 }

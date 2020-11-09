@@ -29,10 +29,24 @@ namespace BudgetUnderControl.Infrastructure.Repositories
             return user;
         }
 
+        public async Task<User> GetByEmailAsync(string email)
+        {
+            var user = await this.Context.Users.FirstOrDefaultAsync(u => u.Email.Equals(email));
+
+            return user;
+        }
+
         public async Task UpdateUserAsync(User user)
         {
             user.UpdateModify();
             this.Context.Users.Update(user);
+            await this.Context.SaveChangesAsync();
+        }
+
+        public async Task AddUserAsync(User user)
+        {
+            user.UpdateModify();
+            await this.Context.Users.AddAsync(user);
             await this.Context.SaveChangesAsync();
         }
     }

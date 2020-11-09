@@ -1,4 +1,4 @@
-﻿using BudgetUnderControl.CommonInfrastructure;
+﻿using BudgetUnderControl.CommonInfrastructure.Commands;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,5 +11,11 @@ namespace BudgetUnderControl.CommonInfrastructure
         IUserIdentityContext CreateUserIdentityContext();
 
         long GetIdOf1stUser();
+
+        Task ValidateLoginAsync(MobileLoginCommand command);
+
+        Task RegisterUserAsync(RegisterUserCommand command);
+
+        Task<bool> ActivateUserAsync(ActivateUserCommand command);
     }
 }

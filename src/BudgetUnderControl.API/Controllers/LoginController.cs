@@ -57,5 +57,36 @@ namespace BudgetUnderControl.API.Controllers
 
             return Ok(token);
         }
+
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromBody] RegisterUserCommand command)
+        {
+
+            command.TokenId = Guid.NewGuid();
+            await DispatchAsync(command);
+            var token = cache.Get<string>(command.TokenId);
+
+            if (string.IsNullOrEmpty(token) || string.IsNullOrWhiteSpace(token))
+            {
+                return Unauthorized();
+            }
+
+            return Ok(token);
+        }
+
+        [HttpPost("Activate")]
+        public async Task<IActionResult> Activate([FromBody] ActivateUserCommand command)
+        {
+            var result = await DispatchWithResultAsync(command);
+            if (result.IsSuccess)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+
+        }
     }
 }

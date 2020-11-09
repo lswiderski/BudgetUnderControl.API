@@ -36,5 +36,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\ReportService\ExpensesReports\Contracts\" />
+    <Folder Include="Services\UserService\" />
   </ItemGroup>
 </Project>

@@ -10,6 +10,10 @@ namespace BudgetUnderControl.CommonInfrastructure.Commands
     {
         Task DispatchAsync<T>(T command) where T : ICommand;
         Task DispatchAsync<T>(T command, IComponentContext context) where T : ICommand;
+
+        Task<ICommandResult> DispatchWithResultAsync<T>(T command) where T : ICommand;
+        Task<ICommandResult> DispatchWithResultAsync<T>(T command, IComponentContext context) where T : ICommand;
+
     }
 
 }

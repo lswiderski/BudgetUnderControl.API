@@ -4,8 +4,8 @@ namespace BudgetUnderControl.CommonInfrastructure.Commands.Login
 {
     public class MobileLoginHandler : ICommandHandler<MobileLoginCommand>
     {
-        private readonly ILoginService loginService;
-        public MobileLoginHandler(ILoginService loginService)
+        private readonly IUserService loginService;
+        public MobileLoginHandler(IUserService loginService)
         {
             this.loginService = loginService;
         }

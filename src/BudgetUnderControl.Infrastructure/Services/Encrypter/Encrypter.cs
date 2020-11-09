@@ -11,14 +11,8 @@ namespace BudgetUnderControl.Infrastructure.Services
         private static readonly int DeriveBytesIterationsCount = 10000;
         private static readonly int SaltSize = 20;
 
-        public string GetSalt(string value)
+        public string GetSalt()
         {
-            if (string.IsNullOrEmpty(value))
-            {
-                throw new ArgumentException("Can not generate salt from an empty value.", nameof(value));
-            }
-
-            var random = new Random();
             var saltBytes = new byte[SaltSize];
             var rng = RandomNumberGenerator.Create();
             rng.GetBytes(saltBytes);

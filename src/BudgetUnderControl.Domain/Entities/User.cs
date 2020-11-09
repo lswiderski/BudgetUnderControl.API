@@ -13,6 +13,8 @@ namespace BudgetUnderControl.Domain
         public int Id { get; protected set; }
         [StringLength(50)]
         public string Username { get; protected set; }
+        public string FirstName { get; protected set; }
+        public string LastName { get; set; }
         public string Role { get; protected set; }
         [StringLength(150)]
         public string Email { get; protected set; }
@@ -22,10 +24,42 @@ namespace BudgetUnderControl.Domain
         public DateTime? ModifiedOn { get; protected set; }
         public Guid ExternalId { get; protected set; }
         public bool IsDeleted { get; protected set; }
+        public bool IsActivated { get; set; }
+        public DateTime? ActivatedOn { get; protected set; }
+        [StringLength(50)]
+        public string ActivationCode { get; set; }
 
         public List<Account> Accounts { get; protected set; }
         public List<AccountGroup> AccountGroups { get; protected set; }
         public List<Transaction> Transactions { get; protected set; }
+
+
+        protected User()
+        {
+
+        }
+
+        public static User Create(string login, string firstName, string lastName, string role, string email, string password, string salt,
+            bool isActive = true, Guid? externalId = null)
+        {
+            return new User()
+            {
+                Username = login,
+                Role = role,
+                Email = email.ToLower(),
+                Password = password,
+                Salt = salt,
+                ExternalId = externalId ?? Guid.NewGuid(),
+                ModifiedOn = DateTime.UtcNow,
+                CreatedAt = DateTime.UtcNow,
+                IsDeleted = !isActive,
+                IsActivated = false,
+                FirstName = firstName,
+                LastName = lastName,
+                ActivationCode = Guid.NewGuid().ToString()
+            };
+        }
+
 
         public void Delete(bool delete = true)
         {
@@ -42,6 +76,19 @@ namespace BudgetUnderControl.Domain
         {
             this.ExternalId = newId;
             this.UpdateModify();
+        }
+
+        public bool Active(string code)
+        {
+            if(code == this.ActivationCode)
+            {
+                this.IsActivated = true;
+                this.ActivatedOn = DateTime.UtcNow;
+                this.UpdateModify();
+                return true;
+            }
+
+            return false;
         }
     }
 }

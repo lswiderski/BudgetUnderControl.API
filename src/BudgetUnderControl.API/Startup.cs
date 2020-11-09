@@ -14,7 +14,6 @@ using BudgetUnderControl.Domain.Repositiories;
 using BudgetUnderControl.Infrastructure.IoC;
 using BudgetUnderControl.Infrastructure.Repositories;
 using BudgetUnderControl.Infrastructure.Services;
-using BudgetUnderControl.Infrastructure.Services.UserService;
 using BudgetUnderControl.Infrastructure;
 using Microsoft.AspNetCore.Cors;
 using CommonServiceLocator;
@@ -37,6 +36,7 @@ using BudgetUnderControl.API.Extensions;
 using System.Text;
 using BudgetUnderControl.CommonInfrastructure.Settings;
 using Microsoft.Extensions.Hosting;
+using BudgetUnderControl.Common.Extensions;
 
 namespace BudgetUnderControl.API
 {
@@ -96,6 +96,23 @@ namespace BudgetUnderControl.API
                };
            });
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(UsersPolicy.AllUsers, policy =>
+                {
+                    policy.AddAuthenticationSchemes("Bearer");
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireRole(UserRole.User.GetStringValue(), UserRole.LimitedUser.GetStringValue(), UserRole.PremiumUser.GetStringValue(), UserRole.Admin.GetStringValue());
+                });
+
+                options.AddPolicy(UsersPolicy.Admins, policy =>
+                {
+                    policy.AddAuthenticationSchemes("Bearer");
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireRole(UserRole.Admin.GetStringValue());
+                });
+            });
+
             // Initialize Autofac builder
             var builder = new ContainerBuilder();          
 
@@ -128,7 +145,6 @@ namespace BudgetUnderControl.API
             app.UseRouting();
 
             app.UseCustomExceptionHandler();
-            app.UseAuthentication();
             app.UseCors(options =>
                     options
                         .AllowAnyMethod()

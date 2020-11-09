@@ -20,5 +20,10 @@ namespace BudgetUnderControl.API.Controllers
         {
             await CommandDispatcher.DispatchAsync(command);
         }
+
+        protected async Task<ICommandResult> DispatchWithResultAsync<T>(T command) where T : ICommand
+        {
+            return await CommandDispatcher.DispatchWithResultAsync(command);
+        }
     }
 }

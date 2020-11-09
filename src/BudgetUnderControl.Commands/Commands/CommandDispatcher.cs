@@ -31,5 +31,24 @@ namespace BudgetUnderControl.CommonInfrastructure.Commands
             var handler = _context.Resolve<ICommandHandler<T>>();
             await handler.HandleAsync(command);
         }
+
+        public async Task<ICommandResult> DispatchWithResultAsync<T>(T command) where T : ICommand
+        {
+             return await this.DispatchWithResultAsync(command, context);
+        }
+
+        public async Task<ICommandResult> DispatchWithResultAsync<T>(T command, IComponentContext _context) where T : ICommand
+        {
+            if (command == null)
+            {
+                throw new ArgumentNullException(nameof(command),
+                    $"Command: '{typeof(T).Name}' cannot be null.");
+            }
+
+            var handler = _context.Resolve<ICommandWithResultHandler<T>>();
+            var result = await handler.HandleAsync(command);
+
+            return result;
+        }
     }
 }

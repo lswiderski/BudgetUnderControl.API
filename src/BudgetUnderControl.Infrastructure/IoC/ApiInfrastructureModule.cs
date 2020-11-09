@@ -3,7 +3,6 @@ using BudgetUnderControl.Domain.Repositiories;
 using BudgetUnderControl.CommonInfrastructure.Commands;
 using BudgetUnderControl.Infrastructure.Repositories;
 using BudgetUnderControl.Infrastructure.Services;
-using BudgetUnderControl.Infrastructure.Services.UserService;
 using BudgetUnderControl.Infrastructure;
 using FluentValidation;
 using System;
@@ -31,6 +30,10 @@ namespace BudgetUnderControl.Infrastructure.IoC
 
             builder.RegisterAssemblyTypes(commonInfrastructureAssembly)
                     .AsClosedTypesOf(typeof(ICommandHandler<>))
+                    .InstancePerLifetimeScope();
+
+            builder.RegisterAssemblyTypes(commonInfrastructureAssembly)
+                    .AsClosedTypesOf(typeof(ICommandWithResultHandler<>))
                     .InstancePerLifetimeScope();
 
             builder.RegisterType<CommandDispatcher>()
@@ -63,7 +66,7 @@ namespace BudgetUnderControl.Infrastructure.IoC
             builder.RegisterType<SynchronizationRepository>().As<ISynchronizationRepository>().InstancePerLifetimeScope();
             builder.RegisterType<Synchroniser>().As<ISynchroniser>().InstancePerLifetimeScope();
             builder.RegisterType<SyncRequestBuilder>().As<ISyncRequestBuilder>().InstancePerLifetimeScope();
-            builder.RegisterType<LoginService>().As<ILoginService>().InstancePerLifetimeScope();
+            builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();
             builder.RegisterType<Encrypter>().As<IEncrypter>().InstancePerLifetimeScope();
             builder.RegisterType<JwtHandlerService>().As<IJwtHandlerService>().InstancePerLifetimeScope();
             builder.RegisterType<FileService>().As<IFileService>().InstancePerLifetimeScope();

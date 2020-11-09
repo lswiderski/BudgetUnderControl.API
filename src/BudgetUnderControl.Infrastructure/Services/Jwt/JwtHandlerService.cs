@@ -1,6 +1,7 @@
 ﻿using BudgetUnderControl.Common.Extensions;
 using BudgetUnderControl.CommonInfrastructure.Commands;
 using BudgetUnderControl.CommonInfrastructure.Settings;
+using BudgetUnderControl.Domain;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace BudgetUnderControl.Infrastructure
             this.settings = settings;
         }
 
-        public string CreateToken(Guid userId)
+        public string CreateToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(settings.SecretKey);
@@ -28,9 +29,11 @@ namespace BudgetUnderControl.Infrastructure
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(JwtRegisteredClaimNames.UniqueName, userId.ToString()),
+                    new Claim(JwtRegisteredClaimNames.UniqueName, user.ExternalId.ToString()),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim(JwtRegisteredClaimNames.Iat, now.ToTimestamp().ToString(), ClaimValueTypes.Integer64)
+                    new Claim(JwtRegisteredClaimNames.Iat, now.ToTimestamp().ToString(), ClaimValueTypes.Integer64),
+                    new Claim(ClaimTypes.Role, user.Role),
+                    new Claim(ClaimTypes.Name, user.Username),
                 }),
                 Expires = DateTime.UtcNow.AddDays(settings.JWTExpiresDays),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
