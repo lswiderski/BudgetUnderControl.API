@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Text;
 using BudgetUnderControl.CommonInfrastructure;
 using BudgetUnderControl.ApiInfrastructure.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace BudgetUnderControl.Infrastructure.IoC
 {
@@ -79,7 +80,8 @@ namespace BudgetUnderControl.Infrastructure.IoC
                 return () =>
                 {
                     var service = context.Resolve<IUserService>();
-                    var identity = service.CreateUserIdentityContext();
+                    var httpAccessor = context.Resolve<IHttpContextAccessor>();
+                    var identity = service.CreateUserIdentityContext(httpAccessor.HttpContext.User.Identity.Name);
                     return identity;
                 };
             });

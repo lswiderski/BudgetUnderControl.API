@@ -74,6 +74,7 @@ namespace BudgetUnderControl.API
             services.AddMemoryCache();
             services.AddCors();
             services.AddControllers();
+            services.AddHttpContextAccessor();
 
             var settings = Configuration.GetSettings<GeneralSettings>();
 

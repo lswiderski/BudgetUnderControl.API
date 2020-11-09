@@ -15,16 +15,16 @@ namespace BudgetUnderControl.Infrastructure.Repositories
         {
         }
 
-        public async Task<User> GetFirstUserAsync()
+        public async Task<User> GetAsync(string username)
         {
-            var user = await this.Context.Users.FirstOrDefaultAsync();
+            var user = await this.Context.Users.FirstOrDefaultAsync(u => u.Username.Equals(username));
 
             return user;
         }
 
-        public async Task<User> GetAsync(string username)
+        public async Task<User> GetAsync(Guid id)
         {
-            var user = await this.Context.Users.FirstOrDefaultAsync(u => u.Username.Equals(username));
+            var user = await this.Context.Users.FirstOrDefaultAsync(u => u.ExternalId.Equals(id));
 
             return user;
         }

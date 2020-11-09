@@ -80,7 +80,7 @@ namespace BudgetUnderControl.Infrastructure.Services
 
         private async Task UpdateLastSyncDateAsync(SyncRequest syncRequest)
         {
-            var userId = (await this.userRepository.GetFirstUserAsync()).Id;
+            var userId = userIdentityContext.UserId;
             var syncObject = await this.synchronizationRepository.GetSynchronizationAsync(syncRequest.Component, syncRequest.ComponentId, userId);// syncRequest.UserId)
 
             if (syncObject != null)
@@ -256,7 +256,7 @@ namespace BudgetUnderControl.Infrastructure.Services
                 return;
             }
 
-            var userId = (await this.userRepository.GetFirstUserAsync()).Id;
+            var userId = userIdentityContext.UserId;
             foreach (var tag in tags)
             {
                
@@ -289,7 +289,7 @@ namespace BudgetUnderControl.Infrastructure.Services
                 return;
             }
 
-            var userId = (await this.userRepository.GetFirstUserAsync()).Id;
+            var userId = userIdentityContext.UserId;
 
             foreach (var category in categories)
             {
@@ -362,7 +362,7 @@ namespace BudgetUnderControl.Infrastructure.Services
 
             foreach (var accountGroup in accountGroups)
             {
-                var userId = (await this.userRepository.GetFirstUserAsync()).Id;
+                var userId = userIdentityContext.UserId;
                 var accountGroupToUpdate = await this.accountGroupRepository.GetAccountGroupAsync(accountGroup.ExternalId);
                 if (accountGroupToUpdate != null )
                 {
@@ -393,7 +393,7 @@ namespace BudgetUnderControl.Infrastructure.Services
 
             var localRates = (await this.currencyRepository.GetExchangeRatesAsync());
 
-            var userId = (await this.userRepository.GetFirstUserAsync()).Id;
+            var userId = userIdentityContext.UserId;
             var currenciesDict = (await this.currencyRepository.GetCurriencesAsync())
                              .ToDictionary(x => x.Code, x => x.Id);
 
@@ -425,7 +425,7 @@ namespace BudgetUnderControl.Infrastructure.Services
                 return;
             }
 
-            var userId = (await this.userRepository.GetFirstUserAsync()).Id;
+            var userId = userIdentityContext.UserId;
             foreach (var file in files)
             {
 

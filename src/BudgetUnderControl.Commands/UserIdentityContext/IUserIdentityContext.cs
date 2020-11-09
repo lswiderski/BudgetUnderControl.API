@@ -14,5 +14,13 @@ namespace BudgetUnderControl.CommonInfrastructure
         UserRole Role { get; }
 
         string RoleName { get; }
+
+        public bool IsActivated { get; }
+
+        public string FirstName { get; }
+
+        public string LastName { get;  }
+
+        public string Email { get;  }
     }
 }

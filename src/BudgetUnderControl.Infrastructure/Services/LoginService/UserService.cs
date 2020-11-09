@@ -89,29 +89,30 @@ namespace BudgetUnderControl.Infrastructure.Services
             
         }
 
-        public IUserIdentityContext CreateUserIdentityContext()
+        public IUserIdentityContext CreateUserIdentityContext(string userId)
         {
-            Task<Domain.User> task = Task.Run<Domain.User>(async () => await this.userRepository.GetFirstUserAsync());
+            var userExternalId = Guid.Parse(userId);
+
+            if(userExternalId == Guid.Empty)
+            {
+                throw new ArgumentException();
+            }
+
+
+            Task<User> task = Task.Run<User>(async () => await this.userRepository.GetAsync(userExternalId));
             var user = task.Result;
 
             var context = new UserIdentityContext
             {
                 UserId = user.Id,
                 ExternalId = user.ExternalId,
-                RoleName = user.Role
+                RoleName = user.Role,
+                IsActivated = user.IsActivated,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email
             };
             return context;
-        }
-
-        public long GetIdOf1stUser()
-        {
-            var user = this.CreateUserIdentityContext();
-            if (user != null)
-            {
-                return user.UserId;
-            }
-
-            return 0;
         }
 
     }

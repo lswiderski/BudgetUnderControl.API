@@ -8,9 +8,7 @@ namespace BudgetUnderControl.CommonInfrastructure
 {
     public interface IUserService
     {
-        IUserIdentityContext CreateUserIdentityContext();
-
-        long GetIdOf1stUser();
+        IUserIdentityContext CreateUserIdentityContext(string userId);
 
         Task ValidateLoginAsync(MobileLoginCommand command);
 

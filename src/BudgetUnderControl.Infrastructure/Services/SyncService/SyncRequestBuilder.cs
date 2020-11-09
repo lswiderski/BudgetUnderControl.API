@@ -216,7 +216,7 @@ namespace BudgetUnderControl.Infrastructure.Services
                     OwnerId = x.OwnerId,
                 }).ToList();
 
-            var userExternalId = (await this.userRepository.GetFirstUserAsync()).ExternalId;
+            var userExternalId = userIdentityContext.ExternalId;
 
             foreach (var account in accountgroups)
             {
@@ -229,7 +229,7 @@ namespace BudgetUnderControl.Infrastructure.Services
         private async Task<IEnumerable<UserSyncDTO>> GetUsersToSyncAsync(DateTime changedSince)
         {
             //temporary I do not support multi users
-            var user = await this.userRepository.GetFirstUserAsync();
+            var user = await this.userRepository.GetAsync(userIdentityContext.ExternalId);
             var result = new List<UserSyncDTO>();
 
             result.Add(new UserSyncDTO
@@ -263,7 +263,7 @@ namespace BudgetUnderControl.Infrastructure.Services
                     OwnerId = x.OwnerId,
                 }).ToList();
 
-            var userExternalId = (await this.userRepository.GetFirstUserAsync()).ExternalId;
+            var userExternalId = userIdentityContext.ExternalId;
 
             foreach (var category in categories)
             {

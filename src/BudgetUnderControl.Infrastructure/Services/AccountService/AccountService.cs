@@ -19,13 +19,18 @@ namespace BudgetUnderControl.Infrastructure.Services
     {
         private readonly IAccountRepository accountRepository;
         private readonly IUserRepository userRepository;
+        private readonly IUserIdentityContext userIdentityContext;
         private readonly ILogger logger;
 
-        public AccountService(IAccountRepository accountRepository, IUserRepository userRepository, ILogger logger)
+        public AccountService(IAccountRepository accountRepository,
+            IUserRepository userRepository, 
+            ILogger logger,
+            IUserIdentityContext userIdentityContext)
         {
             this.accountRepository = accountRepository;
             this.userRepository = userRepository;
             this.logger = logger;
+            this.userIdentityContext = userIdentityContext;
         }
 
         public async Task<EditAccountDTO> GetAccountAsync(Guid id)
@@ -117,8 +122,8 @@ namespace BudgetUnderControl.Infrastructure.Services
 
         public async Task AddAccountAsync(AddAccount command)
         {
-            var user = await userRepository.GetFirstUserAsync();
-            var account = Account.Create(command.Name, command.CurrencyId, command.AccountGroupId, command.IsIncludedInTotal, command.Comment, command.Order, command.Type, command.ParentAccountId, true, user.Id, command.ExternalId);
+            var user = this.userIdentityContext;
+            var account = Account.Create(command.Name, command.CurrencyId, command.AccountGroupId, command.IsIncludedInTotal, command.Comment, command.Order, command.Type, command.ParentAccountId, true, user.UserId, command.ExternalId);
             await accountRepository.AddAccountAsync(account);
 
             if (account.Id <= 0)
