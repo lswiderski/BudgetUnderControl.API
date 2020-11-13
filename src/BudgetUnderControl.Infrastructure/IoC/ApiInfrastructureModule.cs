@@ -12,6 +12,8 @@ using System.Text;
 using BudgetUnderControl.CommonInfrastructure;
 using BudgetUnderControl.ApiInfrastructure.Services;
 using Microsoft.AspNetCore.Http;
+using BudgetUnderControl.ApiInfrastructure.Services.EmailService;
+using BudgetUnderControl.CommonInfrastructure.Interfaces.Email;
 
 namespace BudgetUnderControl.Infrastructure.IoC
 {
@@ -71,8 +73,10 @@ namespace BudgetUnderControl.Infrastructure.IoC
             builder.RegisterType<Encrypter>().As<IEncrypter>().InstancePerLifetimeScope();
             builder.RegisterType<JwtHandlerService>().As<IJwtHandlerService>().InstancePerLifetimeScope();
             builder.RegisterType<FileService>().As<IFileService>().InstancePerLifetimeScope();
-
-
+            builder.RegisterType<EmailBuilder>().As<IEmailBuilder>().InstancePerLifetimeScope();
+            builder.RegisterType<EmailService>().As<IEmailService>().InstancePerLifetimeScope();
+            builder.RegisterType<NotificationService>().As<INotificationService>().InstancePerLifetimeScope();
+            
 
             builder.Register<Func<IUserIdentityContext>>(c =>
             {

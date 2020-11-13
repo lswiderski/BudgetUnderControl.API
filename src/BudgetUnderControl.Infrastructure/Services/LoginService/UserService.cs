@@ -10,6 +10,7 @@ using FluentValidation;
 using BudgetUnderControl.Domain;
 using BudgetUnderControl.Common.Enums;
 using BudgetUnderControl.Common.Extensions;
+using BudgetUnderControl.ApiInfrastructure.Services.EmailService;
 
 namespace BudgetUnderControl.Infrastructure.Services
 {
@@ -20,16 +21,19 @@ namespace BudgetUnderControl.Infrastructure.Services
         private readonly IJwtHandlerService jwtHandlerService;
         private readonly IMemoryCache cache;
         private readonly IValidator<RegisterUserCommand> registerUserValidator;
+        private readonly INotificationService notificationService;
         public UserService(IUserRepository userRepository, IEncrypter encrypter, 
             IJwtHandlerService jwtHandlerService, 
             IMemoryCache cache,
-            IValidator<RegisterUserCommand> registerUserValidator)
+            IValidator<RegisterUserCommand> registerUserValidator,
+            INotificationService notificationService)
         {
             this.userRepository = userRepository;
             this.encrypter = encrypter;
             this.jwtHandlerService = jwtHandlerService;
             this.cache = cache;
             this.registerUserValidator = registerUserValidator;
+            this.notificationService = notificationService;
         }
 
         public async Task ValidateLoginAsync(MobileLoginCommand command)
@@ -67,7 +71,7 @@ namespace BudgetUnderControl.Infrastructure.Services
                 var token = jwtHandlerService.CreateToken(user);
                 cache.Set(command.TokenId, token);
 
-                //send Emails
+                await this.notificationService.SendRegisterNotificationAsync(user.ExternalId);
             }
         }
 
