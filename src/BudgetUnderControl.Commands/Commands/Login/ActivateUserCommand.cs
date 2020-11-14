@@ -6,10 +6,7 @@ namespace BudgetUnderControl.CommonInfrastructure.Commands
 {
     public class ActivateUserCommand : ICommand
     {
-        public string Email { get; set; }
-
-        public string Username { get; set; }
-
+        public Guid UserId { get; set; }
         public string Code { get; set; }
     }
 }

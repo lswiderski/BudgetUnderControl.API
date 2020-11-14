@@ -11,6 +11,9 @@ using BudgetUnderControl.Domain;
 using BudgetUnderControl.Common.Enums;
 using BudgetUnderControl.Common.Extensions;
 using BudgetUnderControl.ApiInfrastructure.Services.EmailService;
+using BudgetUnderControl.ApiInfrastructure.Services.EmailService.Contracts;
+using AutoMapper;
+using BudgetUnderControl.Common.Contracts.User;
 
 namespace BudgetUnderControl.Infrastructure.Services
 {
@@ -22,11 +25,13 @@ namespace BudgetUnderControl.Infrastructure.Services
         private readonly IMemoryCache cache;
         private readonly IValidator<RegisterUserCommand> registerUserValidator;
         private readonly INotificationService notificationService;
-        public UserService(IUserRepository userRepository, IEncrypter encrypter, 
-            IJwtHandlerService jwtHandlerService, 
+        private readonly IMapper mapper;
+        public UserService(IUserRepository userRepository, IEncrypter encrypter,
+            IJwtHandlerService jwtHandlerService,
             IMemoryCache cache,
             IValidator<RegisterUserCommand> registerUserValidator,
-            INotificationService notificationService)
+            INotificationService notificationService,
+            IMapper mapper)
         {
             this.userRepository = userRepository;
             this.encrypter = encrypter;
@@ -34,6 +39,7 @@ namespace BudgetUnderControl.Infrastructure.Services
             this.cache = cache;
             this.registerUserValidator = registerUserValidator;
             this.notificationService = notificationService;
+            this.mapper = mapper;
         }
 
         public async Task ValidateLoginAsync(MobileLoginCommand command)
@@ -70,27 +76,37 @@ namespace BudgetUnderControl.Infrastructure.Services
 
                 var token = jwtHandlerService.CreateToken(user);
                 cache.Set(command.TokenId, token);
+                
 
-                await this.notificationService.SendRegisterNotificationAsync(user.ExternalId);
+                await this.notificationService.SendRegisterNotificationAsync(this.mapper.Map<UserDTO>(user));
             }
+        }
+
+        public async Task ResetActivationCodeAsync(Guid userId)
+        {
+            var user = await this.userRepository.GetAsync(userId);
+
+            user.RecreateActivateCode();
+
+            await this.userRepository.UpdateUserAsync(user);
+
+            await this.notificationService.SendRegisterNotificationAsync(this.mapper.Map<UserDTO>(user));
         }
 
         public async Task<bool> ActivateUserAsync(ActivateUserCommand command)
         {
-            var user = await userRepository.GetAsync(command.Username);
-
-            if (user == null)
-            {
-                user = await userRepository.GetByEmailAsync(command.Email);
-            }
+            var user = await userRepository.GetAsync(command.UserId);
 
             if(user == null)
             {
                 return false;
             }
 
-            return user.Active(command.Code);
-            
+            var result =  user.Activate(command.Code);
+
+            await this.userRepository.UpdateUserAsync(user);
+
+            return result;
         }
 
         public IUserIdentityContext CreateUserIdentityContext(string userId)

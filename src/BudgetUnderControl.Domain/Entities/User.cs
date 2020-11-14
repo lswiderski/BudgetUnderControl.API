@@ -78,7 +78,7 @@ namespace BudgetUnderControl.Domain
             this.UpdateModify();
         }
 
-        public bool Active(string code)
+        public bool Activate(string code)
         {
             if(code == this.ActivationCode)
             {
@@ -89,6 +89,17 @@ namespace BudgetUnderControl.Domain
             }
 
             return false;
+        }
+
+        public void RecreateActivateCode()
+        {
+            if(this.IsActivated)
+            {
+                throw new Exception("Already activated");
+            }
+
+            this.ActivationCode = Guid.NewGuid().ToString();
+            this.UpdateModify();
         }
     }
 }

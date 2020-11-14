@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BudgetUnderControl.CommonInfrastructure;
 using BudgetUnderControl.CommonInfrastructure.Commands;
 using BudgetUnderControl.CommonInfrastructure.Settings;
 using Microsoft.AspNetCore.Http;
@@ -17,7 +18,9 @@ namespace BudgetUnderControl.API.Controllers
         private readonly IMemoryCache cache;
         private readonly GeneralSettings settings;
 
-        public LoginController(ICommandDispatcher commandDispatcher, GeneralSettings settings, IMemoryCache cache) : base(commandDispatcher)
+        public LoginController(ICommandDispatcher commandDispatcher,
+            GeneralSettings settings,
+            IMemoryCache cache) : base(commandDispatcher)
         {
             this.cache = cache;
             this.settings = settings;
@@ -61,7 +64,6 @@ namespace BudgetUnderControl.API.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserCommand command)
         {
-
             command.TokenId = Guid.NewGuid();
             await DispatchAsync(command);
             var token = cache.Get<string>(command.TokenId);
@@ -74,19 +76,6 @@ namespace BudgetUnderControl.API.Controllers
             return Ok(token);
         }
 
-        [HttpPost("Activate")]
-        public async Task<IActionResult> Activate([FromBody] ActivateUserCommand command)
-        {
-            var result = await DispatchWithResultAsync(command);
-            if (result.IsSuccess)
-            {
-                return Ok();
-            }
-            else
-            {
-                return BadRequest();
-            }
-
-        }
+       
     }
 }

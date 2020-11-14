@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BudgetUnderControl.Common.Enums;
+using BudgetUnderControl.CommonInfrastructure;
 using BudgetUnderControl.CommonInfrastructure.Commands;
-using BudgetUnderControl.CommonInfrastructure.Settings;
+using BudgetUnderControl.CommonInfrastructure.Commands.Login;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
@@ -17,16 +18,48 @@ namespace BudgetUnderControl.API.Controllers
     public class UsersController : ApiControllerBase
     {
         private readonly IMemoryCache cache;
+        private readonly IUserIdentityContext userIdentityContext;
 
-        public UsersController(ICommandDispatcher commandDispatcher, IMemoryCache cache) : base(commandDispatcher)
+        public UsersController(ICommandDispatcher commandDispatcher, IMemoryCache cache, IUserIdentityContext userIdentityContext) : base(commandDispatcher)
         {
             this.cache = cache;
+            this.userIdentityContext = userIdentityContext;
         }
 
         [HttpPost("Logout")]
         [Authorize(Policy = UsersPolicy.AllUsers)]
         public async Task<IActionResult> Logout()
         {
+            return Ok();
+        }
+
+        [HttpGet("IdentityContext")]
+        [Authorize(Policy = UsersPolicy.AllUsers)]
+        public async Task<ActionResult<IUserIdentityContext>> GetIdentityContext()
+        {
+            return Ok(userIdentityContext);
+        }
+
+        [HttpPost("Activate")]
+        public async Task<IActionResult> Activate([FromBody] ActivateUserCommand command)
+        {
+            command.UserId = this.userIdentityContext.ExternalId;
+            var result = await DispatchWithResultAsync(command);
+            if (result.IsSuccess)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("ResetActivation")]
+        public async Task<IActionResult> ResetActivationCode()
+        {
+            var command = new ResetActivationCodeCommand { UserId = this.userIdentityContext.ExternalId };
+            await DispatchAsync(command);
             return Ok();
         }
 

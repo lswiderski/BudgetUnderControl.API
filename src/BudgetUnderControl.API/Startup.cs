@@ -37,6 +37,8 @@ using System.Text;
 using BudgetUnderControl.CommonInfrastructure.Settings;
 using Microsoft.Extensions.Hosting;
 using BudgetUnderControl.Common.Extensions;
+using AutoMapper;
+using BudgetUnderControl.ApiInfrastructure.Profiles.User;
 
 namespace BudgetUnderControl.API
 {
@@ -73,6 +75,7 @@ namespace BudgetUnderControl.API
             services.AddTransient<IContextFacade, ContextFacade>();
             services.AddMemoryCache();
             services.AddCors();
+            services.AddAutoMapper(typeof(UserProfile));
             services.AddControllers();
             services.AddHttpContextAccessor();
 

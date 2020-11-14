@@ -1,4 +1,5 @@
-﻿using BudgetUnderControl.Common.Contracts.Email;
+﻿using BudgetUnderControl.ApiInfrastructure.Services.EmailService.Contracts;
+using BudgetUnderControl.Common.Contracts.Email;
 using BudgetUnderControl.CommonInfrastructure.Interfaces.Email;
 using BudgetUnderControl.CommonInfrastructure.Settings;
 using BudgetUnderControl.Domain.Repositiories;
@@ -14,12 +15,11 @@ namespace BudgetUnderControl.ApiInfrastructure.Services.EmailService
     public class EmailService : IEmailService
     {
         private readonly IEmailBuilder emailBuilder;
-        private readonly IUserRepository userRepository;
+       
         private readonly GeneralSettings settings;
-        public EmailService(IEmailBuilder emailBuilder, IUserRepository userRepository, GeneralSettings settings)
+        public EmailService(IEmailBuilder emailBuilder, GeneralSettings settings)
         {
             this.emailBuilder = emailBuilder;
-            this.userRepository = userRepository;
             this.settings = settings;
         }
 
@@ -50,11 +50,9 @@ namespace BudgetUnderControl.ApiInfrastructure.Services.EmailService
             }
         }
 
-        public async Task<EmailMessage> CreateRegistrationEmailAsync(Guid userId, string subject, string body)
+        public async Task<EmailMessage> CreateRegistrationEmailAsync(UserActivationNotificationArgs args, string subject, string body)
         {
-            var user = await this.userRepository.GetAsync(userId);
-
-            var participant = new EmailParticipant { Address = user.Email, DisplayName = $"{user.FirstName} {user.LastName}" };
+            var participant = new EmailParticipant { Address = args.Email, DisplayName = $"{args.FirstName} {args.LastName}" };
 
             return await this.CreateRegistrationEmailAsync(participant, subject, body, false);
         }

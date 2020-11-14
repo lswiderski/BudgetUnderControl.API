@@ -17,6 +17,7 @@ namespace BudgetUnderControl.CommonInfrastructure.Settings
                 return $"Data Source={BUC_DB_Address};Initial Catalog={BUC_DB_Name};User ID={BUC_DB_User};Password={BUC_DB_Password};";
             }
         }
+        public string FrontEndHostBaseURL { get; set; }
         public string ApiBaseUri { get; set; }
         public string ApiKey { get; set; }
         public string SecretKey { get; set; }

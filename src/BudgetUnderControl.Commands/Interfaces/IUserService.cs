@@ -15,5 +15,7 @@ namespace BudgetUnderControl.CommonInfrastructure
         Task RegisterUserAsync(RegisterUserCommand command);
 
         Task<bool> ActivateUserAsync(ActivateUserCommand command);
+
+        Task ResetActivationCodeAsync(Guid userId);
     }
 }
