@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BudgetUnderControl.Common.Enums;
+using BudgetUnderControl.Common.Extensions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -13,7 +15,7 @@ namespace BudgetUnderControl.Domain
         public int Id { get; protected set; }
         [StringLength(50)]
         public string Username { get; protected set; }
-        public string FirstName { get; protected set; }
+        public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Role { get; protected set; }
         [StringLength(150)]
@@ -76,6 +78,33 @@ namespace BudgetUnderControl.Domain
         {
             this.ExternalId = newId;
             this.UpdateModify();
+        }
+
+        public void EditUsername(string name)
+        {
+            if(this.Username != name)
+            {
+                this.Username = name;
+                this.UpdateModify();
+            }
+        }
+
+        public void EditEmail(string email)
+        {
+            if(this.Email != email)
+            {
+                this.Email = email;
+                this.UpdateModify();
+            }
+        }
+
+        public void EditRole(UserRole role)
+        {
+            if (this.Role != role.GetStringValue())
+            {
+                this.Role = role.GetStringValue();
+                this.UpdateModify();
+            }
         }
 
         public bool Activate(string code)

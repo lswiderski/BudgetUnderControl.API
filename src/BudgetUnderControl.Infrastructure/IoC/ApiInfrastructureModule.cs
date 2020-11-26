@@ -14,6 +14,8 @@ using BudgetUnderControl.ApiInfrastructure.Services;
 using Microsoft.AspNetCore.Http;
 using BudgetUnderControl.ApiInfrastructure.Services.EmailService;
 using BudgetUnderControl.CommonInfrastructure.Interfaces.Email;
+using BudgetUnderControl.CommonInfrastructure.Interfaces;
+using BudgetUnderControl.ApiInfrastructure.Services.UserService;
 
 namespace BudgetUnderControl.Infrastructure.IoC
 {
@@ -70,6 +72,7 @@ namespace BudgetUnderControl.Infrastructure.IoC
             builder.RegisterType<Synchroniser>().As<ISynchroniser>().InstancePerLifetimeScope();
             builder.RegisterType<SyncRequestBuilder>().As<ISyncRequestBuilder>().InstancePerLifetimeScope();
             builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();
+            builder.RegisterType<UserAdminService>().As<IUserAdminService>().InstancePerLifetimeScope();
             builder.RegisterType<Encrypter>().As<IEncrypter>().InstancePerLifetimeScope();
             builder.RegisterType<JwtHandlerService>().As<IJwtHandlerService>().InstancePerLifetimeScope();
             builder.RegisterType<FileService>().As<IFileService>().InstancePerLifetimeScope();

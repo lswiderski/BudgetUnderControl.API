@@ -14,6 +14,7 @@ using BudgetUnderControl.ApiInfrastructure.Services.EmailService;
 using BudgetUnderControl.ApiInfrastructure.Services.EmailService.Contracts;
 using AutoMapper;
 using BudgetUnderControl.Common.Contracts.User;
+using BudgetUnderControl.CommonInfrastructure.Commands.User;
 
 namespace BudgetUnderControl.Infrastructure.Services
 {
@@ -26,12 +27,14 @@ namespace BudgetUnderControl.Infrastructure.Services
         private readonly IValidator<RegisterUserCommand> registerUserValidator;
         private readonly INotificationService notificationService;
         private readonly IMapper mapper;
+        private readonly IValidator<EditUser> editUserValidator;
         public UserService(IUserRepository userRepository, IEncrypter encrypter,
             IJwtHandlerService jwtHandlerService,
             IMemoryCache cache,
             IValidator<RegisterUserCommand> registerUserValidator,
             INotificationService notificationService,
-            IMapper mapper)
+            IMapper mapper,
+            IValidator<EditUser> editUserValidator)
         {
             this.userRepository = userRepository;
             this.encrypter = encrypter;
@@ -40,6 +43,7 @@ namespace BudgetUnderControl.Infrastructure.Services
             this.registerUserValidator = registerUserValidator;
             this.notificationService = notificationService;
             this.mapper = mapper;
+            this.editUserValidator = editUserValidator;
         }
 
         public async Task ValidateLoginAsync(MobileLoginCommand command)
@@ -134,6 +138,24 @@ namespace BudgetUnderControl.Infrastructure.Services
             };
             return context;
         }
+
+        public async Task EditUserAsync(EditUser command)
+        {
+            var validationResult = this.editUserValidator.Validate(command);
+            if(validationResult.IsValid)
+            {
+                var user = await this.userRepository.GetAsync(command.ExternalId);
+
+                user.LastName = command.LastName;
+                user.FirstName = command.FirstName;
+                user.EditEmail(command.Email);
+                user.EditUsername(command.Username);
+                user.EditRole(command.Role);
+
+                this.userRepository.UpdateUserAsync(user);
+            }
+        }
+
 
     }
 }

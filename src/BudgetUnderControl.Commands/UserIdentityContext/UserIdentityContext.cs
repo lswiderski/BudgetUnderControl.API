@@ -20,6 +20,14 @@ namespace BudgetUnderControl.CommonInfrastructure
             }
         }
 
+        public bool IsAdmin
+        {
+            get
+            {
+                return this.Role == UserRole.Admin;
+            }
+        }
+
         public string RoleName { get; set; }
 
         public bool IsActivated { get; set; }
@@ -28,7 +36,7 @@ namespace BudgetUnderControl.CommonInfrastructure
 
         public string LastName { get; set; }
 
-        public string Email { get;  set; }
+        public string Email { get; set; }
 
     }
 }

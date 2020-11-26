@@ -36,6 +36,13 @@ namespace BudgetUnderControl.Infrastructure.Repositories
             return user;
         }
 
+        public async Task<ICollection<User>> GetUsersAsync()
+        {
+            var users = await this.Context.Users.ToListAsync();
+
+            return users;
+        }
+
         public async Task UpdateUserAsync(User user)
         {
             user.UpdateModify();

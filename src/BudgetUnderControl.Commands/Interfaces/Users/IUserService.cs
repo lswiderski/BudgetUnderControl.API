@@ -1,4 +1,5 @@
 ﻿using BudgetUnderControl.CommonInfrastructure.Commands;
+using BudgetUnderControl.CommonInfrastructure.Commands.User;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,5 +18,7 @@ namespace BudgetUnderControl.CommonInfrastructure
         Task<bool> ActivateUserAsync(ActivateUserCommand command);
 
         Task ResetActivationCodeAsync(Guid userId);
+
+        Task EditUserAsync(EditUser command);
     }
 }

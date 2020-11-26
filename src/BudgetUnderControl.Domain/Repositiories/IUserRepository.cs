@@ -10,6 +10,7 @@ namespace BudgetUnderControl.Domain.Repositiories
         Task<User> GetByEmailAsync(string email);
         Task<User> GetAsync(string username);
         Task<User> GetAsync(Guid id);
+        Task<ICollection<User>> GetUsersAsync();
         Task AddUserAsync(User user);
         Task UpdateUserAsync(User user);
     }
