@@ -80,7 +80,7 @@ namespace BudgetUnderControl.Infrastructure.Services
             var recalculateCurrencies = true;
             List<ExchangeRate> exchangeRates = null;
 
-            var transactions = await this.transactionService.GetTransactionsAsync(new TransactionsFilter { FromDate = now.AddMonths(-6) });
+            var transactions = await this.transactionService.GetTransactionsAsync(new TransactionsFilter { FromDate = now.AddMonths(-6),  IncludeTransfers = false });
             var accounts = await accountService.GetAccountsWithBalanceAsync();
 
             if (recalculateCurrencies)

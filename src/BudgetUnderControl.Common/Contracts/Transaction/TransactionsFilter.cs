@@ -15,9 +15,11 @@ namespace BudgetUnderControl.Common.Contracts
         public bool IncludeDeleted { get; set; }
         public DateTime? ChangedSince { get; set; }
         public string SearchQuery { get; set; }
+        public bool IncludeTransfers { get; set; }
 
         public TransactionsFilter()
         {
+            this.IncludeTransfers = true;
         }
     }
 }

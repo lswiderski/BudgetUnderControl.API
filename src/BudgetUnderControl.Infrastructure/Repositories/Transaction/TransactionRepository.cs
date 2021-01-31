@@ -163,6 +163,9 @@ namespace BudgetUnderControl.Infrastructure
                 {
                     query = query.Where(q => q.CreatedOn >= filter.ChangedSince || q.ModifiedOn >= filter.ChangedSince).AsQueryable();
                 }
+
+                
+
             }
             else
             {
@@ -179,6 +182,12 @@ namespace BudgetUnderControl.Infrastructure
                                                         })
                                                    .ToListAsync());
             transactionsWithExtraProperty.ForEach(x => x.t.IsTransfer = x.IsTransfer);
+
+            if (filter != null &&!filter.IncludeTransfers)
+            {
+                transactionsWithExtraProperty = transactionsWithExtraProperty.Where(q => q.IsTransfer == false).ToList();
+            }
+
             var transactions = transactionsWithExtraProperty.Select(x => x.t).ToList();
             return transactions;
 
