@@ -31,6 +31,7 @@ namespace BudgetUnderControl.Domain
         public virtual DbSet<Transaction> Transactions { get; set; }
         public virtual DbSet<Transfer> Transfers { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Token> Tokens { get; set; }
         public virtual DbSet<Synchronization> Synchronizations { get; set; }
 
 
@@ -108,6 +109,7 @@ namespace BudgetUnderControl.Domain
             modelBuilder.Entity<Transfer>().ToTable("Transfer");
             modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<Synchronization>().ToTable("Synchronization");
+            modelBuilder.Entity<Token>().ToTable("Token");
 
             modelBuilder.Entity<Account>()
                 .HasOne(x => x.AccountGroup)
@@ -224,6 +226,12 @@ namespace BudgetUnderControl.Domain
                .WithMany(y => y.FilesToTransaction)
                .HasForeignKey(x => x.TransactionId)
                .HasConstraintName("ForeignKey_FileToTransaction_Transaction");
+
+            modelBuilder.Entity<Token>()
+            .HasOne(x => x.User)
+            .WithMany(y => y.Tokens)
+            .HasForeignKey(x => x.UserId)
+            .HasConstraintName("ForeignKey_Token_User");
         }
 
     }

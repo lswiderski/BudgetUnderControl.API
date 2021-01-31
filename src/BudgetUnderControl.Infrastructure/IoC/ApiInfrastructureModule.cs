@@ -16,6 +16,7 @@ using BudgetUnderControl.ApiInfrastructure.Services.EmailService;
 using BudgetUnderControl.CommonInfrastructure.Interfaces.Email;
 using BudgetUnderControl.CommonInfrastructure.Interfaces;
 using BudgetUnderControl.ApiInfrastructure.Services.UserService;
+using BudgetUnderControl.ApiInfrastructure.Repositories;
 
 namespace BudgetUnderControl.Infrastructure.IoC
 {
@@ -79,7 +80,7 @@ namespace BudgetUnderControl.Infrastructure.IoC
             builder.RegisterType<EmailBuilder>().As<IEmailBuilder>().InstancePerLifetimeScope();
             builder.RegisterType<EmailService>().As<IEmailService>().InstancePerLifetimeScope();
             builder.RegisterType<NotificationService>().As<INotificationService>().InstancePerLifetimeScope();
-            
+            builder.RegisterType<TokenRepository>().As<ITokenRepository>().InstancePerLifetimeScope();
 
             builder.Register<Func<IUserIdentityContext>>(c =>
             {

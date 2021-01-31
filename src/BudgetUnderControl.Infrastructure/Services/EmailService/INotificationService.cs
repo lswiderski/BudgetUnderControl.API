@@ -9,6 +9,6 @@ namespace BudgetUnderControl.ApiInfrastructure.Services.EmailService
 {
     public interface INotificationService
     {
-       Task SendRegisterNotificationAsync(UserDTO user);
+       Task SendRegisterNotificationAsync(UserDTO user,string code);
     }
 }

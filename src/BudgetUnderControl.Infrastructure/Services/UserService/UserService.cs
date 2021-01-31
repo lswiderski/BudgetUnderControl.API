@@ -28,13 +28,15 @@ namespace BudgetUnderControl.Infrastructure.Services
         private readonly INotificationService notificationService;
         private readonly IMapper mapper;
         private readonly IValidator<EditUser> editUserValidator;
+        private readonly ITokenRepository tokenRepository;
         public UserService(IUserRepository userRepository, IEncrypter encrypter,
             IJwtHandlerService jwtHandlerService,
             IMemoryCache cache,
             IValidator<RegisterUserCommand> registerUserValidator,
             INotificationService notificationService,
             IMapper mapper,
-            IValidator<EditUser> editUserValidator)
+            IValidator<EditUser> editUserValidator,
+            ITokenRepository tokenRepository)
         {
             this.userRepository = userRepository;
             this.encrypter = encrypter;
@@ -44,6 +46,7 @@ namespace BudgetUnderControl.Infrastructure.Services
             this.notificationService = notificationService;
             this.mapper = mapper;
             this.editUserValidator = editUserValidator;
+            this.tokenRepository = tokenRepository;
         }
 
         public async Task ValidateLoginAsync(MobileLoginCommand command)
@@ -80,9 +83,12 @@ namespace BudgetUnderControl.Infrastructure.Services
 
                 var token = jwtHandlerService.CreateToken(user);
                 cache.Set(command.TokenId, token);
+
+                var activationToken = Token.Create(TokenType.Activation, user.ExternalId, user.Id, DateTime.UtcNow.AddDays(1));
+                await tokenRepository.AddAsync(activationToken);
                 
 
-                await this.notificationService.SendRegisterNotificationAsync(this.mapper.Map<UserDTO>(user));
+                await this.notificationService.SendRegisterNotificationAsync(this.mapper.Map<UserDTO>(user), activationToken.Code);
             }
         }
 
@@ -90,11 +96,13 @@ namespace BudgetUnderControl.Infrastructure.Services
         {
             var user = await this.userRepository.GetAsync(userId);
 
-            user.RecreateActivateCode();
-
             await this.userRepository.UpdateUserAsync(user);
 
-            await this.notificationService.SendRegisterNotificationAsync(this.mapper.Map<UserDTO>(user));
+            await tokenRepository.DeactivateTokensAsync(TokenType.Activation, user.ExternalId);
+            var activationToken = Token.Create(TokenType.Activation, user.ExternalId, user.Id, DateTime.UtcNow.AddDays(1));
+            await tokenRepository.AddAsync(activationToken);
+
+            await this.notificationService.SendRegisterNotificationAsync(this.mapper.Map<UserDTO>(user), activationToken.Code);
         }
 
         public async Task<bool> ActivateUserAsync(ActivateUserCommand command)
@@ -105,12 +113,19 @@ namespace BudgetUnderControl.Infrastructure.Services
             {
                 return false;
             }
+            var token = await tokenRepository.GetByCodeAsync(command.Code, TokenType.Activation, user.ExternalId);
 
-            var result =  user.Activate(command.Code);
+            if(token != null && token.IsValid && token.ValidUntil >= DateTime.UtcNow)
+            {
+                var result = user.Activate();
+                token.Devalidate();
 
-            await this.userRepository.UpdateUserAsync(user);
+                await this.userRepository.UpdateUserAsync(user);
+                await this.tokenRepository.UpdateAsync(token);
+                return result;
+            }
 
-            return result;
+            return false;
         }
 
         public IUserIdentityContext CreateUserIdentityContext(string userId)

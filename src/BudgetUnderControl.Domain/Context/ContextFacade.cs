@@ -134,5 +134,10 @@ namespace BudgetUnderControl.Domain
             get => _context.Synchronizations;
             set => _context.Synchronizations = value;
         }
+        public DbSet<Token> Tokens
+        {
+            get => _context.Tokens;
+            set => _context.Tokens= value;
+        }
     }
 }

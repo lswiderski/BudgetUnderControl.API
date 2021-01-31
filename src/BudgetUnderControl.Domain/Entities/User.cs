@@ -28,13 +28,11 @@ namespace BudgetUnderControl.Domain
         public bool IsDeleted { get; protected set; }
         public bool IsActivated { get; set; }
         public DateTime? ActivatedOn { get; protected set; }
-        [StringLength(50)]
-        public string ActivationCode { get; set; }
 
         public List<Account> Accounts { get; protected set; }
         public List<AccountGroup> AccountGroups { get; protected set; }
         public List<Transaction> Transactions { get; protected set; }
-
+        public List<Token> Tokens { get; protected set; }
 
         protected User()
         {
@@ -58,7 +56,6 @@ namespace BudgetUnderControl.Domain
                 IsActivated = false,
                 FirstName = firstName,
                 LastName = lastName,
-                ActivationCode = Guid.NewGuid().ToString()
             };
         }
 
@@ -107,9 +104,9 @@ namespace BudgetUnderControl.Domain
             }
         }
 
-        public bool Activate(string code)
+        public bool Activate()
         {
-            if(code == this.ActivationCode)
+            if(!this.IsActivated)
             {
                 this.IsActivated = true;
                 this.ActivatedOn = DateTime.UtcNow;
@@ -118,17 +115,6 @@ namespace BudgetUnderControl.Domain
             }
 
             return false;
-        }
-
-        public void RecreateActivateCode()
-        {
-            if(this.IsActivated)
-            {
-                throw new Exception("Already activated");
-            }
-
-            this.ActivationCode = Guid.NewGuid().ToString();
-            this.UpdateModify();
         }
     }
 }

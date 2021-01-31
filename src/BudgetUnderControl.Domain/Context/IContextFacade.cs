@@ -32,5 +32,6 @@ namespace BudgetUnderControl.Domain
         DbSet<Transfer> Transfers { get; set; }
         DbSet<User> Users { get; set; }
         DbSet<Synchronization> Synchronizations { get; set; }
+        DbSet<Token> Tokens { get; set; }
     }
 }

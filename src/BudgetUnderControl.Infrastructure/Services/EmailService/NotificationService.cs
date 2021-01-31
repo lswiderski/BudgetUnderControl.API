@@ -19,18 +19,18 @@ namespace BudgetUnderControl.ApiInfrastructure.Services.EmailService
             this.settings = settings;
         }
 
-        public async Task SendRegisterNotificationAsync(UserDTO user)
+        public async Task SendRegisterNotificationAsync(UserDTO user, string code)
         {
             var subject = "Welcome in Budget Under Control";
            
-            var link = $"{ settings.FrontEndHostBaseURL }activate?code={user.ActivationCode}";
-            var body = $"Welcome in BUC app. To Activate your account please use this code: {user.ActivationCode} or open this link in a browser: {link}";
+            var link = $"{ settings.FrontEndHostBaseURL }activate?code={code}";
+            var body = $"Welcome in BUC app. To Activate your account please use this code: {code} or open this link in a browser: {link}";
             var notificationArgs = new UserActivationNotificationArgs
             {
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                ActivationToken = user.ActivationCode
+                ActivationToken = code
             };
             var email = await emailService.CreateRegistrationEmailAsync(notificationArgs, subject, body);
             emailService.SendEmail(email);

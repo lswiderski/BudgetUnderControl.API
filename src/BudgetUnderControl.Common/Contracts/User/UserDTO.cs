@@ -27,6 +27,5 @@ namespace BudgetUnderControl.Common.Contracts.User
         public bool IsDeleted { get; protected set; }
         public bool IsActivated { get; set; }
         public DateTime? ActivatedOn { get; protected set; }
-        public string ActivationCode { get; set; }
     }
 }
