@@ -48,7 +48,7 @@ namespace BudgetUnderControl.Infrastructure.IoC
 
             builder.RegisterAssemblyTypes(assembly)
                    .AsClosedTypesOf(typeof(IValidator<>))
-                   .InstancePerLifetimeScope();
+                    .AsImplementedInterfaces();
 
             builder.RegisterType<BaseModel>().As<IBaseModel>().InstancePerLifetimeScope();
             builder.RegisterType<AccountService>().As<IAccountService>().InstancePerLifetimeScope();

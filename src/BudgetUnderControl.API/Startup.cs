@@ -65,18 +65,22 @@ namespace BudgetUnderControl.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().SetCompatibilityVersion(CompatibilityVersion.Latest)
-                .AddJsonOptions(x => {
-                    x.JsonSerializerOptions.WriteIndented = true;
-                    })
-                .AddFluentValidation();
-
             services.AddDbContext<Context>(ServiceLifetime.Transient);
             services.AddTransient<IContextFacade, ContextFacade>();
             services.AddMemoryCache();
             services.AddCors();
             services.AddAutoMapper(typeof(UserProfile));
-            services.AddControllers();
+            services.AddControllers()
+                .SetCompatibilityVersion(CompatibilityVersion.Latest)
+                .AddJsonOptions(x =>
+                {
+                    x.JsonSerializerOptions.WriteIndented = true;
+                })
+                .AddFluentValidation(fv =>
+                {
+                    fv.RegisterValidatorsFromAssemblyContaining<ApiInfrastructureModule>();
+                    fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
+                });
             services.AddHttpContextAccessor();
 
             var settings = Configuration.GetSettings<GeneralSettings>();
