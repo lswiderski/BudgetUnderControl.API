@@ -15,4 +15,8 @@
     <ProjectReference Include="..\BudgetUnderControl.Common\BudgetUnderControl.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="CommandHandlers\Transaction\" />
+  </ItemGroup>
+
 </Project>

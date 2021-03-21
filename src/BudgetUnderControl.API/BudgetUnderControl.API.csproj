@@ -67,6 +67,7 @@
     <ProjectReference Include="..\BudgetUnderControl.Domain\BudgetUnderControl.Domain.csproj" />
     <ProjectReference Include="..\BudgetUnderControl.Infrastructure\BudgetUnderControl.ApiInfrastructure.csproj" />
     <ProjectReference Include="..\Database\BudgetUnderControl.Migrations.SqlServer\BudgetUnderControl.Migrations.SqlServer.csproj" />
+    <ProjectReference Include="..\Modules\Transactions\Api\BudgetUnderControl.Modules.Transactions.Api.csproj" />
   </ItemGroup>
 
   <ItemGroup>

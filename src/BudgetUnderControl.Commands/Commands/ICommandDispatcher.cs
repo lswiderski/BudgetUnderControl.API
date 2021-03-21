@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BudgetUnderControl.CommonInfrastructure.Commands
 {
+    [Obsolete]
     public interface ICommandDispatcher
     {
         Task DispatchAsync<T>(T command) where T : ICommand;

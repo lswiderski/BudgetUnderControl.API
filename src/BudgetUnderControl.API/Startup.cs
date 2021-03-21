@@ -39,6 +39,8 @@ using Microsoft.Extensions.Hosting;
 using BudgetUnderControl.Common.Extensions;
 using AutoMapper;
 using BudgetUnderControl.ApiInfrastructure.Profiles.User;
+using BudgetUnderControl.Modules.Transactions.Api;
+using Microsoft.AspNetCore.Http;
 
 namespace BudgetUnderControl.API
 {
@@ -67,6 +69,7 @@ namespace BudgetUnderControl.API
         {
             services.AddDbContext<Context>(ServiceLifetime.Transient);
             services.AddTransient<IContextFacade, ContextFacade>();
+           
             services.AddMemoryCache();
             services.AddCors();
             services.AddAutoMapper(typeof(UserProfile));
@@ -126,9 +129,10 @@ namespace BudgetUnderControl.API
 
             builder.RegisterModule<ApiInfrastructureModule>();
             builder.RegisterModule(new ApiModule(Configuration, environment));
+            builder.RegisterModule<TransactionsAutofacModule>();
             builder.Populate(services);
             ApplicationContainer = builder.Build();
-
+            services.AddTransactionsModule(ApplicationContainer);
             return new AutofacServiceProvider(ApplicationContainer);
         }
 
@@ -151,7 +155,7 @@ namespace BudgetUnderControl.API
             //app.UseHttpsRedirection();
 
             app.UseRouting();
-
+            app.UseTransactionsModule();
             app.UseCustomExceptionHandler();
             app.UseCors(options =>
                     options
@@ -164,7 +168,11 @@ namespace BudgetUnderControl.API
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(x => x.MapControllers());
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapGet("/", context => context.Response.WriteAsync("Budget Under Control API"));
+            });
         }
     }
 }

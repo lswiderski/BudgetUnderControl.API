@@ -130,27 +130,38 @@ namespace BudgetUnderControl.Infrastructure.Services
 
         public IUserIdentityContext CreateUserIdentityContext(string userId)
         {
-            var userExternalId = Guid.Parse(userId);
+             var userExternalId = Guid.Parse(userId);
 
-            if(userExternalId == Guid.Empty)
+             if(userExternalId == Guid.Empty)
+             {
+                 throw new ArgumentException();
+             }
+
+
+             Task<User> task = Task.Run<User>(async () => await this.userRepository.GetAsync(userExternalId));
+             var user = task.Result;
+
+             var context = new UserIdentityContext
+             {
+                 UserId = user.Id,
+                 ExternalId = user.ExternalId,
+                 RoleName = user.Role,
+                 IsActivated = user.IsActivated,
+                 FirstName = user.FirstName,
+                 LastName = user.LastName,
+                 Email = user.Email
+             };
+           /* var context = new UserIdentityContext
             {
-                throw new ArgumentException();
-            }
+                UserId = 1,
+                ExternalId = new Guid("10000000-0000-0000-0000-000000000001"),
+                RoleName = "User",
+                IsActivated = true,
+                FirstName = "Demo",
+                LastName = "Demo",
+                Email = "Demo"
+            };*/
 
-
-            Task<User> task = Task.Run<User>(async () => await this.userRepository.GetAsync(userExternalId));
-            var user = task.Result;
-
-            var context = new UserIdentityContext
-            {
-                UserId = user.Id,
-                ExternalId = user.ExternalId,
-                RoleName = user.Role,
-                IsActivated = user.IsActivated,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email
-            };
             return context;
         }
 

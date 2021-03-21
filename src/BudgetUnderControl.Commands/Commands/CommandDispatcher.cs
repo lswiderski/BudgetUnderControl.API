@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace BudgetUnderControl.CommonInfrastructure.Commands
 {
+    [Obsolete]
     public class CommandDispatcher : ICommandDispatcher
     {
         private readonly IComponentContext context;

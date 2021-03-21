@@ -4,6 +4,7 @@ using System.Text;
 
 namespace BudgetUnderControl.CommonInfrastructure.Commands
 {
+    [Obsolete]
     public class CommandResult : ICommandResult
     {
         public bool IsSuccess { get; set; }

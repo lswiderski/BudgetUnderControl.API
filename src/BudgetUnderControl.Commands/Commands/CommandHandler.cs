@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace BudgetUnderControl.CommonInfrastructure.Commands
 {
+    [Obsolete]
     public interface ICommandHandler<T> where T : ICommand
     {
         Task HandleAsync(T command);
