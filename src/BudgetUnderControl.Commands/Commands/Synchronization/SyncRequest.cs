@@ -6,7 +6,7 @@ using System.Text;
 
 namespace BudgetUnderControl.CommonInfrastructure.Commands
 {
-    public class SyncRequest : ICommand
+    public class SyncRequest 
     {
         public DateTime LastSync { get; set; }
 

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BudgetUnderControl.CommonInfrastructure.Commands
 {
-    public class DeleteTransaction : ICommand
+    public class DeleteTransaction
     {
         public int? Id { get; set; }
 

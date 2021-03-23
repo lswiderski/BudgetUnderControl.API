@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BudgetUnderControl.CommonInfrastructure.Commands
 {
-    public class DeleteAccount : ICommand
+    public class DeleteAccount
     {
         public Guid Id { get; set; }
     }

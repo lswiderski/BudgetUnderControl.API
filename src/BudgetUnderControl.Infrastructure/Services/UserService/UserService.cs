@@ -49,27 +49,29 @@ namespace BudgetUnderControl.Infrastructure.Services
             this.tokenRepository = tokenRepository;
         }
 
-        public async Task ValidateLoginAsync(MobileLoginCommand command)
+        public async Task<string> ValidateLoginAsync(MobileLoginCommand command)
         {
             var user = await userRepository.GetAsync(command.Username);
 
             if(user == null)
             {
-                return;
+                return string.Empty;
             }
 
             var hash = encrypter.GetHash(command.Password, user.Salt);
 
             if(hash != user.Password)
             {
-                return;
+                return string.Empty;
             }
 
             var token = jwtHandlerService.CreateToken(user);
             cache.Set(command.TokenId, token);
+
+            return token;
         }
 
-        public async Task RegisterUserAsync(RegisterUserCommand command)
+        public async Task<string> RegisterUserAsync(RegisterUserCommand command)
         {
             var validationResult = registerUserValidator.Validate(command);
             if(validationResult.IsValid)
@@ -89,7 +91,10 @@ namespace BudgetUnderControl.Infrastructure.Services
                 
 
                 await this.notificationService.SendRegisterNotificationAsync(this.mapper.Map<UserDTO>(user), activationToken.Code);
+                return token;
             }
+
+            return string.Empty;
         }
 
         public async Task ResetActivationCodeAsync(Guid userId)

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BudgetUnderControl.CommonInfrastructure.Commands
 {
-    public class RegisterUserCommand : ICommand
+    public class RegisterUserCommand
     {
         public string Username { get; set; }
 

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BudgetUnderControl.CommonInfrastructure.Commands
 {
-    public class AddExchangeRate : ICommand
+    public class AddExchangeRate
     {
         public int FromCurrencyId { get; set; }
         public int ToCurrencyId { get; set; }

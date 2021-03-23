@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BudgetUnderControl.CommonInfrastructure.Commands.User
 {
-    public class EditUser : ICommand
+    public class EditUser
     {
         public string Username { get; set; }
         public string FirstName { get; set; }

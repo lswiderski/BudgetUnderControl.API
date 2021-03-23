@@ -17,11 +17,10 @@ namespace BudgetUnderControl.Infrastructure.Services
         private readonly IUserIdentityContext userContext;
         private readonly ICurrencyService currencyService;
         private readonly ICategoryService categoryService;
-        private readonly ICommandDispatcher commandDispatcher;
 
         public TestDataSeeder(IAccountService accountService, ITransactionService transactionService,
             IAccountGroupService accountGroupService, ICurrencyService currencyService, ICategoryService categoryService,
-            IUserIdentityContext userContext, ICommandDispatcher commandDispatcher)
+            IUserIdentityContext userContext)
         {
             this.accountService = accountService;
             this.transactionService = transactionService;
@@ -29,7 +28,6 @@ namespace BudgetUnderControl.Infrastructure.Services
             this.currencyService = currencyService;
             this.categoryService = categoryService;
             this.userContext = userContext;
-            this.commandDispatcher = commandDispatcher;
         }
 
         public async Task SeedAsync()
@@ -46,7 +44,7 @@ namespace BudgetUnderControl.Infrastructure.Services
                 Order = 0,
                 Type = AccountType.Account
             };
-            await commandDispatcher.DispatchAsync(addAccountCommand);
+           
 
             var account = (await accountService.GetAccountsWithBalanceAsync()).First();
             var categories = await categoryService.GetCategoriesAsync();
@@ -63,7 +61,6 @@ namespace BudgetUnderControl.Infrastructure.Services
                     CategoryId = categories.First().Id,
                     Name = Guid.NewGuid().ToString()
                 };
-                await commandDispatcher.DispatchAsync(addTransactionCommand);
             }
         }
     }

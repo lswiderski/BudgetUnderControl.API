@@ -33,19 +33,6 @@ namespace BudgetUnderControl.Infrastructure.IoC
             .GetTypeInfo()
             .Assembly;
 
-
-            builder.RegisterAssemblyTypes(commonInfrastructureAssembly)
-                    .AsClosedTypesOf(typeof(ICommandHandler<>))
-                    .InstancePerLifetimeScope();
-
-            builder.RegisterAssemblyTypes(commonInfrastructureAssembly)
-                    .AsClosedTypesOf(typeof(ICommandWithResultHandler<>))
-                    .InstancePerLifetimeScope();
-
-            builder.RegisterType<CommandDispatcher>()
-                .As<ICommandDispatcher>()
-                .InstancePerLifetimeScope();
-
             builder.RegisterAssemblyTypes(assembly)
                    .AsClosedTypesOf(typeof(IValidator<>))
                     .AsImplementedInterfaces();

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace BudgetUnderControl.CommonInfrastructure.Commands
 {
-    public class AddTransaction : ICommand
+    public class AddTransaction
     {
         public int AccountId { get; set; }
         public int? CategoryId { get; set; }

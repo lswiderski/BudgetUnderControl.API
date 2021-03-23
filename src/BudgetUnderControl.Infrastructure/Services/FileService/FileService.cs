@@ -29,7 +29,7 @@ namespace BudgetUnderControl.ApiInfrastructure.Services
             this.logger = logger;
         }
 
-        public async Task<string> SaveFileAsync(IFormFile file)
+        public async Task<Guid> SaveFileAsync(IFormFile file)
         {
             var createdOn = DateTime.UtcNow;
             var rootPath = settings.FileRootPath;
@@ -64,7 +64,7 @@ namespace BudgetUnderControl.ApiInfrastructure.Services
                 await file.CopyToAsync(fileStream).ConfigureAwait(false);
             }
 
-            return fileEntity.Id.ToString();
+            return fileEntity.Id;
         }
 
         public async Task<string> SaveFileAsync(byte[] content, Guid id, DateTime? date = null)

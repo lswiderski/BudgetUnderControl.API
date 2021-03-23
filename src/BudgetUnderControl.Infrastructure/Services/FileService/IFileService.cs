@@ -9,7 +9,7 @@ namespace BudgetUnderControl.ApiInfrastructure.Services
 {
     public interface IFileService
     {
-        Task<string> SaveFileAsync(IFormFile file);
+        Task<Guid> SaveFileAsync(IFormFile file);
 
         Task<string> SaveFileAsync(byte[] content, Guid id, DateTime? date = null);
 

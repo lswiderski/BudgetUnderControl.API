@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BudgetUnderControl.CommonInfrastructure.Commands
 {
-    public class MobileLoginCommand : ICommand
+    public class MobileLoginCommand
     {
         public string Username { get; set; }
 

@@ -11,9 +11,9 @@ namespace BudgetUnderControl.CommonInfrastructure
     {
         IUserIdentityContext CreateUserIdentityContext(string userId);
 
-        Task ValidateLoginAsync(MobileLoginCommand command);
+        Task<string> ValidateLoginAsync(MobileLoginCommand command);
 
-        Task RegisterUserAsync(RegisterUserCommand command);
+        Task<string> RegisterUserAsync(RegisterUserCommand command);
 
         Task<bool> ActivateUserAsync(ActivateUserCommand command);
 

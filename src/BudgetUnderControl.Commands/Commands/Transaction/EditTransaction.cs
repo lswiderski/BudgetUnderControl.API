@@ -6,7 +6,7 @@ using System.Text;
 
 namespace BudgetUnderControl.CommonInfrastructure.Commands
 {
-    public class EditTransaction : ICommand
+    public class EditTransaction
     {
         public int Id { get; set; }
         public int AccountId { get; set; }

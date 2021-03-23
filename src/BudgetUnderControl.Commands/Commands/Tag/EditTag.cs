@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BudgetUnderControl.CommonInfrastructure.Commands
 {
-    public class EditTag : ICommand
+    public class EditTag
     {
         public string Name { get; set; }
 
