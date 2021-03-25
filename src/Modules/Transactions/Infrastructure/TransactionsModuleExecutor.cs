@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using BudgetUnderControl.Modules.Transactions.Application.Contracts;
 using BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration;
-using BudgetUnderControl.Modules.Transactions.Infrastructure.Processing;
+using BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration.Processing;
 using MediatR;
 using System;
 using System.Collections.Generic;

@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Application\BudgetUnderControl.Modules.Transactions.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Processing\" />
+  </ItemGroup>
+
 </Project>

@@ -1,26 +1,25 @@
-﻿using BudgetUnderControl.Common.Contracts.User;
-using BudgetUnderControl.CommonInfrastructure.Commands.User;
-using BudgetUnderControl.Domain.Repositiories;
+﻿using BudgetUnderControl.Domain.Repositiories;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BudgetUnderControl.ApiInfrastructure.Commands.Validators.Users
+namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Users.UpdateUser
 {
-    public class EditUserValidator : AbstractValidator<EditUser>
+    internal class UpdateUserCommandValidator : AbstractValidator<UpdateUserCommand>
     {
         private readonly IUserRepository userRepository;
-        public EditUserValidator(IUserRepository userRepository)
+        public UpdateUserCommandValidator(IUserRepository userRepository)
         {
             this.userRepository = userRepository;
 
             RuleFor(t => t.Username).NotEmpty().Length(1, 50)
                 .CustomAsync(async (id, context, cancel) =>
                 {
-                    
+
 
 
                 })
@@ -30,7 +29,7 @@ namespace BudgetUnderControl.ApiInfrastructure.Commands.Validators.Users
                 .EmailAddress().MustAsync(IsEmailUniqueAsync).WithMessage("User with that email already exist");
         }
 
-        private async Task<bool> IsNameUniqueAsync(EditUser command, string name, CancellationToken cancel)
+        private async Task<bool> IsNameUniqueAsync(UpdateUserCommand command, string name, CancellationToken cancel)
         {
             var user = await userRepository.GetAsync(name);
 
@@ -41,9 +40,9 @@ namespace BudgetUnderControl.ApiInfrastructure.Commands.Validators.Users
             return true;
         }
 
-        private async Task<bool> IsEmailUniqueAsync(EditUser command, string email, CancellationToken cancel)
+        private async Task<bool> IsEmailUniqueAsync(UpdateUserCommand command, string email, CancellationToken cancel)
         {
-            if(string.IsNullOrWhiteSpace(email))
+            if (string.IsNullOrWhiteSpace(email))
             {
                 return false;
             }
@@ -57,3 +56,4 @@ namespace BudgetUnderControl.ApiInfrastructure.Commands.Validators.Users
         }
     }
 }
+

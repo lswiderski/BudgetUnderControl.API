@@ -1,17 +1,18 @@
 ﻿using BudgetUnderControl.Common.Enums;
-using BudgetUnderControl.CommonInfrastructure.Commands;
-using BudgetUnderControl.Infrastructure.Services;
+using BudgetUnderControl.CommonInfrastructure;
+using BudgetUnderControl.Modules.Transactions.Application.Transactions.AddTransaction;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using BudgetUnderControl.CommonInfrastructure;
+using System.Threading.Tasks;
 
-namespace BudgetUnderControl.ApiInfrastructure.Commands.Validators
+namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Transactions.AddTransaction
 {
-    public class AddTransactionValidator : AbstractValidator<AddTransaction>
+    internal class AddTransactionCommandValidator : AbstractValidator<AddTransactionCommand>
     {
-        public AddTransactionValidator(ICategoryService categoryService, IAccountService accountService)
+        public AddTransactionCommandValidator(ICategoryService categoryService, IAccountService accountService)
         {
             RuleFor(t => t.Amount).NotEmpty();
             RuleFor(t => t.Date).NotEmpty();
@@ -49,7 +50,7 @@ namespace BudgetUnderControl.ApiInfrastructure.Commands.Validators
 
             RuleFor(t => t.TransferAccountId).NotEmpty().When(t => t.Type == ExtendedTransactionType.Transfer).CustomAsync(async (id, context, cancel) =>
             {
-                if ((context.InstanceToValidate as AddTransaction).Type == ExtendedTransactionType.Transfer)
+                if ((context.InstanceToValidate as AddTransactionCommand).Type == ExtendedTransactionType.Transfer)
                 {
                     var isValid = await accountService.IsValidAsync(id.Value);
                     if (!isValid)

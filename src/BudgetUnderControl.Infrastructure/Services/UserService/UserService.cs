@@ -24,28 +24,22 @@ namespace BudgetUnderControl.Infrastructure.Services
         private readonly IEncrypter encrypter;
         private readonly IJwtHandlerService jwtHandlerService;
         private readonly IMemoryCache cache;
-        private readonly IValidator<RegisterUserCommand> registerUserValidator;
         private readonly INotificationService notificationService;
         private readonly IMapper mapper;
-        private readonly IValidator<EditUser> editUserValidator;
         private readonly ITokenRepository tokenRepository;
         public UserService(IUserRepository userRepository, IEncrypter encrypter,
             IJwtHandlerService jwtHandlerService,
             IMemoryCache cache,
-            IValidator<RegisterUserCommand> registerUserValidator,
             INotificationService notificationService,
             IMapper mapper,
-            IValidator<EditUser> editUserValidator,
             ITokenRepository tokenRepository)
         {
             this.userRepository = userRepository;
             this.encrypter = encrypter;
             this.jwtHandlerService = jwtHandlerService;
             this.cache = cache;
-            this.registerUserValidator = registerUserValidator;
             this.notificationService = notificationService;
             this.mapper = mapper;
-            this.editUserValidator = editUserValidator;
             this.tokenRepository = tokenRepository;
         }
 
@@ -73,9 +67,6 @@ namespace BudgetUnderControl.Infrastructure.Services
 
         public async Task<string> RegisterUserAsync(RegisterUserCommand command)
         {
-            var validationResult = registerUserValidator.Validate(command);
-            if(validationResult.IsValid)
-            {
                 var salt = encrypter.GetSalt();
 
                 var hash = encrypter.GetHash(command.Password, salt);
@@ -92,9 +83,6 @@ namespace BudgetUnderControl.Infrastructure.Services
 
                 await this.notificationService.SendRegisterNotificationAsync(this.mapper.Map<UserDTO>(user), activationToken.Code);
                 return token;
-            }
-
-            return string.Empty;
         }
 
         public async Task ResetActivationCodeAsync(Guid userId)
@@ -172,9 +160,6 @@ namespace BudgetUnderControl.Infrastructure.Services
 
         public async Task EditUserAsync(EditUser command)
         {
-            var validationResult = this.editUserValidator.Validate(command);
-            if(validationResult.IsValid)
-            {
                 var user = await this.userRepository.GetAsync(command.ExternalId);
 
                 user.LastName = command.LastName;
@@ -184,9 +169,6 @@ namespace BudgetUnderControl.Infrastructure.Services
                 user.EditRole(command.Role);
 
                 this.userRepository.UpdateUserAsync(user);
-            }
         }
-
-
     }
 }

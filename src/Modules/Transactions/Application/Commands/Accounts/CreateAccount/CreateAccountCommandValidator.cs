@@ -1,16 +1,16 @@
 ﻿using BudgetUnderControl.CommonInfrastructure;
-using BudgetUnderControl.CommonInfrastructure.Commands;
-using BudgetUnderControl.Infrastructure.Services;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace BudgetUnderControl.ApiInfrastructure.Commands.Validators
+namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.CreateAccount
 {
-    public class AddAccountValidator : AbstractValidator<AddAccount>
+    internal class CreateAccountCommandValidator : AbstractValidator<CreateAccountCommand>
     {
-        public AddAccountValidator(ICurrencyService currencyService, IAccountGroupService accountGroupService, IAccountService accountService)
+        public CreateAccountCommandValidator(ICurrencyService currencyService, IAccountGroupService accountGroupService, IAccountService accountService)
         {
             RuleFor(t => t.AccountGroupId).NotEmpty();
             RuleFor(t => t.Name).NotEmpty().Length(1, 100);

@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Processing
+namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration.Processing
 {
     internal static class CommandsExecutor
     {

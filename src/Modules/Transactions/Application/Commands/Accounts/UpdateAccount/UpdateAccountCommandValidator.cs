@@ -1,16 +1,16 @@
-﻿using BudgetUnderControl.CommonInfrastructure.Commands;
-using BudgetUnderControl.Infrastructure.Services;
+﻿using BudgetUnderControl.CommonInfrastructure;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using BudgetUnderControl.CommonInfrastructure;
+using System.Threading.Tasks;
 
-namespace BudgetUnderControl.ApiInfrastructure.Commands.Validators
+namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.UpdateAccount
 {
-    public class EditAccountValidator : AbstractValidator<EditAccount>
+    internal class UpdateAccountCommandValidator : AbstractValidator<UpdateAccountCommand>
     {
-        public EditAccountValidator(ICurrencyService currencyService, IAccountGroupService accountGroupService, IAccountService accountService)
+        public UpdateAccountCommandValidator(ICurrencyService currencyService, IAccountGroupService accountGroupService, IAccountService accountService)
         {
             RuleFor(t => t.Id).NotEmpty();
             RuleFor(t => t.ExternalId).NotEmpty();

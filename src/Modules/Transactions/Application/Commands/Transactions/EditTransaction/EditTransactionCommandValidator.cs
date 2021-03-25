@@ -1,17 +1,18 @@
 ﻿using BudgetUnderControl.Common.Enums;
-using BudgetUnderControl.CommonInfrastructure.Commands;
-using BudgetUnderControl.Infrastructure.Services;
+using BudgetUnderControl.CommonInfrastructure;
+using BudgetUnderControl.Modules.Transactions.Application.Transactions.EditTransaction;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using BudgetUnderControl.CommonInfrastructure;
+using System.Threading.Tasks;
 
-namespace BudgetUnderControl.ApiInfrastructure.Commands.Validators
+namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Transactions.EditTransaction
 {
-    public class EditTransactionValidator : AbstractValidator<EditTransaction>
+    internal class EditTransactionCommandValidator : AbstractValidator<EditTransactionCommand>
     {
-        public EditTransactionValidator(ICategoryService categoryService, IAccountService accountService)
+        public EditTransactionCommandValidator(ICategoryService categoryService, IAccountService accountService)
         {
             RuleFor(t => t.Id).NotEmpty();
             RuleFor(t => t.ExternalId).NotEmpty();
@@ -52,7 +53,7 @@ namespace BudgetUnderControl.ApiInfrastructure.Commands.Validators
             RuleFor(t => t.TransferId).NotEmpty().When(t => t.ExtendedType == ExtendedTransactionType.Transfer);
             RuleFor(t => t.TransferAccountId).NotEmpty().When(t => t.ExtendedType == ExtendedTransactionType.Transfer).CustomAsync(async (id, context, cancel) =>
             {
-                if ((context.InstanceToValidate as EditTransaction).ExtendedType == ExtendedTransactionType.Transfer && id.HasValue)
+                if ((context.InstanceToValidate as EditTransactionCommand).ExtendedType == ExtendedTransactionType.Transfer && id.HasValue)
                 {
                     var isValid = await accountService.IsValidAsync(id.Value);
                     if (!isValid)

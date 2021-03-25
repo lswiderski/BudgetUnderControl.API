@@ -22,8 +22,6 @@ namespace BudgetUnderControl.Infrastructure.Services
     {
         private readonly ITransactionRepository transactionRepository;
         private readonly ITagRepository tagRepository;
-        private readonly IValidator<AddTransaction> addTransactionValidator;
-        private readonly IValidator<EditTransaction> editTransactionValidator;
         private readonly IFileService fileService;
         private readonly ICurrencyService currencyService;
         private readonly ICurrencyRepository currencyRepository;
@@ -35,14 +33,10 @@ namespace BudgetUnderControl.Infrastructure.Services
             IFileService fileService,
             ICurrencyService currencyService,
             ICurrencyRepository currencyRepository,
-            IValidator<AddTransaction> addTransactionValidator,
-            IValidator<EditTransaction> editTransactionValidator,
             IUserIdentityContext userIdentityContext) : base(context)
         {
             this.transactionRepository = transactionRepository;
             this.tagRepository = tagRepository;
-            this.addTransactionValidator = addTransactionValidator;
-            this.editTransactionValidator = editTransactionValidator;
             this.fileService = fileService;
             this.currencyService = currencyService;
             this.currencyRepository = currencyRepository;
@@ -92,12 +86,6 @@ namespace BudgetUnderControl.Infrastructure.Services
 
         public async Task AddTransactionAsync(AddTransaction command)
         {
-            var results = addTransactionValidator.Validate(command);
-            if(!results.IsValid)
-            {
-                throw new ArgumentException(results.ToString("~"));
-            }
-
             var user = userIdentityContext;
 
             if (command.Type == ExtendedTransactionType.Transfer)
@@ -154,12 +142,6 @@ namespace BudgetUnderControl.Infrastructure.Services
 
         public async Task EditTransactionAsync(EditTransaction command)
         {
-            var results = editTransactionValidator.Validate(command);
-            if (!results.IsValid)
-            {
-                throw new ArgumentException(results.ToString("~"));
-            }
-
             var user = userIdentityContext;
 
             var firstTransaction = await this.transactionRepository.GetTransactionAsync(command.Id);

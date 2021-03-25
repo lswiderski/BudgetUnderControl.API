@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Core;
 using Autofac.Features.Variance;
+using FluentValidation;
 using MediatR;
 using MediatR.Pipeline;
 using System;
@@ -22,12 +23,14 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration.M
 
             builder.RegisterSource(new ScopedContravariantRegistrationSource(
                 typeof(IRequestHandler<,>),
-                typeof(INotificationHandler<>)));
+                typeof(INotificationHandler<>),
+                typeof(IValidator<>)));
 
             var mediatorOpenTypes = new[]
             {
                 typeof(IRequestHandler<,>),
-                typeof(INotificationHandler<>)
+                typeof(INotificationHandler<>),
+                typeof(IValidator<>)
             };
 
             foreach (var mediatorOpenType in mediatorOpenTypes)

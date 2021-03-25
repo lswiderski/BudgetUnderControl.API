@@ -29,14 +29,6 @@ namespace BudgetUnderControl.Infrastructure.IoC
             .GetTypeInfo()
             .Assembly;
 
-            var commonInfrastructureAssembly = typeof(AddAccount)
-            .GetTypeInfo()
-            .Assembly;
-
-            builder.RegisterAssemblyTypes(assembly)
-                   .AsClosedTypesOf(typeof(IValidator<>))
-                    .AsImplementedInterfaces();
-
             builder.RegisterType<BaseModel>().As<IBaseModel>().InstancePerLifetimeScope();
             builder.RegisterType<AccountService>().As<IAccountService>().InstancePerLifetimeScope();
             builder.RegisterType<CurrencyService>().As<ICurrencyService>().InstancePerLifetimeScope();

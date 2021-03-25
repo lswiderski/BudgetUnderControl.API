@@ -1,15 +1,16 @@
-﻿using BudgetUnderControl.CommonInfrastructure.Commands;
-using BudgetUnderControl.Domain.Repositiories;
+﻿using BudgetUnderControl.Domain.Repositiories;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace BudgetUnderControl.ApiInfrastructure.Commands.Validators
+namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Login.CreateNewUser
 {
-    public class RegisterUserValidator : AbstractValidator<RegisterUserCommand>
+    internal class CreateNewUserCommandValidator : AbstractValidator<CreateNewUserCommand>
     {
-        public RegisterUserValidator(IUserRepository userRepository)
+        public CreateNewUserCommandValidator(IUserRepository userRepository)
         {
             RuleFor(t => t.Password).NotEmpty();
 
@@ -26,7 +27,7 @@ namespace BudgetUnderControl.ApiInfrastructure.Commands.Validators
 
             RuleFor(t => t.Email).NotNull().NotEmpty().Length(1, 150).EmailAddress().CustomAsync(async (email, context, cancel) =>
             {
-                if(!string.IsNullOrEmpty(email))
+                if (!string.IsNullOrEmpty(email))
                 {
                     var user = await userRepository.GetByEmailAsync(email.ToLower());
 
