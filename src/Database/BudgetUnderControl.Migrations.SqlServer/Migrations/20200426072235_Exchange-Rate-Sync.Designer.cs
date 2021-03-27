@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BudgetUnderControl.Migrations.SqlServer.Migrations
 {
-    [DbContext(typeof(Context))]
+    [DbContext(typeof(TransactionsContext))]
     [Migration("20200426072235_Exchange-Rate-Sync")]
     partial class ExchangeRateSync
     {

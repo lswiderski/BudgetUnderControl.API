@@ -9,10 +9,13 @@ using System.Threading.Tasks;
 
 namespace BudgetUnderControl.Infrastructure
 {
-    public class AccountGroupRepository : BaseModel, IAccountGroupRepository
+    public class AccountGroupRepository : IAccountGroupRepository
     {
-        public AccountGroupRepository(IContextFacade context) : base(context)
+        private readonly TransactionsContext Context;
+
+        public AccountGroupRepository(TransactionsContext context)
         {
+            this.Context = context;
         }
 
         public async Task<ICollection<AccountGroup>> GetAccountGroupsAsync()

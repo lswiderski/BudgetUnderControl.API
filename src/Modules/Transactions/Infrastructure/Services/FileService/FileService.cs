@@ -14,19 +14,21 @@ using System.Threading.Tasks;
 
 namespace BudgetUnderControl.ApiInfrastructure.Services
 {
-    public class FileService : BaseModel, IFileService
+    public class FileService : IFileService
     {
         private string _uploadCatalog = "uploads";
 
         private readonly IUserIdentityContext userIdentityContext;
         private readonly GeneralSettings settings;
         private readonly ILogger logger;
+        private readonly TransactionsContext Context;
 
-        public FileService(IContextFacade context, IUserIdentityContext userIdentityContext, GeneralSettings settings, ILogger logger) : base(context)
+        public FileService(TransactionsContext context, IUserIdentityContext userIdentityContext, GeneralSettings settings, ILogger logger)
         {
             this.userIdentityContext = userIdentityContext;
             this.settings = settings;
             this.logger = logger;
+            this.Context = context;
         }
 
         public async Task<Guid> SaveFileAsync(IFormFile file)

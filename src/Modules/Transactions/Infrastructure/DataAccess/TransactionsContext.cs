@@ -11,11 +11,9 @@ using System.Data.Common;
 
 namespace BudgetUnderControl.Domain
 {
-    public class Context : DbContext, IDisposable
+    public class TransactionsContext : DbContext, IDisposable
     {
         private readonly IContextConfig config;
-
-        private string databasePath { get; set; }
 
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<AccountGroup> AccountGroup { get; set; }
@@ -34,39 +32,15 @@ namespace BudgetUnderControl.Domain
         public virtual DbSet<Token> Tokens { get; set; }
         public virtual DbSet<Synchronization> Synchronizations { get; set; }
 
-
-        public static Context Create(IContextConfig contextConfig)
-        {
-            var context = new Context(contextConfig);
-            // context.Database.EnsureCreated();
-            return context;
-        }
-
-        public static Context CreateTest(DbContextOptions options, IContextConfig config)
-        {
-            var context = new Context(options, config);
-            context.Database.EnsureCreated();
-            return context;
-        }
-
-        protected Context()
+        protected TransactionsContext()
         {
 
         }
 
-        public Context(DbContextOptions options, IContextConfig config) : base(options)
+        public TransactionsContext(DbContextOptions options, IContextConfig config) : base(options)
         {
             this.config = config;
             if (config.Application == ApplicationType.Test)
-            {
-                Database.Migrate();
-            }
-        }
-
-        public Context(IContextConfig config)
-        {
-            this.config = config;
-            if (config.Application == ApplicationType.Mobile || config.Application == ApplicationType.Web)
             {
                 Database.Migrate();
             }
@@ -76,17 +50,9 @@ namespace BudgetUnderControl.Domain
         {
             if (config != null)
             {
-                if (config.Application == ApplicationType.Mobile || config.Application == ApplicationType.SQLiteMigrations)
-                {
-                  //  optionsBuilder.UseSqlite(config.ConnectionString, options => options.MigrationsAssembly("BudgetUnderControl.Migrations.SQLite"));
-                }
-                else if (config.Application == ApplicationType.Web || config.Application == ApplicationType.SqlServerMigrations)
+                if (config.Application == ApplicationType.Web || config.Application == ApplicationType.SqlServerMigrations)
                 {
                     optionsBuilder.UseSqlServer(config.ConnectionString, options => options.MigrationsAssembly("BudgetUnderControl.Migrations.SqlServer"));
-                }
-                else if (config.Application == ApplicationType.Test)
-                {
-
                 }
             }
 

@@ -2,7 +2,6 @@
 using BudgetUnderControl.CommonInfrastructure;
 using BudgetUnderControl.Domain;
 using BudgetUnderControl.Domain.Repositiories;
-using BudgetUnderControl.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,16 +10,18 @@ using System.Threading.Tasks;
 
 namespace BudgetUnderControl.Infrastructure
 {
-    public class TransactionRepository : BaseModel, ITransactionRepository
+    public class TransactionRepository : ITransactionRepository
     {
         private readonly IAccountRepository accountRepository;
         private readonly IUserIdentityContext userIdentityContext;
+        private readonly TransactionsContext Context;
 
-        public TransactionRepository(IContextFacade context, IAccountRepository accountRepository,
-            IUserIdentityContext userIdentityContext) : base(context)
+        public TransactionRepository(TransactionsContext context, IAccountRepository accountRepository,
+            IUserIdentityContext userIdentityContext)
         {
             this.accountRepository = accountRepository;
             this.userIdentityContext = userIdentityContext;
+            this.Context = context;
         }
 
         public async Task AddTransactionAsync(Transaction transaction)
@@ -164,7 +165,7 @@ namespace BudgetUnderControl.Infrastructure
                     query = query.Where(q => q.CreatedOn >= filter.ChangedSince || q.ModifiedOn >= filter.ChangedSince).AsQueryable();
                 }
 
-                
+
 
             }
             else
@@ -183,7 +184,7 @@ namespace BudgetUnderControl.Infrastructure
                                                    .ToListAsync());
             transactionsWithExtraProperty.ForEach(x => x.t.IsTransfer = x.IsTransfer);
 
-            if (filter != null &&!filter.IncludeTransfers)
+            if (filter != null && !filter.IncludeTransfers)
             {
                 transactionsWithExtraProperty = transactionsWithExtraProperty.Where(q => q.IsTransfer == false).ToList();
             }

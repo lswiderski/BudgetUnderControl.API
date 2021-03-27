@@ -11,13 +11,15 @@ using System.Threading.Tasks;
 
 namespace BudgetUnderControl.Infrastructure.Repositories
 {
-    public class TagRepository : BaseModel, ITagRepository
+    public class TagRepository : ITagRepository
     {
         private readonly IUserIdentityContext userIdentityContext;
+        private readonly TransactionsContext Context;
 
-        public TagRepository(IContextFacade context, IUserIdentityContext userIdentityContext) : base(context)
+        public TagRepository(TransactionsContext context, IUserIdentityContext userIdentityContext) 
         {
             this.userIdentityContext = userIdentityContext;
+            this.Context = context;
         }
 
         public async Task AddAsync(Tag tag)

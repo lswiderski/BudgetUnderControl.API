@@ -12,13 +12,15 @@ using System.Threading.Tasks;
 
 namespace BudgetUnderControl.Infrastructure
 {
-    public class CategoryRepository : BaseModel, ICategoryRepository
+    public class CategoryRepository : ICategoryRepository
     {
         private readonly IUserIdentityContext userIdentityContext;
+        private readonly TransactionsContext Context;
 
-        public CategoryRepository(IContextFacade context, IUserIdentityContext userIdentityContext) : base(context)
+        public CategoryRepository(TransactionsContext context, IUserIdentityContext userIdentityContext) 
         {
             this.userIdentityContext = userIdentityContext;
+            this.Context = context;
         }
 
         public async Task<ICollection<Category>> GetCategoriesAsync()

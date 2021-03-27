@@ -60,8 +60,7 @@ namespace BudgetUnderControl.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<Context>(ServiceLifetime.Transient);
-            services.AddTransient<IContextFacade, ContextFacade>();
+            services.AddDbContext<TransactionsContext>(ServiceLifetime.Transient);
            
             services.AddMemoryCache();
             services.AddCors();
@@ -122,7 +121,7 @@ namespace BudgetUnderControl.API
             var builder = new ContainerBuilder();          
 
             builder.RegisterModule(new ApiModule(Configuration, environment));
-            builder.RegisterModule<TransactionsAutofacModule>();
+            
             builder.Populate(services);
             ApplicationContainer = builder.Build();
             services.AddTransactionsModule(ApplicationContainer);

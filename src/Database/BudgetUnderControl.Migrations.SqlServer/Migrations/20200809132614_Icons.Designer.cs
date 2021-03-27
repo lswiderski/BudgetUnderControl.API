@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BudgetUnderControl.Migrations.SqlServer.Migrations
 {
-    [DbContext(typeof(Context))]
+    [DbContext(typeof(TransactionsContext))]
     [Migration("20200809132614_Icons")]
     partial class Icons
     {

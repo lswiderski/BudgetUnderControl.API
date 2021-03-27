@@ -13,13 +13,15 @@ using System.Threading.Tasks;
 namespace BudgetUnderControl.Infrastructure
 {
 
-    public class CurrencyRepository : BaseModel, ICurrencyRepository
+    public class CurrencyRepository :  ICurrencyRepository
     {
         private readonly IUserIdentityContext userIdentityContext;
+        private readonly TransactionsContext Context;
 
-        public CurrencyRepository(IContextFacade context,  IUserIdentityContext userIdentityContext) : base(context)
+        public CurrencyRepository(TransactionsContext context,  IUserIdentityContext userIdentityContext) 
         {
             this.userIdentityContext = userIdentityContext;
+            this.Context = context;
         }
 
         public async Task AddCurrencyAsync(Currency currency)

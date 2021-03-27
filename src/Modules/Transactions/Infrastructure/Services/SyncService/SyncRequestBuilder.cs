@@ -16,7 +16,7 @@ using BudgetUnderControl.ApiInfrastructure.Services;
 
 namespace BudgetUnderControl.Infrastructure.Services
 {
-    public class SyncRequestBuilder : BaseModel, ISyncRequestBuilder
+    public class SyncRequestBuilder : ISyncRequestBuilder
     {
         private readonly ILogger logger;
         private readonly ITransactionRepository transactionRepository;
@@ -30,7 +30,9 @@ namespace BudgetUnderControl.Infrastructure.Services
         private readonly ITagRepository tagRepository;
         private readonly GeneralSettings settings;
         private readonly IFileService fileService;
-        public SyncRequestBuilder(IContextFacade context, ITransactionRepository transactionRepository,
+        private readonly TransactionsContext Context;
+
+        public SyncRequestBuilder(TransactionsContext context, ITransactionRepository transactionRepository,
             IAccountRepository accountRepository,
             ICurrencyRepository currencyRepository,
             ICategoryRepository categoryRepository,
@@ -41,7 +43,7 @@ namespace BudgetUnderControl.Infrastructure.Services
             ITagRepository tagRepository,
             ILogger logger,
             GeneralSettings settings,
-            IFileService fileService) : base(context)
+            IFileService fileService) 
         {
             this.transactionRepository = transactionRepository;
             this.accountRepository = accountRepository;
@@ -55,6 +57,7 @@ namespace BudgetUnderControl.Infrastructure.Services
             this.tagRepository = tagRepository;
             this.logger = logger;
             this.fileService = fileService;
+            this.Context = context;
         }
 
         public async Task<SyncRequest> CreateSyncRequestAsync(SynchronizationComponent source, SynchronizationComponent target)

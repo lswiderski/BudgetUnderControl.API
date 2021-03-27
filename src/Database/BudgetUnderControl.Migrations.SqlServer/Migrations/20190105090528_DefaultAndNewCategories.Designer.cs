@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BudgetUnderControl.Migrations.SqlServer.Migrations
 {
-    [DbContext(typeof(Context))]
+    [DbContext(typeof(TransactionsContext))]
     [Migration("20190105090528_DefaultAndNewCategories")]
     partial class DefaultAndNewCategories
     {

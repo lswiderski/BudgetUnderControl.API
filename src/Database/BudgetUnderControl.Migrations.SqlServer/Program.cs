@@ -10,29 +10,29 @@ using System.IO;
 
 namespace BudgetUnderControl.Migrations.SqlServer
 {
-    class Program : IDesignTimeDbContextFactory<Context>
+    class Program : IDesignTimeDbContextFactory<TransactionsContext>
     {
         static void Main(string[] args)
         {
             Program p = new Program();
-            using (Context context = p.CreateDbContext(null))
+            using (TransactionsContext context = p.CreateDbContext(null))
             {
 
             }
                 Console.WriteLine("Hello World!");
         }
 
-        public Context CreateDbContext(string[] args)
+        public TransactionsContext CreateDbContext(string[] args)
         {
 
             var contextConfig = new ContextConfig() { DbName = Settings.DB_SQLServer_NAME, Application = ApplicationType.SqlServerMigrations, ConnectionString= "Data Source=.;Initial Catalog=dbBUC-dev;User ID=buc;Password=Qwerty!1" };
             var connectionString = contextConfig.ConnectionString;
 
 
-            DbContextOptionsBuilder<Context> optionsBuilder = new DbContextOptionsBuilder<Context>()
+            DbContextOptionsBuilder<TransactionsContext> optionsBuilder = new DbContextOptionsBuilder<TransactionsContext>()
                 .UseSqlServer(connectionString);
 
-             return new Context(optionsBuilder.Options, contextConfig);
+             return new TransactionsContext(optionsBuilder.Options, contextConfig);
         }
     }
 

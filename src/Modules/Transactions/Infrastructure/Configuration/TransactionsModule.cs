@@ -6,10 +6,13 @@ using BudgetUnderControl.ApiInfrastructure.Services.UserService;
 using BudgetUnderControl.CommonInfrastructure;
 using BudgetUnderControl.CommonInfrastructure.Interfaces;
 using BudgetUnderControl.CommonInfrastructure.Interfaces.Email;
+using BudgetUnderControl.Domain;
 using BudgetUnderControl.Domain.Repositiories;
 using BudgetUnderControl.Infrastructure;
 using BudgetUnderControl.Infrastructure.Repositories;
 using BudgetUnderControl.Infrastructure.Services;
+using BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration.Processing;
+using BudgetUnderControl.Modules.Transactions.Infrastructure.DataAccess;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -21,10 +24,19 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration
 {
     public class TransactionsModule : Autofac.Module
     {
+        private readonly IContextConfig contextConfig;
+
+        public TransactionsModule(IContextConfig contextConfig)
+        {
+            this.contextConfig = contextConfig;
+        }
 
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<BaseModel>().As<IBaseModel>().InstancePerLifetimeScope();
+
+            builder.RegisterModule(new DataAccessModule(contextConfig));
+            builder.RegisterModule(new ProcessingModule());
+
             builder.RegisterType<AccountService>().As<IAccountService>().InstancePerLifetimeScope();
             builder.RegisterType<CurrencyService>().As<ICurrencyService>().InstancePerLifetimeScope();
             builder.RegisterType<CategoryService>().As<ICategoryService>().InstancePerLifetimeScope();

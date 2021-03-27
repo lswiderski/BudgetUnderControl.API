@@ -9,11 +9,13 @@ using System.Threading.Tasks;
 
 namespace BudgetUnderControl.Infrastructure.Repositories
 {
-    public class SynchronizationRepository : BaseModel, ISynchronizationRepository
+    public class SynchronizationRepository :  ISynchronizationRepository
     {
-        public SynchronizationRepository(IContextFacade context) : base(context)
-        {
+        private readonly TransactionsContext Context;
 
+        public SynchronizationRepository(TransactionsContext context) 
+        {
+            this.Context = context;
         }
 
         public async Task<IEnumerable<Synchronization>> GetSynchronizationsAsync()

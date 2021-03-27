@@ -9,10 +9,13 @@ using System.Threading.Tasks;
 
 namespace BudgetUnderControl.Infrastructure.Repositories
 {
-    public class UserRepository : BaseModel, IUserRepository
+    public class UserRepository : IUserRepository
     {
-        public UserRepository(IContextFacade context) : base(context)
+        private readonly TransactionsContext Context;
+
+        public UserRepository(TransactionsContext context)
         {
+            this.Context = context;
         }
 
         public async Task<User> GetAsync(string username)

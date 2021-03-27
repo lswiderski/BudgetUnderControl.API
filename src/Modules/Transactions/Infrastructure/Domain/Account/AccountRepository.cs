@@ -13,13 +13,15 @@ using BudgetUnderControl.CommonInfrastructure;
 
 namespace BudgetUnderControl.Infrastructure
 {
-    public class AccountRepository : BaseModel, IAccountRepository
+    public class AccountRepository : IAccountRepository
     {
         private readonly IUserIdentityContext userIdentityContext;
+        private readonly TransactionsContext Context;
 
-        public AccountRepository(IContextFacade context, IUserIdentityContext userIdentityContext) : base(context)
+        public AccountRepository(TransactionsContext context, IUserIdentityContext userIdentityContext)
         {
             this.userIdentityContext = userIdentityContext;
+            this.Context = context;
         }
 
         public async Task<IEnumerable<Account>> GetAccountsAsync(bool? active = null)

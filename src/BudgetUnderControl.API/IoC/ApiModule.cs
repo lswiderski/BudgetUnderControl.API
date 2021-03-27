@@ -4,6 +4,8 @@ using BudgetUnderControl.Common;
 using BudgetUnderControl.Common.Enums;
 using BudgetUnderControl.CommonInfrastructure.Settings;
 using BudgetUnderControl.Domain;
+using BudgetUnderControl.Modules.Transactions.Api;
+using BudgetUnderControl.Modules.Transactions.Infrastructure.DataAccess;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using NLog;
@@ -43,10 +45,12 @@ namespace BudgetUnderControl.API.IoC
             var contextConfig = new ContextConfig() { DbName = settings.BUC_DB_Name, Application = settings.ApplicationType, ConnectionString = settings.ConnectionString };
 
             builder.RegisterInstance(contextConfig).As<IContextConfig>();
-           
+            
             var logManager = new NLogManager();
             builder.RegisterInstance(logManager).As<ILogManager>().SingleInstance();
             builder.RegisterInstance(logManager.GetLog()).As<ILogger>();
+
+            builder.RegisterModule(new TransactionsAutofacModule(contextConfig));
 
         }
     }

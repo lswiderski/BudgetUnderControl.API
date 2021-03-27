@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using BudgetUnderControl.Domain;
 using BudgetUnderControl.Modules.Transactions.Application.Contracts;
 using BudgetUnderControl.Modules.Transactions.Infrastructure;
 using BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration.Mediation;
@@ -12,6 +13,12 @@ namespace BudgetUnderControl.Modules.Transactions.Api
 {
     public class TransactionsAutofacModule : Module
     {
+        private readonly IContextConfig contextConfig;
+
+        public TransactionsAutofacModule(IContextConfig contextConfig)
+        {
+            this.contextConfig = contextConfig;
+        }
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterType<TransactionsModuleExecutor>()
@@ -19,8 +26,9 @@ namespace BudgetUnderControl.Modules.Transactions.Api
                 .InstancePerLifetimeScope();
 
 
+           
             builder.RegisterModule(new MediatorModule());
-            builder.RegisterModule(new Infrastructure.Configuration.TransactionsModule());
+            builder.RegisterModule(new Infrastructure.Configuration.TransactionsModule(contextConfig));
         }
     }
 }

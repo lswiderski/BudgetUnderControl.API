@@ -18,7 +18,7 @@ using BudgetUnderControl.ApiInfrastructure.Services;
 
 namespace BudgetUnderControl.Infrastructure.Services
 {
-    public class TransactionService : BaseModel, ITransactionService
+    public class TransactionService : ITransactionService
     {
         private readonly ITransactionRepository transactionRepository;
         private readonly ITagRepository tagRepository;
@@ -26,14 +26,15 @@ namespace BudgetUnderControl.Infrastructure.Services
         private readonly ICurrencyService currencyService;
         private readonly ICurrencyRepository currencyRepository;
         private readonly IUserIdentityContext userIdentityContext;
+        private readonly TransactionsContext Context;
 
-        public TransactionService(IContextFacade context,
+        public TransactionService(TransactionsContext context,
             ITransactionRepository transactionRepository,
             ITagRepository tagRepository,
             IFileService fileService,
             ICurrencyService currencyService,
             ICurrencyRepository currencyRepository,
-            IUserIdentityContext userIdentityContext) : base(context)
+            IUserIdentityContext userIdentityContext)
         {
             this.transactionRepository = transactionRepository;
             this.tagRepository = tagRepository;
@@ -41,6 +42,7 @@ namespace BudgetUnderControl.Infrastructure.Services
             this.currencyService = currencyService;
             this.currencyRepository = currencyRepository;
             this.userIdentityContext = userIdentityContext;
+            this.Context = context;
         }
 
         public async Task<ICollection<TransactionListItemDTO>> GetTransactionsAsync(TransactionsFilter filter = null)

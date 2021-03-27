@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BudgetUnderControl.Migrations.SqlServer.Migrations
 {
-    [DbContext(typeof(Context))]
+    [DbContext(typeof(TransactionsContext))]
     [Migration("20181129170327_set_same_external_ids")]
     partial class set_same_external_ids
     {

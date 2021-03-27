@@ -12,11 +12,13 @@ using System.Threading.Tasks;
 
 namespace BudgetUnderControl.ApiInfrastructure.Repositories
 {
-    public class TokenRepository : BaseModel, ITokenRepository
+    public class TokenRepository :  ITokenRepository
     {
+        private readonly TransactionsContext Context;
 
-        public TokenRepository(IContextFacade context) : base(context)
+        public TokenRepository(TransactionsContext context) 
         {
+            this.Context = context;
         }
 
         public async Task AddAsync(Token token)
