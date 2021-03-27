@@ -2,7 +2,6 @@
 using BudgetUnderControl.Common.Enums;
 using BudgetUnderControl.Domain.Repositiories;
 using BudgetUnderControl.CommonInfrastructure.Commands;
-using BudgetUnderControl.CommonInfrastructure.Settings;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -13,6 +12,7 @@ using BudgetUnderControl.CommonInfrastructure;
 using BudgetUnderControl.Domain;
 using Microsoft.EntityFrameworkCore;
 using BudgetUnderControl.ApiInfrastructure.Services;
+using BudgetUnderControl.Shared.Infrastructure.Settings;
 
 namespace BudgetUnderControl.Infrastructure.Services
 {

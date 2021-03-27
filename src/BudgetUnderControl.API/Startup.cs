@@ -27,13 +27,13 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using BudgetUnderControl.API.Extensions;
 using System.Text;
-using BudgetUnderControl.CommonInfrastructure.Settings;
 using Microsoft.Extensions.Hosting;
 using BudgetUnderControl.Common.Extensions;
 using AutoMapper;
 using BudgetUnderControl.ApiInfrastructure.Profiles.User;
 using BudgetUnderControl.Modules.Transactions.Api;
 using Microsoft.AspNetCore.Http;
+using BudgetUnderControl.Shared.Infrastructure.Settings;
 
 namespace BudgetUnderControl.API
 {

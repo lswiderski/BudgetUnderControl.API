@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BudgetUnderControl.CommonInfrastructure.Settings
+namespace BudgetUnderControl.Shared.Infrastructure.Settings
 {
     public class GeneralSettings
     {

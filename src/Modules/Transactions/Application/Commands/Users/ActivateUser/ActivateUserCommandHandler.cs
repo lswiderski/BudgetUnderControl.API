@@ -22,11 +22,7 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Users.Act
 
         public async Task<bool> Handle(ActivateUserCommand request, CancellationToken cancellationToken)
         {
-            var isSuccess = await this.userService.ActivateUserAsync(new CommonInfrastructure.Commands.ActivateUserCommand
-            {
-                UserId = identityContext.ExternalId,
-                Code = request.Code
-            });
+            var isSuccess = await this.userService.ActivateUserAsync(identityContext.ExternalId, request.Code);
 
             return isSuccess;
         }

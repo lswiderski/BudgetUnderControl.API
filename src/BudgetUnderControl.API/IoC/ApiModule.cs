@@ -1,19 +1,14 @@
 ﻿using Autofac;
 using BudgetUnderControl.API.Extensions;
 using BudgetUnderControl.Common;
-using BudgetUnderControl.Common.Enums;
-using BudgetUnderControl.CommonInfrastructure.Settings;
 using BudgetUnderControl.Domain;
 using BudgetUnderControl.Modules.Transactions.Api;
-using BudgetUnderControl.Modules.Transactions.Infrastructure.DataAccess;
+using BudgetUnderControl.Shared.Infrastructure.Settings;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using NLog;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BudgetUnderControl.API.IoC
 {

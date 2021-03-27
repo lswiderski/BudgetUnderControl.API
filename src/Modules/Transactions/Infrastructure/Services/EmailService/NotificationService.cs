@@ -1,7 +1,7 @@
 ﻿using BudgetUnderControl.ApiInfrastructure.Services.EmailService.Contracts;
 using BudgetUnderControl.Common.Contracts.User;
-using BudgetUnderControl.CommonInfrastructure.Settings;
 using BudgetUnderControl.Domain.Repositiories;
+using BudgetUnderControl.Shared.Infrastructure.Settings;
 using System;
 using System.Collections.Generic;
 using System.Text;

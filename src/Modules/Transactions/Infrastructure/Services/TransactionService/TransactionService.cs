@@ -290,18 +290,10 @@ namespace BudgetUnderControl.Infrastructure.Services
             await this.Context.SaveChangesAsync();
         }
 
-        public async Task DeleteTransactionAsync(DeleteTransaction command)
+        public async Task DeleteTransactionAsync(Guid transactionId)
         {
-            Transaction firstTransaction = null;
-            if (command.Id != null)
-            {
-                firstTransaction = await this.transactionRepository.GetTransactionAsync(command.Id.Value);
-            }
-            else if(command.ExternalId != null)
-            {
-                firstTransaction = await this.transactionRepository.GetTransactionAsync(command.ExternalId.Value);
-            }
-            else
+            Transaction firstTransaction = await this.transactionRepository.GetTransactionAsync(transactionId);
+            if (firstTransaction  == null)
             {
                 throw new ArgumentException("No Transaction to remove");
             }

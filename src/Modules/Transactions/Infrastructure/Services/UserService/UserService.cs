@@ -43,16 +43,16 @@ namespace BudgetUnderControl.Infrastructure.Services
             this.tokenRepository = tokenRepository;
         }
 
-        public async Task<string> ValidateLoginAsync(MobileLoginCommand command)
+        public async Task<string> ValidateLoginAsync(string username, string password)
         {
-            var user = await userRepository.GetAsync(command.Username);
+            var user = await userRepository.GetAsync(username);
 
             if(user == null)
             {
                 return string.Empty;
             }
 
-            var hash = encrypter.GetHash(command.Password, user.Salt);
+            var hash = encrypter.GetHash(password, user.Salt);
 
             if(hash != user.Password)
             {
@@ -60,7 +60,6 @@ namespace BudgetUnderControl.Infrastructure.Services
             }
 
             var token = jwtHandlerService.CreateToken(user);
-            cache.Set(command.TokenId, token);
 
             return token;
         }
@@ -98,15 +97,15 @@ namespace BudgetUnderControl.Infrastructure.Services
             await this.notificationService.SendRegisterNotificationAsync(this.mapper.Map<UserDTO>(user), activationToken.Code);
         }
 
-        public async Task<bool> ActivateUserAsync(ActivateUserCommand command)
+        public async Task<bool> ActivateUserAsync(Guid userId, string code)
         {
-            var user = await userRepository.GetAsync(command.UserId);
+            var user = await userRepository.GetAsync(userId);
 
             if(user == null)
             {
                 return false;
             }
-            var token = await tokenRepository.GetByCodeAsync(command.Code, TokenType.Activation, user.ExternalId);
+            var token = await tokenRepository.GetByCodeAsync(code, TokenType.Activation, user.ExternalId);
 
             if(token != null && token.IsValid && token.ValidUntil >= DateTime.UtcNow)
             {

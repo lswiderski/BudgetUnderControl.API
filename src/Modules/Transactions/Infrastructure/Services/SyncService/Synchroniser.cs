@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
 using BudgetUnderControl.CommonInfrastructure;
-using BudgetUnderControl.CommonInfrastructure.Settings;
 using BudgetUnderControl.CommonInfrastructure.Commands;
 using Microsoft.EntityFrameworkCore;
 using BudgetUnderControl.ApiInfrastructure.Services;
@@ -30,7 +29,6 @@ namespace BudgetUnderControl.Infrastructure.Services
         private readonly ITagRepository tagRepository;
         private readonly ITransactionService transactionService;
         private readonly IFileService fileService;
-        private readonly GeneralSettings settings;
         private Dictionary<Guid, int> _tags;
         private readonly TransactionsContext Context;
 
@@ -45,8 +43,7 @@ namespace BudgetUnderControl.Infrastructure.Services
             ITagRepository tagRepository,
             ITransactionService transactionService,
             ILogger logger,
-            IFileService fileService,
-            GeneralSettings settings)
+            IFileService fileService)
         {
             this.transactionRepository = transactionRepository;
             this.accountRepository = accountRepository;
@@ -56,7 +53,6 @@ namespace BudgetUnderControl.Infrastructure.Services
             this.userRepository = userRepository;
             this.synchronizationRepository = synchronizationRepository;
             this.userIdentityContext = userIdentityContext;
-            this.settings = settings;
             this.tagRepository = tagRepository;
             this.transactionService = transactionService;
             this.logger = logger;

@@ -22,7 +22,7 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Transactions.Delet
 
         public async Task<Unit> Handle(DeleteTransactionCommand request, CancellationToken cancellationToken)
         {
-            await this.transactionService.DeleteTransactionAsync(new CommonInfrastructure.Commands.DeleteTransaction { ExternalId = request.TransactionId });
+            await this.transactionService.DeleteTransactionAsync(request.TransactionId);
 
             return Unit.Value;
         }

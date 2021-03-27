@@ -21,7 +21,7 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.
 
         public async Task<Unit> Handle(DeleteAccountCommand request, CancellationToken cancellationToken)
         {
-            await this.accountService.DeleteAccountAsync(new CommonInfrastructure.Commands.DeleteAccount { Id = request.AccountId });
+            await this.accountService.DeleteAccountAsync(request.AccountId);
 
             return Unit.Value;
         }

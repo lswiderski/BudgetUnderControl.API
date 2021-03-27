@@ -19,7 +19,7 @@ namespace BudgetUnderControl.CommonInfrastructure
 
         Task AddAccountAsync(AddAccount account);
         Task EditAccountAsync(EditAccount command);
-        Task DeleteAccountAsync(DeleteAccount command);
+        Task DeleteAccountAsync(Guid id);
         Task<bool> IsValidAsync(int accountId);
     }
 }

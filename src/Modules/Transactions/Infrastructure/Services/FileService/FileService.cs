@@ -1,8 +1,8 @@
 ﻿using BudgetUnderControl.Common.Contracts;
 using BudgetUnderControl.CommonInfrastructure;
-using BudgetUnderControl.CommonInfrastructure.Settings;
 using BudgetUnderControl.Domain;
 using BudgetUnderControl.Infrastructure;
+using BudgetUnderControl.Shared.Infrastructure.Settings;
 using Microsoft.AspNetCore.Http;
 using NLog;
 using System;

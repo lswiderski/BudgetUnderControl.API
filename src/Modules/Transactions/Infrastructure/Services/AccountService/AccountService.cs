@@ -173,10 +173,10 @@ namespace BudgetUnderControl.Infrastructure.Services
             await accountRepository.UpdateAsync(account);
         }
 
-        public async Task DeleteAccountAsync(DeleteAccount command)
+        public async Task DeleteAccountAsync(Guid id)
         {
             //temporary no removing AccountAvailable
-            await this.DeactivateAccountAsync(command.Id);
+            await this.DeactivateAccountAsync(id);
             /*
              var transactions = this.Context.Transactions.Where(x => x.AccountId == id).ToList();
 

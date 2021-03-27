@@ -1,8 +1,8 @@
 ﻿using BudgetUnderControl.ApiInfrastructure.Services.EmailService.Contracts;
 using BudgetUnderControl.Common.Contracts.Email;
 using BudgetUnderControl.CommonInfrastructure.Interfaces.Email;
-using BudgetUnderControl.CommonInfrastructure.Settings;
 using BudgetUnderControl.Domain.Repositiories;
+using BudgetUnderControl.Shared.Infrastructure.Settings;
 using MoreLinq;
 using System;
 using System.Collections.Generic;

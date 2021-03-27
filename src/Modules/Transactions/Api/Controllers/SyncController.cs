@@ -1,11 +1,11 @@
 ﻿using BudgetUnderControl.Common.Contracts;
 using BudgetUnderControl.CommonInfrastructure.Commands;
-using BudgetUnderControl.CommonInfrastructure.Settings;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Sync.GetBackup;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Sync.GetCSV;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Sync.ImportBackup;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Sync.Sync;
 using BudgetUnderControl.Modules.Transactions.Application.Contracts;
+using BudgetUnderControl.Shared.Infrastructure.Settings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;

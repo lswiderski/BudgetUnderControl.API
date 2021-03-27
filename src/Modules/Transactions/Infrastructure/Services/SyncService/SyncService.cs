@@ -4,7 +4,6 @@ using BudgetUnderControl.Common.Enums;
 using BudgetUnderControl.Domain;
 using BudgetUnderControl.Domain.Repositiories;
 using BudgetUnderControl.CommonInfrastructure.Commands;
-using BudgetUnderControl.CommonInfrastructure.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,11 +21,7 @@ namespace BudgetUnderControl.Infrastructure.Services
         private readonly IAccountRepository accountRepository;
         private readonly ICurrencyRepository currencyRepository;
         private readonly ICategoryRepository categoryRepository;
-        private readonly IAccountGroupRepository accountGroupRepository;
-        private readonly IUserRepository userRepository;
-        private readonly ISynchronizationRepository synchronizationRepository;
         private readonly IUserIdentityContext userIdentityContext;
-        private readonly GeneralSettings settings;
         private readonly ISyncRequestBuilder syncRequestBuilder;
         private readonly ISynchroniser synchroniser;
         private readonly ITagRepository tagRepository;
@@ -38,12 +33,8 @@ namespace BudgetUnderControl.Infrastructure.Services
             IAccountRepository accountRepository,
             ICurrencyRepository currencyRepository,
             ICategoryRepository categoryRepository,
-            IAccountGroupRepository accountGroupRepository,
-            IUserRepository userRepository,
-            ISynchronizationRepository synchronizationRepository,
             ITagRepository tagRepository,
             IUserIdentityContext userIdentityContext,
-            GeneralSettings settings,
             ISyncRequestBuilder syncRequestBuilder,
             ISynchroniser synchroniser)
         {
@@ -51,11 +42,8 @@ namespace BudgetUnderControl.Infrastructure.Services
             this.accountRepository = accountRepository;
             this.currencyRepository = currencyRepository;
             this.categoryRepository = categoryRepository;
-            this.accountGroupRepository = accountGroupRepository;
-            this.userRepository = userRepository;
-            this.synchronizationRepository = synchronizationRepository;
             this.userIdentityContext = userIdentityContext;
-            this.settings = settings;
+
             this.syncRequestBuilder = syncRequestBuilder;
             this.synchroniser = synchroniser;
             this.tagRepository = tagRepository;

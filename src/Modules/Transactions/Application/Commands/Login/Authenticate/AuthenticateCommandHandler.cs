@@ -20,13 +20,7 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Login.Aut
 
         public async Task<string> Handle(AuthenticateCommand request, CancellationToken cancellationToken)
         {
-            var token = await this.userService.ValidateLoginAsync(
-                new CommonInfrastructure.Commands.MobileLoginCommand
-                {
-                    Password = request.Password,
-                    Username = request.Username,
-                    TokenId = Guid.NewGuid()
-                });
+            var token = await this.userService.ValidateLoginAsync(request.Username, request.Password);
 
             return token;
         }
