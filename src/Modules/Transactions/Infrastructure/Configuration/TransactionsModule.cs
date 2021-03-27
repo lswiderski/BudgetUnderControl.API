@@ -1,34 +1,29 @@
 ﻿using Autofac;
+using BudgetUnderControl.ApiInfrastructure.Repositories;
+using BudgetUnderControl.ApiInfrastructure.Services;
+using BudgetUnderControl.ApiInfrastructure.Services.EmailService;
+using BudgetUnderControl.ApiInfrastructure.Services.UserService;
+using BudgetUnderControl.CommonInfrastructure;
+using BudgetUnderControl.CommonInfrastructure.Interfaces;
+using BudgetUnderControl.CommonInfrastructure.Interfaces.Email;
 using BudgetUnderControl.Domain.Repositiories;
-using BudgetUnderControl.CommonInfrastructure.Commands;
+using BudgetUnderControl.Infrastructure;
 using BudgetUnderControl.Infrastructure.Repositories;
 using BudgetUnderControl.Infrastructure.Services;
-using BudgetUnderControl.Infrastructure;
-using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
+using System.Linq;
 using System.Text;
-using BudgetUnderControl.CommonInfrastructure;
-using BudgetUnderControl.ApiInfrastructure.Services;
-using Microsoft.AspNetCore.Http;
-using BudgetUnderControl.ApiInfrastructure.Services.EmailService;
-using BudgetUnderControl.CommonInfrastructure.Interfaces.Email;
-using BudgetUnderControl.CommonInfrastructure.Interfaces;
-using BudgetUnderControl.ApiInfrastructure.Services.UserService;
-using BudgetUnderControl.ApiInfrastructure.Repositories;
+using System.Threading.Tasks;
 
-namespace BudgetUnderControl.Infrastructure.IoC
+namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration
 {
-    public class ApiInfrastructureModule : Autofac.Module
+    public class TransactionsModule : Autofac.Module
     {
 
         protected override void Load(ContainerBuilder builder)
         {
-            var assembly = typeof(ApiInfrastructureModule)
-            .GetTypeInfo()
-            .Assembly;
-
             builder.RegisterType<BaseModel>().As<IBaseModel>().InstancePerLifetimeScope();
             builder.RegisterType<AccountService>().As<IAccountService>().InstancePerLifetimeScope();
             builder.RegisterType<CurrencyService>().As<ICurrencyService>().InstancePerLifetimeScope();

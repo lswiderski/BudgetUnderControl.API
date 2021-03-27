@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BudgetUnderControl.Infrastructure
+namespace BudgetUnderControl.CommonInfrastructure
 {
     public interface IJwtHandlerService
     {

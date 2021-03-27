@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using BudgetUnderControl.Common.Enums;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -36,11 +35,11 @@ namespace BudgetUnderControl.Domain
             {
                 if(_connection == null)
                 {
-                    _connection = new SqliteConnection("DataSource=:memory:");
+                   /* _connection = new SqliteConnection("DataSource=:memory:");
                     _connection.Open();
                     var optionsBuilder = new DbContextOptionsBuilder<Context>()
                     .UseSqlite(_connection, options => options.MigrationsAssembly("BudgetUnderControl.Migrations.SQLite")).Options;
-                    _context = Context.CreateTest(optionsBuilder, contextConfig);
+                    _context = Context.CreateTest(optionsBuilder, contextConfig);*/
                 }
             }
             else

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using BudgetUnderControl.Common;
 using System;
 using BudgetUnderControl.Common.Enums;
-using Microsoft.Data.Sqlite;
+
 using System.Data.Common;
 
 namespace BudgetUnderControl.Domain
@@ -78,7 +78,7 @@ namespace BudgetUnderControl.Domain
             {
                 if (config.Application == ApplicationType.Mobile || config.Application == ApplicationType.SQLiteMigrations)
                 {
-                    optionsBuilder.UseSqlite(config.ConnectionString, options => options.MigrationsAssembly("BudgetUnderControl.Migrations.SQLite"));
+                  //  optionsBuilder.UseSqlite(config.ConnectionString, options => options.MigrationsAssembly("BudgetUnderControl.Migrations.SQLite"));
                 }
                 else if (config.Application == ApplicationType.Web || config.Application == ApplicationType.SqlServerMigrations)
                 {

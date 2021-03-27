@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BudgetUnderControl.ApiInfrastructure.Services
+namespace BudgetUnderControl.CommonInfrastructure
 {
     public interface IFileService
     {

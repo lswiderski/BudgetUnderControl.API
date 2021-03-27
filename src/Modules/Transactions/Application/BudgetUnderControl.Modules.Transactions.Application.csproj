@@ -13,7 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\BudgetUnderControl.Commands\BudgetUnderControl.CommonInfrastructure.csproj" />
     <ProjectReference Include="..\..\..\BudgetUnderControl.Common\BudgetUnderControl.Common.csproj" />
-    <ProjectReference Include="..\..\..\BudgetUnderControl.Infrastructure\BudgetUnderControl.ApiInfrastructure.csproj" />
+    <ProjectReference Include="..\Core\BudgetUnderControl.Modules.Transactions.Core.csproj" />
   </ItemGroup>
 
 </Project>

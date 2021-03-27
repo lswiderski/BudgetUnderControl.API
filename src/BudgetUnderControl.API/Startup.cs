@@ -10,14 +10,7 @@ using BudgetUnderControl.API.IoC;
 using BudgetUnderControl.Common;
 using BudgetUnderControl.Common.Enums;
 using BudgetUnderControl.Domain;
-using BudgetUnderControl.Domain.Repositiories;
-using BudgetUnderControl.Infrastructure.IoC;
-using BudgetUnderControl.Infrastructure.Repositories;
-using BudgetUnderControl.Infrastructure.Services;
-using BudgetUnderControl.Infrastructure;
-using Microsoft.AspNetCore.Cors;
-using CommonServiceLocator;
-using FluentValidation;
+
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -78,12 +71,13 @@ namespace BudgetUnderControl.API
                 .AddJsonOptions(x =>
                 {
                     x.JsonSerializerOptions.WriteIndented = true;
-                })
+                });
+            /*
                 .AddFluentValidation(fv =>
                 {
                     fv.RegisterValidatorsFromAssemblyContaining<ApiInfrastructureModule>();
                     fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
-                });
+                });*/
             services.AddHttpContextAccessor();
 
             var settings = Configuration.GetSettings<GeneralSettings>();
@@ -127,7 +121,6 @@ namespace BudgetUnderControl.API
             // Initialize Autofac builder
             var builder = new ContainerBuilder();          
 
-            builder.RegisterModule<ApiInfrastructureModule>();
             builder.RegisterModule(new ApiModule(Configuration, environment));
             builder.RegisterModule<TransactionsAutofacModule>();
             builder.Populate(services);

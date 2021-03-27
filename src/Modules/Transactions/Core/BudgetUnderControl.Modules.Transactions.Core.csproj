@@ -4,4 +4,13 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\BudgetUnderControl.Commands\BudgetUnderControl.CommonInfrastructure.csproj" />
+    <ProjectReference Include="..\..\..\BudgetUnderControl.Common\BudgetUnderControl.Common.csproj" />
+  </ItemGroup>
+
 </Project>

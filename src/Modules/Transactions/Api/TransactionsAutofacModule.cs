@@ -20,6 +20,7 @@ namespace BudgetUnderControl.Modules.Transactions.Api
 
 
             builder.RegisterModule(new MediatorModule());
+            builder.RegisterModule(new Infrastructure.Configuration.TransactionsModule());
         }
     }
 }

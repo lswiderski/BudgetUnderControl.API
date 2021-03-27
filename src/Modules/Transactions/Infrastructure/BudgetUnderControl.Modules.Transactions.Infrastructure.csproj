@@ -5,17 +5,32 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Domain\Identity\**" />
+    <Compile Remove="Processing\**" />
+    <EmbeddedResource Remove="Domain\Identity\**" />
+    <EmbeddedResource Remove="Processing\**" />
+    <None Remove="Domain\Identity\**" />
+    <None Remove="Processing\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac" Version="6.1.0" />
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.4" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+    <PackageReference Include="morelinq" Version="3.3.2" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BudgetUnderControl.Common\BudgetUnderControl.Common.csproj" />
     <ProjectReference Include="..\Application\BudgetUnderControl.Modules.Transactions.Application.csproj" />
+    <ProjectReference Include="..\Core\BudgetUnderControl.Modules.Transactions.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Processing\" />
+    <Folder Include="Services\ReportService\ExpensesReports\Contracts\" />
   </ItemGroup>
 
 </Project>
