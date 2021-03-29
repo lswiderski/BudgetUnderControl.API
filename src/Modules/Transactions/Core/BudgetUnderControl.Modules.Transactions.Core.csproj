@@ -12,4 +12,8 @@
     <ProjectReference Include="..\..\..\BudgetUnderControl.Common\BudgetUnderControl.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Domain\Enums\" />
+  </ItemGroup>
+
 </Project>

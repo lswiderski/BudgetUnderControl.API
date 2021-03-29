@@ -11,9 +11,13 @@ using BudgetUnderControl.Domain.Repositiories;
 using BudgetUnderControl.Infrastructure;
 using BudgetUnderControl.Infrastructure.Repositories;
 using BudgetUnderControl.Infrastructure.Services;
+using BudgetUnderControl.Modules.Transactions.Application.Contracts;
+using BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration.Mediation;
 using BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration.Processing;
 using BudgetUnderControl.Modules.Transactions.Infrastructure.DataAccess;
+using BudgetUnderControl.Shared.Infrastructure.Settings;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,20 +26,30 @@ using System.Threading.Tasks;
 
 namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration
 {
-    public class TransactionsModule : Autofac.Module
+    public class TransactionsAutofacModule : Autofac.Module
     {
-        private readonly IContextConfig contextConfig;
-
-        public TransactionsModule(IContextConfig contextConfig)
+        private readonly IConfiguration configuration;
+        private readonly GeneralSettings settings;
+        public TransactionsAutofacModule(IConfiguration configuration, GeneralSettings settings)
         {
-            this.contextConfig = contextConfig;
+            this.configuration = configuration;
+            this.settings = settings;
         }
+
 
         protected override void Load(ContainerBuilder builder)
         {
+            builder.RegisterType<TransactionsModuleExecutor>()
+              .As<ITransactionsModule>()
+              .InstancePerLifetimeScope();
 
-            builder.RegisterModule(new DataAccessModule(contextConfig));
-            builder.RegisterModule(new ProcessingModule());
+            var contextConfig = new ContextConfig() { DbName = settings.BUC_DB_Name, Application = settings.ApplicationType, ConnectionString = settings.ConnectionString };
+
+
+       
+          
+
+           
 
             builder.RegisterType<AccountService>().As<IAccountService>().InstancePerLifetimeScope();
             builder.RegisterType<CurrencyService>().As<ICurrencyService>().InstancePerLifetimeScope();
@@ -84,6 +98,12 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration
             {
                 return c.Resolve<Func<IUserIdentityContext>>()();
             });
+
+            builder.RegisterModule(new DataAccessModule(contextConfig));
+            builder.RegisterModule(new MediatorModule());
+            builder.RegisterModule(new ProcessingModule());
+
         }
+
     }
 }

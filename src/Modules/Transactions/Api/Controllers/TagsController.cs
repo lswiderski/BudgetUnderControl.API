@@ -9,9 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
@@ -19,7 +17,7 @@ namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    class TagsController : ControllerBase
+    public class TagsController : ControllerBase
     {
         private readonly ITransactionsModule _transactionsModule;
 

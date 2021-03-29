@@ -12,7 +12,7 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Contracts
         Guid Id { get; }
     }
 
-    public interface ICommand : IRequest
+    public interface ICommand : ICommand<Unit>
     {
         Guid Id { get; }
     }

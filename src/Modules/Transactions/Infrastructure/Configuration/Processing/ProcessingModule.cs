@@ -1,5 +1,7 @@
 ﻿using Autofac;
 using BudgetUnderControl.Modules.Transactions.Application.Configuration.Commands;
+using BudgetUnderControl.Shared.Infrastructure.UnitOfWork;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,15 +14,19 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration.P
     {
         protected override void Load(ContainerBuilder builder)
         {
-
-            builder.RegisterGenericDecorator(
-                typeof(ValidationCommandHandlerDecorator<>),
-                typeof(ICommandHandler<>));
+            builder.RegisterType<UnitOfWork>()
+               .As<IUnitOfWork>()
+               .InstancePerLifetimeScope();
 
             builder.RegisterGenericDecorator(
                 typeof(ValidationCommandHandlerWithResultDecorator<,>),
-                typeof(ICommandHandler<,>));
+                typeof(IRequestHandler<,>),
+                x => x.ImplementationType.IsClosedTypeOf(typeof(ICommandHandler<>)) || x.ImplementationType.IsClosedTypeOf(typeof(ICommandHandler<,>)));
 
+            builder.RegisterGenericDecorator(
+                typeof(UnitOfWorkCommandHandlerWithResultDecorator<,>),
+                typeof(IRequestHandler<,>),
+                x => x.ImplementationType.IsClosedTypeOf(typeof(ICommandHandler<>)) || x.ImplementationType.IsClosedTypeOf(typeof(ICommandHandler<,>)));
         }
     }
 }

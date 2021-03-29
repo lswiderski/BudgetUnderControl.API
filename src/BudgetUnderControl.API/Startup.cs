@@ -34,12 +34,13 @@ using BudgetUnderControl.ApiInfrastructure.Profiles.User;
 using BudgetUnderControl.Modules.Transactions.Api;
 using Microsoft.AspNetCore.Http;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
+using BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration;
+using System.IO;
 
 namespace BudgetUnderControl.API
 {
     public class Startup
     {
-        public IContainer ApplicationContainer { get; private set; }
 
         public IConfiguration Configuration { get; }
 
@@ -60,8 +61,8 @@ namespace BudgetUnderControl.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<TransactionsContext>(ServiceLifetime.Transient);
-           
+            //services.AddDbContext<TransactionsContext>(ServiceLifetime.Transient);
+            services.AddAutofac();
             services.AddMemoryCache();
             services.AddCors();
             services.AddAutoMapper(typeof(UserProfile));
@@ -71,6 +72,7 @@ namespace BudgetUnderControl.API
                 {
                     x.JsonSerializerOptions.WriteIndented = true;
                 });
+               // .AddFluentValidation();
             /*
                 .AddFluentValidation(fv =>
                 {
@@ -79,7 +81,15 @@ namespace BudgetUnderControl.API
                 });*/
             services.AddHttpContextAccessor();
 
-            var settings = Configuration.GetSettings<GeneralSettings>();
+            var settings = Configuration.GetSettings<GeneralSettings>().InjectEnvVariables();
+            Console.WriteLine("Connection string: " + settings.ConnectionString);
+            Console.WriteLine("Application Type:  " + settings.ApplicationType.ToString());
+            Console.WriteLine("DB Name:  " + settings.BUC_DB_Name);
+            if (string.IsNullOrWhiteSpace(environment.WebRootPath))
+            {
+                environment.WebRootPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            }
+            settings.FileRootPath = environment.WebRootPath;
 
             var key = Encoding.ASCII.GetBytes(settings.SecretKey);
             services.AddAuthentication(x =>
@@ -117,24 +127,37 @@ namespace BudgetUnderControl.API
                 });
             });
 
-            // Initialize Autofac builder
-            var builder = new ContainerBuilder();          
+            var builder = new ContainerBuilder();
 
-            builder.RegisterModule(new ApiModule(Configuration, environment));
+            builder.RegisterInstance(settings)
+                .SingleInstance();
+      
+            var contextConfig = new ContextConfig() { DbName = settings.BUC_DB_Name, Application = settings.ApplicationType, ConnectionString = settings.ConnectionString };
+
+            builder.RegisterInstance(contextConfig).As<IContextConfig>();
+
+
+           
+            builder.RegisterModule(new ApiModule());
+            builder.RegisterModule(new TransactionsAutofacModule(Configuration, settings));
             
             builder.Populate(services);
-            ApplicationContainer = builder.Build();
-            services.AddTransactionsModule(ApplicationContainer);
-            return new AutofacServiceProvider(ApplicationContainer);
+
+            var _container = builder.Build();
+            services.AddTransactionsModule();
+
+            return new AutofacServiceProvider(_container);
         }
 
+
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, IContextConfig contextConfig)//, ITestDataSeeder testDataSeeder)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)//, IContextConfig contextConfig)//, ITestDataSeeder testDataSeeder)
         {
-            if(contextConfig.Application == ApplicationType.Test)
-            {
+            //if(contextConfig.Application == ApplicationType.Test)
+           // {
                 //testDataSeeder.SeedAsync().Wait();
-            }
+            //}
 
             if (env.IsDevelopment())
             {

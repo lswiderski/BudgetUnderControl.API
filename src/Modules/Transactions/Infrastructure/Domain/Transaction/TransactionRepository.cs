@@ -40,7 +40,8 @@ namespace BudgetUnderControl.Infrastructure
         {
             transaction.UpdateModify();
             this.Context.Transactions.Update(transaction);
-            await this.Context.SaveChangesAsync();
+            //await this.Context.SaveChangesAsync();
+            await Task.CompletedTask;
         }
 
         public async Task UpdateAsync(IEnumerable<Transaction> transactions)

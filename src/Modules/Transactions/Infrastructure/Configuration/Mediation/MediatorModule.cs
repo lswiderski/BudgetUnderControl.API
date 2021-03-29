@@ -1,6 +1,10 @@
 ﻿using Autofac;
 using Autofac.Core;
 using Autofac.Features.Variance;
+using BudgetUnderControl.Modules.Transactions.Application.Configuration.Commands;
+using BudgetUnderControl.Modules.Transactions.Application.Transactions.EditTransaction;
+using BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration.Processing;
+using BudgetUnderControl.Shared.Infrastructure.UnitOfWork;
 using FluentValidation;
 using MediatR;
 using MediatR.Pipeline;
@@ -23,15 +27,18 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration.M
 
             builder.RegisterSource(new ScopedContravariantRegistrationSource(
                 typeof(IRequestHandler<,>),
+                typeof(IRequestHandler<>),
                 typeof(INotificationHandler<>),
                 typeof(IValidator<>)));
 
             var mediatorOpenTypes = new[]
             {
                 typeof(IRequestHandler<,>),
+                typeof(IRequestHandler<>),
                 typeof(INotificationHandler<>),
                 typeof(IValidator<>)
             };
+
 
             foreach (var mediatorOpenType in mediatorOpenTypes)
             {
