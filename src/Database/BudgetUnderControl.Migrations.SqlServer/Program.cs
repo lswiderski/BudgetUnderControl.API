@@ -25,7 +25,7 @@ namespace BudgetUnderControl.Migrations.SqlServer
         public TransactionsContext CreateDbContext(string[] args)
         {
 
-            var contextConfig = new ContextConfig() { DbName = Settings.DB_SQLServer_NAME, Application = ApplicationType.SqlServerMigrations, ConnectionString= "Data Source=.;Initial Catalog=dbBUC-dev;User ID=buc;Password=Qwerty!1" };
+            var contextConfig = new ContextConfig() { DbName = "dbBUC", Application = ApplicationType.SqlServerMigrations, ConnectionString= "Data Source=.;Initial Catalog=dbBUC-dev;User ID=buc;Password=Qwerty!1" };
             var connectionString = contextConfig.ConnectionString;
 
 

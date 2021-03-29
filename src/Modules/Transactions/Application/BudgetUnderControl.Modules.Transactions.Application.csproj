@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\BudgetUnderControl.Common\BudgetUnderControl.Common.csproj" />
     <ProjectReference Include="..\Core\BudgetUnderControl.Modules.Transactions.Core.csproj" />
   </ItemGroup>
 

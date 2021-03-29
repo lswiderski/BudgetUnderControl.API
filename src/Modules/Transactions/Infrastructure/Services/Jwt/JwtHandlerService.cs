@@ -1,6 +1,7 @@
 ﻿using BudgetUnderControl.Common.Extensions;
 using BudgetUnderControl.CommonInfrastructure;
 using BudgetUnderControl.Domain;
+using BudgetUnderControl.Shared.Infrastructure.Extensions;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
 using Microsoft.IdentityModel.Tokens;
 using System;

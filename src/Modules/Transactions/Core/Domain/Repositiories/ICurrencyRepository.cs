@@ -1,8 +1,4 @@
-﻿using BudgetUnderControl.Common.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BudgetUnderControl.Domain.Repositiories

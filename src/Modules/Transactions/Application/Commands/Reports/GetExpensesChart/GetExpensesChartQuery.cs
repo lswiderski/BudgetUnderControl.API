@@ -10,11 +10,11 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Reports.G
 {
     public class GetExpensesChartQuery : QueryBase<List<ExpensesColumnChartSeriesDto>>
     {
-        public GetExpensesChartQuery(TransactionsFilter filters)
+        public GetExpensesChartQuery(TransactionsFilterDTO filters)
         {
             Filters = filters;
         }
 
-        public TransactionsFilter Filters { get; }
+        public TransactionsFilterDTO Filters { get; }
     }
 }

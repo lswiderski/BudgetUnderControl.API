@@ -15,7 +15,7 @@ namespace BudgetUnderControl.CommonInfrastructure
 
         Task<ICollection<AccountListItemDTO>> GetAccountsWithBalanceAsync();
         Task<EditAccountDTO> GetAccountAsync(Guid id);
-        Task<AccountDetailsDTO> GetAccountDetailsAsync(TransactionsFilter filter);
+        Task<AccountDetailsDTO> GetAccountDetailsAsync(TransactionsFilterDTO filter);
 
         Task AddAccountAsync(AddAccount account);
         Task EditAccountAsync(EditAccount command);

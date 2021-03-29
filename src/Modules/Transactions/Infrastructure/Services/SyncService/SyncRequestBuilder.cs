@@ -13,6 +13,7 @@ using BudgetUnderControl.Domain;
 using Microsoft.EntityFrameworkCore;
 using BudgetUnderControl.ApiInfrastructure.Services;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
+using BudgetUnderControl.Modules.Transactions.Core.ValueObjects;
 
 namespace BudgetUnderControl.Infrastructure.Services
 {

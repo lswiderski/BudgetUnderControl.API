@@ -34,7 +34,7 @@ namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
         [HttpGet]
         [Authorize(Policy = UsersPolicy.AllUsers)]
         [ProducesResponseType(typeof(List<TransactionListItemDTO>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IEnumerable<TransactionListItemDTO>>> Get([FromQuery] TransactionsFilter filter)
+        public async Task<ActionResult<IEnumerable<TransactionListItemDTO>>> Get([FromQuery] TransactionsFilterDTO filter)
         {
             var transactions = await _transactionsModule.ExecuteQueryAsync(new GetTransactionsQuery(filter));
             return Ok(transactions);

@@ -8,6 +8,6 @@ namespace BudgetUnderControl.ApiInfrastructure.Services
 {
     public interface IExpensesReportService
     {
-        Task<List<ExpensesColumnChartSeriesDto>> GetExpensesChartDataAsync(TransactionsFilter filter);
+        Task<List<ExpensesColumnChartSeriesDto>> GetExpensesChartDataAsync(TransactionsFilterDTO filter);
     }
 }

@@ -17,7 +17,7 @@ namespace BudgetUnderControl.ApiInfrastructure.Services
             this.transactionService = transactionService;
         }
 
-        public async Task<List<ExpensesColumnChartSeriesDto>> GetExpensesChartDataAsync(TransactionsFilter filter)
+        public async Task<List<ExpensesColumnChartSeriesDto>> GetExpensesChartDataAsync(TransactionsFilterDTO filter)
         {
             var transactions = await this.transactionService.GetTransactionsAsync(filter);
 

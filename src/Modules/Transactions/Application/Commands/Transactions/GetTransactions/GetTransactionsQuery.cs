@@ -10,11 +10,11 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Transactions.GetTr
 {
     public class GetTransactionsQuery : QueryBase<List<TransactionListItemDTO>>
     {
-        public GetTransactionsQuery(TransactionsFilter filters)
+        public GetTransactionsQuery(TransactionsFilterDTO filters)
         {
             Filters = filters;
         }
 
-        public TransactionsFilter Filters { get;}
+        public TransactionsFilterDTO Filters { get;}
     }
 }

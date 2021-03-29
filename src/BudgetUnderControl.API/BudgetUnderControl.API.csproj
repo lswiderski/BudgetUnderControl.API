@@ -56,13 +56,12 @@
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.8.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="NLog" Version="4.7.7" />
+    <PackageReference Include="NLog" Version="4.7.9" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.10.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BudgetUnderControl.Common\BudgetUnderControl.Common.csproj" />
     <ProjectReference Include="..\Database\BudgetUnderControl.Migrations.SqlServer\BudgetUnderControl.Migrations.SqlServer.csproj" />
     <ProjectReference Include="..\Modules\Transactions\Api\BudgetUnderControl.Modules.Transactions.Api.csproj" />
   </ItemGroup>

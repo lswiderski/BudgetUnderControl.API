@@ -28,7 +28,7 @@ namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
 
         [HttpGet("movingsum")]
         [ProducesResponseType(typeof(List<MovingSumItemDTO>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> MovingSum([FromQuery] TransactionsFilter filter)
+        public async Task<IActionResult> MovingSum([FromQuery] TransactionsFilterDTO filter)
         {
             var days = await this._transactionsModule.ExecuteQueryAsync(new GetMovingSumQuery(filter));
             return Ok(days);
@@ -45,7 +45,7 @@ namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
 
         [HttpGet("expenseschart")]
         [ProducesResponseType(typeof(List<ExpensesColumnChartSeriesDto>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> ExpensesChart([FromQuery] TransactionsFilter filter)
+        public async Task<IActionResult> ExpensesChart([FromQuery] TransactionsFilterDTO filter)
         {
             var days = await this._transactionsModule.ExecuteQueryAsync(new GetExpensesChartQuery(filter));
             return Ok(days);

@@ -18,7 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\BudgetUnderControl.Common\BudgetUnderControl.Common.csproj" />
     <ProjectReference Include="..\..\Modules\Transactions\Infrastructure\BudgetUnderControl.Modules.Transactions.Infrastructure.csproj" />
   </ItemGroup>
 

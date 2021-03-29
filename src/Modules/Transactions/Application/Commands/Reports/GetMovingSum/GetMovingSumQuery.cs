@@ -10,11 +10,11 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Reports.G
 {
     public class GetMovingSumQuery : QueryBase<List<MovingSumItemDTO>>
     {
-        public GetMovingSumQuery(TransactionsFilter filters)
+        public GetMovingSumQuery(TransactionsFilterDTO filters)
         {
             Filters = filters;
         }
 
-        public TransactionsFilter Filters { get; }
+        public TransactionsFilterDTO Filters { get; }
     }
 }

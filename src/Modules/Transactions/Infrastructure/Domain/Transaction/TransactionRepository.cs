@@ -1,7 +1,7 @@
-﻿using BudgetUnderControl.Common.Contracts;
-using BudgetUnderControl.CommonInfrastructure;
+﻿using BudgetUnderControl.CommonInfrastructure;
 using BudgetUnderControl.Domain;
 using BudgetUnderControl.Domain.Repositiories;
+using BudgetUnderControl.Modules.Transactions.Core.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

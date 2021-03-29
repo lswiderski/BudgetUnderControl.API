@@ -81,7 +81,7 @@ namespace BudgetUnderControl.Infrastructure.Services
             return accountsWithBalance;
         }
 
-        public async Task<AccountDetailsDTO> GetAccountDetailsAsync(TransactionsFilter filter)
+        public async Task<AccountDetailsDTO> GetAccountDetailsAsync(TransactionsFilterDTO filter)
         {
 
             Account account;

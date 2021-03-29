@@ -15,6 +15,8 @@ using BudgetUnderControl.CommonInfrastructure;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using BudgetUnderControl.ApiInfrastructure.Services;
+using BudgetUnderControl.Modules.Transactions.Core.ValueObjects;
+using AutoMapper;
 
 namespace BudgetUnderControl.Infrastructure.Services
 {
@@ -26,6 +28,7 @@ namespace BudgetUnderControl.Infrastructure.Services
         private readonly ICurrencyService currencyService;
         private readonly ICurrencyRepository currencyRepository;
         private readonly IUserIdentityContext userIdentityContext;
+        private readonly IMapper mapper;
         private readonly TransactionsContext Context;
 
         public TransactionService(TransactionsContext context,
@@ -34,7 +37,8 @@ namespace BudgetUnderControl.Infrastructure.Services
             IFileService fileService,
             ICurrencyService currencyService,
             ICurrencyRepository currencyRepository,
-            IUserIdentityContext userIdentityContext)
+            IUserIdentityContext userIdentityContext,
+            IMapper mapper)
         {
             this.transactionRepository = transactionRepository;
             this.tagRepository = tagRepository;
@@ -43,9 +47,10 @@ namespace BudgetUnderControl.Infrastructure.Services
             this.currencyRepository = currencyRepository;
             this.userIdentityContext = userIdentityContext;
             this.Context = context;
+            this.mapper = mapper;
         }
 
-        public async Task<ICollection<TransactionListItemDTO>> GetTransactionsAsync(TransactionsFilter filter = null)
+        public async Task<ICollection<TransactionListItemDTO>> GetTransactionsAsync(TransactionsFilterDTO filter = null)
         {
             var exchangeRates = (await this.currencyRepository.GetExchangeRatesAsync())
                .Select(x => new ExchangeRateDTO
@@ -58,7 +63,7 @@ namespace BudgetUnderControl.Infrastructure.Services
 
             var mainCurrency = "PLN";
 
-            var transactions = await this.transactionRepository.GetTransactionsAsync(filter);
+            var transactions = await this.transactionRepository.GetTransactionsAsync(this.mapper.Map<TransactionsFilter>(filter));
             var dtos = transactions.Select(async t => new TransactionListItemDTO
             {
                 AccountId = t.AccountId,

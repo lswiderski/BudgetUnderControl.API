@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BudgetUnderControl.Common.Contracts
 {
-    public class TransactionsFilter
+    public class TransactionsFilterDTO
     {
         public IEnumerable<int> AccountsIds { get; set; }
         public IEnumerable<Guid> AccountsExternalIds { get; set; }
@@ -17,7 +17,7 @@ namespace BudgetUnderControl.Common.Contracts
         public string SearchQuery { get; set; }
         public bool IncludeTransfers { get; set; }
 
-        public TransactionsFilter()
+        public TransactionsFilterDTO()
         {
             this.IncludeTransfers = true;
         }

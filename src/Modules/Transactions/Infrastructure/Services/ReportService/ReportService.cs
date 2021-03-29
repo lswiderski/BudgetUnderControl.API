@@ -31,7 +31,7 @@ namespace BudgetUnderControl.Infrastructure.Services
             this.expensesReportService = expensesReportService;
         }
 
-        public async Task<ICollection<MovingSumItemDTO>> MovingSum(TransactionsFilter filter = null)
+        public async Task<ICollection<MovingSumItemDTO>> MovingSum(TransactionsFilterDTO filter = null)
         {
             var transactions = await this.transactionService.GetTransactionsAsync(filter);
            
@@ -79,7 +79,7 @@ namespace BudgetUnderControl.Infrastructure.Services
             var recalculateCurrencies = true;
             List<ExchangeRate> exchangeRates = null;
 
-            var transactions = await this.transactionService.GetTransactionsAsync(new TransactionsFilter { FromDate = now.AddMonths(-6),  IncludeTransfers = false });
+            var transactions = await this.transactionService.GetTransactionsAsync(new TransactionsFilterDTO { FromDate = now.AddMonths(-6),  IncludeTransfers = false });
             var accounts = await accountService.GetAccountsWithBalanceAsync();
 
             if (recalculateCurrencies)
@@ -103,12 +103,12 @@ namespace BudgetUnderControl.Infrastructure.Services
             dashboard.ActualStatus = this.CalculateActualStatus(accounts);
             dashboard.Total = this.CalculateTotalSum(dashboard.ActualStatus, exchangeRates, userMainCurrency);
 
-            dashboard.ExpensesChart = await this.GetExpensesChartDataAsync(new TransactionsFilter { FromDate = now.AddDays(-3) });
+            dashboard.ExpensesChart = await this.GetExpensesChartDataAsync(new TransactionsFilterDTO { FromDate = now.AddDays(-3) });
 
             return dashboard;
         }
 
-        public async Task<List<ExpensesColumnChartSeriesDto>> GetExpensesChartDataAsync(TransactionsFilter filter)
+        public async Task<List<ExpensesColumnChartSeriesDto>> GetExpensesChartDataAsync(TransactionsFilterDTO filter)
         {
             var report = await this.expensesReportService.GetExpensesChartDataAsync(filter);
             return report;
