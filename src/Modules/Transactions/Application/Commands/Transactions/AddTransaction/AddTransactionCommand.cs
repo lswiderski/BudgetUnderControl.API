@@ -26,8 +26,13 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Transactions.AddTr
         public double? Longitude { get; set; }
         public string FileGuid { get; set; }
 
+        public Guid ExternalId { get; }
+        public Guid TransferExternalId { get; }
+
         public AddTransactionCommand()
         {
+            this.ExternalId = Guid.NewGuid();
+            this.TransferExternalId = Guid.NewGuid();
         }
     }
 }

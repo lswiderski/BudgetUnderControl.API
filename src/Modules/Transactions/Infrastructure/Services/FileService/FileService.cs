@@ -1,7 +1,5 @@
-﻿using BudgetUnderControl.Common.Contracts;
-using BudgetUnderControl.CommonInfrastructure;
+﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Domain;
-using BudgetUnderControl.Infrastructure;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
 using Microsoft.AspNetCore.Http;
 using NLog;
@@ -11,8 +9,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 
-namespace BudgetUnderControl.ApiInfrastructure.Services
+namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
     public class FileService : IFileService
     {

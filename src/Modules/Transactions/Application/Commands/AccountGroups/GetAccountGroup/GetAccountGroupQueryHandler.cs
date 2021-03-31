@@ -1,12 +1,8 @@
-﻿using BudgetUnderControl.Common.Contracts;
-using BudgetUnderControl.CommonInfrastructure;
+﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Modules.Transactions.Application.Configuration.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 
 namespace BudgetUnderControl.Modules.Transactions.Application.Commands.AccountGroups.GetAccountGroup
 {

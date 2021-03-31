@@ -1,4 +1,4 @@
-﻿using BudgetUnderControl.Common.Contracts;
+﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.CreateAccount;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.DeleteAccount;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.GetAccount;

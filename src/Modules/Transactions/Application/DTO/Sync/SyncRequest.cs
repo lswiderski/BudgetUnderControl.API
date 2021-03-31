@@ -1,10 +1,9 @@
-﻿using BudgetUnderControl.Common.Contracts;
+﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Common.Enums;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace BudgetUnderControl.CommonInfrastructure.Commands
+namespace BudgetUnderControl.Modules.Transactions.Application.DTO
 {
     public class SyncRequest 
     {

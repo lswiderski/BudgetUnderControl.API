@@ -1,11 +1,9 @@
-﻿using BudgetUnderControl.Common.Contracts;
+﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace BudgetUnderControl.CommonInfrastructure
+namespace BudgetUnderControl.Modules.Transactions.Application.Services
 {
     public interface IFileService
     {

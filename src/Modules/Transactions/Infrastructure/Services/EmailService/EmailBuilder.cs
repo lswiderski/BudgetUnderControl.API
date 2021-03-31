@@ -1,10 +1,10 @@
 ﻿using BudgetUnderControl.Common.Contracts.Email;
-using BudgetUnderControl.CommonInfrastructure.Interfaces.Email;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BudgetUnderControl.ApiInfrastructure.Services.EmailService
+namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
     public class EmailBuilder : IEmailBuilder
     {

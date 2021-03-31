@@ -1,6 +1,6 @@
 ﻿using BudgetUnderControl.ApiInfrastructure.Services;
-using BudgetUnderControl.Common.Contracts;
-using BudgetUnderControl.CommonInfrastructure;
+using BudgetUnderControl.Modules.Transactions.Application.DTO;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 using BudgetUnderControl.Domain;
 using BudgetUnderControl.Domain.Repositiories;
 using MoreLinq.Extensions;
@@ -10,8 +10,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static MoreLinq.Extensions.MinByExtension;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 
-namespace BudgetUnderControl.Infrastructure.Services
+namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
     public class ReportService : IReportService
     {

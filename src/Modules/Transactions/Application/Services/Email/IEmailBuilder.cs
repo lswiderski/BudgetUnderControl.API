@@ -1,9 +1,6 @@
 ﻿using BudgetUnderControl.Common.Contracts.Email;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace BudgetUnderControl.CommonInfrastructure.Interfaces.Email
+namespace BudgetUnderControl.Modules.Transactions.Application.Services
 {
     public interface IEmailBuilder : IFrom, ITo, IAfterTo, IContent, IAfterCc
     {

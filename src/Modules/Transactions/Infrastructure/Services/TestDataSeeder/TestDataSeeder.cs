@@ -1,13 +1,15 @@
 ﻿using BudgetUnderControl.Common.Enums;
-using BudgetUnderControl.CommonInfrastructure;
-using BudgetUnderControl.CommonInfrastructure.Commands;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
+using BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.CreateAccount;
+using BudgetUnderControl.Modules.Transactions.Application.DTO;
+using BudgetUnderControl.Modules.Transactions.Application.Transactions.AddTransaction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BudgetUnderControl.Infrastructure.Services
+namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
     public class TestDataSeeder : ITestDataSeeder
     {
@@ -34,7 +36,7 @@ namespace BudgetUnderControl.Infrastructure.Services
         {
             var accountGroup = (await this.accountGroupService.GetAccountGroupsAsync()).First();
             var currencies = await this.currencyService.GetCurriencesAsync();
-            var addAccountCommand = new AddAccount
+            var addAccountCommand = new CreateAccountCommand
             {
                 AccountGroupId = accountGroup.Id,
                 Amount = 0,
@@ -52,7 +54,7 @@ namespace BudgetUnderControl.Infrastructure.Services
             for (int i = 0; i < 5; i++)
             {
                 var amount = random.Next(-20, 20);
-                var addTransactionCommand = new AddTransaction
+                var addTransactionCommand = new AddTransactionCommand
                 {
                     AccountId = account.Id,
                     Amount = amount,

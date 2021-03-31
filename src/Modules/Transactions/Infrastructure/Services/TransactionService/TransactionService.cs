@@ -6,17 +6,17 @@ using System.Text;
 using System.Threading.Tasks;
 using BudgetUnderControl.Common;
 using BudgetUnderControl.Common.Enums;
-using BudgetUnderControl.Common.Contracts;
+using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Domain;
 using BudgetUnderControl.Domain.Repositiories;
-using BudgetUnderControl.CommonInfrastructure.Commands;
 using BudgetUnderControl.Common.Extensions;
-using BudgetUnderControl.CommonInfrastructure;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using BudgetUnderControl.ApiInfrastructure.Services;
 using BudgetUnderControl.Modules.Transactions.Core.ValueObjects;
 using AutoMapper;
+using BudgetUnderControl.Modules.Transactions.Application.Transactions.EditTransaction;
+using BudgetUnderControl.Modules.Transactions.Application.Transactions.AddTransaction;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 
 namespace BudgetUnderControl.Infrastructure.Services
 {
@@ -91,7 +91,7 @@ namespace BudgetUnderControl.Infrastructure.Services
             return dtos;
         }
 
-        public async Task AddTransactionAsync(AddTransaction command)
+        public async Task AddTransactionAsync(AddTransactionCommand command)
         {
             var user = userIdentityContext;
 
@@ -147,7 +147,7 @@ namespace BudgetUnderControl.Infrastructure.Services
             }
         }
 
-        public async Task EditTransactionAsync(EditTransaction command)
+        public async Task EditTransactionAsync(EditTransactionCommand command)
         {
             var user = userIdentityContext;
 

@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using BudgetUnderControl.Common.Enums;
 using BudgetUnderControl.Common.Extensions;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 
-namespace BudgetUnderControl.CommonInfrastructure
+namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
     public class UserIdentityContext : IUserIdentityContext
     {

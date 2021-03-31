@@ -1,5 +1,5 @@
 ﻿using BudgetUnderControl.Common.Enums;
-using BudgetUnderControl.CommonInfrastructure;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 using BudgetUnderControl.Domain;
 using BudgetUnderControl.Domain.Repositiories;
 using BudgetUnderControl.Infrastructure;

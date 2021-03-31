@@ -1,5 +1,5 @@
 ﻿using BudgetUnderControl.Common.Enums;
-using BudgetUnderControl.Common.Contracts;
+using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Domain;
 using BudgetUnderControl.Domain.Repositiories;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BudgetUnderControl.Infrastructure.Services;
-using BudgetUnderControl.CommonInfrastructure;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 
 namespace BudgetUnderControl.Infrastructure
 {

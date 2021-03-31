@@ -1,13 +1,12 @@
-﻿using BudgetUnderControl.Common.Contracts;
-using BudgetUnderControl.CommonInfrastructure;
+﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Domain.Repositiories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 
-namespace BudgetUnderControl.Infrastructure.Services
+namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
     public class AccountGroupService : IAccountGroupService
     {

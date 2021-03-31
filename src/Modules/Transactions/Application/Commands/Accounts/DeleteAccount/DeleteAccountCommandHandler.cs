@@ -1,5 +1,6 @@
-﻿using BudgetUnderControl.CommonInfrastructure;
+﻿
 using BudgetUnderControl.Modules.Transactions.Application.Configuration.Commands;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 using MediatR;
 using System;
 using System.Collections.Generic;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BudgetUnderControl.Common.Enums;
-using BudgetUnderControl.CommonInfrastructure;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using BudgetUnderControl.Common.Extensions;

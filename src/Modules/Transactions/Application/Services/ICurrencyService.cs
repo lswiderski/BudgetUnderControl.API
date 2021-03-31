@@ -1,12 +1,12 @@
-﻿using BudgetUnderControl.Common.Contracts;
-using BudgetUnderControl.CommonInfrastructure.Commands;
+﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
+using BudgetUnderControl.Modules.Transactions.Application.Commands.Currencies.AddExchangeRate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BudgetUnderControl.CommonInfrastructure
+namespace BudgetUnderControl.Modules.Transactions.Application.Services
 {
     public interface ICurrencyService
     {
@@ -16,7 +16,7 @@ namespace BudgetUnderControl.CommonInfrastructure
         Task<bool> IsValidAsync(int currencyId);
 
         Task<IEnumerable<ExchangeRateDTO>> GetExchangeRatesAsync();
-        Task AddExchangeRateAsync(AddExchangeRate command);
+        Task AddExchangeRateAsync(AddExchangeRateCommand command);
         Task<decimal> TransformAmountAsync(decimal amount, int fromCurrencyId, int toCurrencyId);
         Task<decimal> TransformAmountAsync(decimal amount, string fromCurrencyCode, string toCurrencyCode);
 

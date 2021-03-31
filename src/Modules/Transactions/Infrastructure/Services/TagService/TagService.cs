@@ -1,13 +1,15 @@
-﻿using BudgetUnderControl.Common.Contracts;
+﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Domain;
 using BudgetUnderControl.Domain.Repositiories;
-using BudgetUnderControl.CommonInfrastructure.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BudgetUnderControl.CommonInfrastructure;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
+using BudgetUnderControl.Modules.Transactions.Application.Commands.Tags.CreateTag;
+using BudgetUnderControl.Modules.Transactions.Application.Commands.Tags.UpdateTag;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 
 namespace BudgetUnderControl.Infrastructure.Services
 {
@@ -66,13 +68,13 @@ namespace BudgetUnderControl.Infrastructure.Services
             return result;
         }
 
-        public async Task AddTagAsync(AddTag command)
+        public async Task AddTagAsync(CreateTagCommand command)
         {
             var tag = Tag.Create(command.Name, userIdentityContext.UserId, false, command.ExternalId);
             await this.tagRepository.AddAsync(tag);
         }
 
-        public async Task EditTagAsync(EditTag command)
+        public async Task EditTagAsync(UpdateTagCommand command)
         {
             var tag = await this.tagRepository.GetAsync(command.ExternalId);
             tag.Edit(command.Name, tag.OwnerId,  command.IsDeleted);

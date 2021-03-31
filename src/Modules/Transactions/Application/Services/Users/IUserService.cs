@@ -1,11 +1,9 @@
-﻿using BudgetUnderControl.CommonInfrastructure.Commands;
-using BudgetUnderControl.CommonInfrastructure.Commands.User;
+﻿using BudgetUnderControl.Modules.Transactions.Application.Commands.Login.CreateNewUser;
+using BudgetUnderControl.Modules.Transactions.Application.Commands.Users.UpdateUser;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace BudgetUnderControl.CommonInfrastructure
+namespace BudgetUnderControl.Modules.Transactions.Application.Services
 {
     public interface IUserService
     {
@@ -13,12 +11,12 @@ namespace BudgetUnderControl.CommonInfrastructure
 
         Task<string> ValidateLoginAsync(string username, string password);
 
-        Task<string> RegisterUserAsync(RegisterUserCommand command);
+        Task<string> RegisterUserAsync(CreateNewUserCommand command);
 
         Task<bool> ActivateUserAsync(Guid userId, string code);
 
         Task ResetActivationCodeAsync(Guid userId);
 
-        Task EditUserAsync(EditUser command);
+        Task EditUserAsync(UpdateUserCommand command);
     }
 }

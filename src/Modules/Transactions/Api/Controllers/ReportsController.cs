@@ -1,4 +1,4 @@
-﻿using BudgetUnderControl.Common.Contracts;
+﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Reports.GetDashboard;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Reports.GetExpensesChart;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Reports.GetMovingSum;

@@ -7,10 +7,13 @@
   <ItemGroup>
     <Compile Remove="Domain\Identity\**" />
     <Compile Remove="Processing\**" />
+    <Compile Remove="Services\ReportService\ExpensesReports\Contracts\**" />
     <EmbeddedResource Remove="Domain\Identity\**" />
     <EmbeddedResource Remove="Processing\**" />
+    <EmbeddedResource Remove="Services\ReportService\ExpensesReports\Contracts\**" />
     <None Remove="Domain\Identity\**" />
     <None Remove="Processing\**" />
+    <None Remove="Services\ReportService\ExpensesReports\Contracts\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,10 +33,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Shared\BudgetUnderControl.Shared.Infrastructure\BudgetUnderControl.Shared.Infrastructure.csproj" />
     <ProjectReference Include="..\Application\BudgetUnderControl.Modules.Transactions.Application.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\ReportService\ExpensesReports\Contracts\" />
   </ItemGroup>
 
 </Project>

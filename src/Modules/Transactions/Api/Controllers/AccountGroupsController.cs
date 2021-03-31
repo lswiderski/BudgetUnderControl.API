@@ -1,4 +1,4 @@
-﻿using BudgetUnderControl.Common.Contracts;
+﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.AccountGroups.GetAccountGroup;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.AccountGroups.GetAllAccountGroups;
 using BudgetUnderControl.Modules.Transactions.Application.Contracts;

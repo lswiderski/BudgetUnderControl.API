@@ -1,5 +1,5 @@
-﻿using BudgetUnderControl.CommonInfrastructure;
-using BudgetUnderControl.CommonInfrastructure.Commands;
+﻿using BudgetUnderControl.Modules.Transactions.Application.Services;
+using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Modules.Transactions.Application.Configuration.Commands;
 using System;
 using System.Collections.Generic;
@@ -21,15 +21,7 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Login.Cre
 
         public async Task<string> Handle(CreateNewUserCommand request, CancellationToken cancellationToken)
         {
-            var token = await this.userService.RegisterUserAsync(new RegisterUserCommand
-            {
-                TokenId = request.TokenId,
-                Email = request.Email,
-                Password = request.Password,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                Username = request.Username
-            });
+            var token = await this.userService.RegisterUserAsync(request);
 
             return token;
         }

@@ -1,4 +1,4 @@
-﻿using BudgetUnderControl.CommonInfrastructure;
+﻿using BudgetUnderControl.Modules.Transactions.Application.Services;
 using BudgetUnderControl.Modules.Transactions.Application.Configuration;
 using BudgetUnderControl.Modules.Transactions.Application.Configuration.Commands;
 using MediatR;
@@ -22,30 +22,7 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Transactions.EditT
 
         public async Task<Unit> Handle(EditTransactionCommand request, CancellationToken cancellationToken)
         {
-            var commandDTO = new CommonInfrastructure.Commands.EditTransaction
-            {
-                AccountId = request.AccountId,
-                Amount = request.Amount,
-                CategoryId = request.CategoryId,
-                Comment = request.Comment,
-                Date = request.Date,
-                FileGuid = request.FileGuid,
-                Latitude = request.Latitude,
-                Longitude = request.Longitude,
-                Name = request.Name,
-                Rate = request.Rate,
-                Tags = request.Tags,
-                TransferAccountId = request.TransferAccountId,
-                TransferAmount = request.TransferAmount,
-                TransferDate = request.TransferDate,
-                ExtendedType = request.ExtendedType,
-                ExternalId = request.ExternalId,
-                Id = request.Id,
-                IsDeleted = request.IsDeleted,
-                TransferId = request.TransferId,
-                TransferTransactionId = request.TransferTransactionId
-            };
-            await transactionService.EditTransactionAsync(commandDTO);
+            await transactionService.EditTransactionAsync(request);
 
             return Unit.Value;
         }

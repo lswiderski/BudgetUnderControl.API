@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Security.Cryptography;
-using System.Text;
-using BudgetUnderControl.CommonInfrastructure;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 
-namespace BudgetUnderControl.Infrastructure.Services
+namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
     public class Encrypter : IEncrypter
     {

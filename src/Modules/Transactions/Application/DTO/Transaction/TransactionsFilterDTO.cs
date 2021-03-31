@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace BudgetUnderControl.Common.Contracts
+namespace BudgetUnderControl.Modules.Transactions.Application.DTO
 {
     public class TransactionsFilterDTO
     {

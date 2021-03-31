@@ -1,19 +1,18 @@
 ﻿using BudgetUnderControl.Common.Enums;
-using BudgetUnderControl.Common.Contracts;
+using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Domain;
 using BudgetUnderControl.Domain.Repositiories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using BudgetUnderControl.CommonInfrastructure.Commands;
-using BudgetUnderControl.CommonInfrastructure;
-using FluentValidation;
-using BudgetUnderControl.Common;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 using NLog;
+using BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.CreateAccount;
+using BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.UpdateAccount;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 
-namespace BudgetUnderControl.Infrastructure.Services
+namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
     public class AccountService : IAccountService
     {
@@ -120,7 +119,7 @@ namespace BudgetUnderControl.Infrastructure.Services
             return dto;
         }
 
-        public async Task AddAccountAsync(AddAccount command)
+        public async Task AddAccountAsync(CreateAccountCommand command)
         {
             var user = this.userIdentityContext;
             var account = Account.Create(command.Name, command.CurrencyId, command.AccountGroupId, command.IsIncludedInTotal, command.Comment, command.Order, command.Type, command.ParentAccountId, true, user.UserId, command.ExternalId);
@@ -137,7 +136,7 @@ namespace BudgetUnderControl.Infrastructure.Services
             }
         }
 
-        public async Task EditAccountAsync(EditAccount command)
+        public async Task EditAccountAsync(UpdateAccountCommand command)
         {
             var account = await accountRepository.GetAccountAsync(command.Id);
             account.Edit(command.Name, command.CurrencyId, command.AccountGroupId, command.IsIncludedInTotal, command.Comment, command.Order, command.Type, command.ParentAccountId, command.IsActive);

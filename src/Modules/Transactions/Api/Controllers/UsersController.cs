@@ -1,6 +1,5 @@
-﻿using BudgetUnderControl.Common.Contracts.User;
-using BudgetUnderControl.Common.Enums;
-using BudgetUnderControl.CommonInfrastructure;
+﻿using BudgetUnderControl.Common.Enums;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Users.ActivateUser;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Users.GetUser;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Users.GetUserIdentity;
@@ -8,6 +7,7 @@ using BudgetUnderControl.Modules.Transactions.Application.Commands.Users.GetUser
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Users.ResetUserActivation;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Users.UpdateUser;
 using BudgetUnderControl.Modules.Transactions.Application.Contracts;
+using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;

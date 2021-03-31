@@ -1,4 +1,4 @@
-﻿using BudgetUnderControl.CommonInfrastructure;
+﻿using BudgetUnderControl.Modules.Transactions.Application.Services;
 using BudgetUnderControl.Modules.Transactions.Application.Configuration.Commands;
 using MediatR;
 using System;
@@ -21,13 +21,7 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Tags.Upda
 
         public async Task<Unit> Handle(UpdateTagCommand request, CancellationToken cancellationToken)
         {
-            var commandDTO = new CommonInfrastructure.Commands.EditTag
-            {
-                ExternalId = request.ExternalId,
-                Name = request.Name,
-                IsDeleted = request.IsDeleted,
-            };
-            await this.tagService.EditTagAsync(commandDTO);
+            await this.tagService.EditTagAsync(request);
 
             return Unit.Value;
         }

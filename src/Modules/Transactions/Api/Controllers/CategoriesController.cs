@@ -1,4 +1,4 @@
-﻿using BudgetUnderControl.Common.Contracts;
+﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Categories.GetAllCategories;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Categories.GetCategory;
 using BudgetUnderControl.Modules.Transactions.Application.Contracts;

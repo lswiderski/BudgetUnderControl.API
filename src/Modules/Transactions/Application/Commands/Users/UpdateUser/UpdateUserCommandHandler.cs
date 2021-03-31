@@ -1,4 +1,4 @@
-﻿using BudgetUnderControl.CommonInfrastructure;
+﻿using BudgetUnderControl.Modules.Transactions.Application.Services;
 using BudgetUnderControl.Modules.Transactions.Application.Configuration.Commands;
 using MediatR;
 using System;
@@ -21,16 +21,7 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Users.Upd
 
         public async Task<Unit> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
-            await this.userService.EditUserAsync(new CommonInfrastructure.Commands.User.EditUser
-            {
-                IsActivated = request.IsActivated,
-                Email = request.Email,
-                Role = request.Role,
-                ExternalId = request.ExternalId,
-                FirstName = request.FirstName,
-                LastName = request.LastName,
-                Username = request.Username
-            });
+            await this.userService.EditUserAsync(request);
 
             return Unit.Value;
         }

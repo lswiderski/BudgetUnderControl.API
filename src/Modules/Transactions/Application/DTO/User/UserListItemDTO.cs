@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BudgetUnderControl.Common.Contracts.User
+﻿namespace BudgetUnderControl.Modules.Transactions.Application.DTO
 {
     public class UserListItemDTO : UserDTO
     {

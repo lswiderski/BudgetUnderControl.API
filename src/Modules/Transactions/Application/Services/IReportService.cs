@@ -1,8 +1,8 @@
-﻿using BudgetUnderControl.Common.Contracts;
+﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace BudgetUnderControl.CommonInfrastructure
+namespace BudgetUnderControl.Modules.Transactions.Application.Services
 {
     public interface IReportService
     {

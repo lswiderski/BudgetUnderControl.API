@@ -1,4 +1,4 @@
-﻿using BudgetUnderControl.Common.Contracts;
+﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Common.Enums;
 using BudgetUnderControl.Modules.Transactions.Application.Contracts;
 using BudgetUnderControl.Modules.Transactions.Application.Transactions.AddTransaction;

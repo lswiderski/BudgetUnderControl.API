@@ -1,18 +1,18 @@
-﻿using BudgetUnderControl.Common.Contracts;
-using BudgetUnderControl.CommonInfrastructure.Commands;
+﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
+using BudgetUnderControl.Modules.Transactions.Application.Commands.Tags.CreateTag;
+using BudgetUnderControl.Modules.Transactions.Application.Commands.Tags.UpdateTag;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace BudgetUnderControl.CommonInfrastructure
+namespace BudgetUnderControl.Modules.Transactions.Application.Services
 {
     public interface ITagService
     {
         Task<ICollection<TagDTO>> GetTagsAsync();
         Task<ICollection<TagDTO>> GetActiveTagsAsync();
         Task<TagDTO> GetTagAsync(Guid tagId);
-        Task AddTagAsync(AddTag command);
-        Task EditTagAsync(EditTag command);
+        Task AddTagAsync(CreateTagCommand command);
+        Task EditTagAsync(UpdateTagCommand command);
     }
 }

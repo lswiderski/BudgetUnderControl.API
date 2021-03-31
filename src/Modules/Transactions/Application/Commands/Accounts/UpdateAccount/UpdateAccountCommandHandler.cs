@@ -1,4 +1,4 @@
-﻿using BudgetUnderControl.CommonInfrastructure;
+﻿using BudgetUnderControl.Modules.Transactions.Application.Services;
 using BudgetUnderControl.Modules.Transactions.Application.Configuration.Commands;
 using MediatR;
 using System;
@@ -21,23 +21,7 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.
 
         public async Task<Unit> Handle(UpdateAccountCommand request, CancellationToken cancellationToken)
         {
-            await this.accountService.EditAccountAsync(new CommonInfrastructure.Commands.EditAccount
-            {
-                AccountGroupId = request.AccountGroupId,
-                Amount = request.Amount,
-                Comment = request.Comment,
-                CurrencyId = request.CurrencyId,
-                ExternalId = request.ExternalId,
-                IsIncludedInTotal = request.IsIncludedInTotal,
-                Name = request.Name,
-                Order = request.Order,
-                ParentAccountId = request.ParentAccountId,
-                Type = request.Type,
-                Currency = request.Currency,
-                CurrencySymbol = request.CurrencySymbol,
-                Id = request.Id,
-                IsActive = request.IsActive,
-            });
+            await this.accountService.EditAccountAsync(request);
 
             return Unit.Value;
         }

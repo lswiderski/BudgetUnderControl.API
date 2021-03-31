@@ -1,7 +1,7 @@
-﻿using BudgetUnderControl.CommonInfrastructure.Commands;
+﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using System.Threading.Tasks;
 
-namespace BudgetUnderControl.CommonInfrastructure
+namespace BudgetUnderControl.Modules.Transactions.Application.Services
 {
     public interface ISynchroniser
     {

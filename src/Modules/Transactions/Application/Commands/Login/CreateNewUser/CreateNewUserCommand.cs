@@ -10,14 +10,13 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Login.Cre
 {
     public class CreateNewUserCommand : CommandBase<string>
     {
-        public CreateNewUserCommand(string username, string firstname, string lastname, string email, string password, Guid tokenId)
+        public CreateNewUserCommand(string username, string firstname, string lastname, string email, string password)
         {
             Username = username;
             FirstName = firstname;
             LastName = lastname;
             Email = email;
             Password = password;
-            TokenId = tokenId;
         }
 
         public CreateNewUserCommand()
@@ -33,7 +32,5 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Login.Cre
         public string Email { get; set; }
 
         public string Password { get; set; }
-
-        public Guid TokenId { get; set; }
     }
 }

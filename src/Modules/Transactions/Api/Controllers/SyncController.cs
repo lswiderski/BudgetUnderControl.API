@@ -1,5 +1,5 @@
-﻿using BudgetUnderControl.Common.Contracts;
-using BudgetUnderControl.CommonInfrastructure.Commands;
+﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
+using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Sync.GetBackup;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Sync.GetCSV;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Sync.ImportBackup;

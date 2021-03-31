@@ -1,6 +1,5 @@
-﻿using BudgetUnderControl.Common.Extensions;
-using BudgetUnderControl.CommonInfrastructure;
-using BudgetUnderControl.Domain;
+﻿using BudgetUnderControl.Domain;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 using BudgetUnderControl.Shared.Infrastructure.Extensions;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
 using Microsoft.IdentityModel.Tokens;
@@ -10,7 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace BudgetUnderControl.Infrastructure
+namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
     public class JwtHandlerService : IJwtHandlerService
     {

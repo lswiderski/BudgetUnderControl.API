@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace BudgetUnderControl.Common.Contracts
+namespace BudgetUnderControl.Modules.Transactions.Application.DTO
 {
     public class DashboardDTO
     {

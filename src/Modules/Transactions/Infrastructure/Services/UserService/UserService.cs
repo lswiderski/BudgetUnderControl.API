@@ -1,11 +1,11 @@
 ﻿using BudgetUnderControl.Domain.Repositiories;
-using BudgetUnderControl.CommonInfrastructure.Commands;
+using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using BudgetUnderControl.CommonInfrastructure;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 using FluentValidation;
 using BudgetUnderControl.Domain;
 using BudgetUnderControl.Common.Enums;
@@ -13,10 +13,10 @@ using BudgetUnderControl.Common.Extensions;
 using BudgetUnderControl.ApiInfrastructure.Services.EmailService;
 using BudgetUnderControl.ApiInfrastructure.Services.EmailService.Contracts;
 using AutoMapper;
-using BudgetUnderControl.Common.Contracts.User;
-using BudgetUnderControl.CommonInfrastructure.Commands.User;
+using BudgetUnderControl.Modules.Transactions.Application.Commands.Login.CreateNewUser;
+using BudgetUnderControl.Modules.Transactions.Application.Commands.Users.UpdateUser;
 
-namespace BudgetUnderControl.Infrastructure.Services
+namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
     public class UserService : IUserService
     {
@@ -64,7 +64,7 @@ namespace BudgetUnderControl.Infrastructure.Services
             return token;
         }
 
-        public async Task<string> RegisterUserAsync(RegisterUserCommand command)
+        public async Task<string> RegisterUserAsync(CreateNewUserCommand command)
         {
                 var salt = encrypter.GetSalt();
 
@@ -74,7 +74,6 @@ namespace BudgetUnderControl.Infrastructure.Services
                 await userRepository.AddUserAsync(user);
 
                 var token = jwtHandlerService.CreateToken(user);
-                cache.Set(command.TokenId, token);
 
                 var activationToken = Token.Create(TokenType.Activation, user.ExternalId, user.Id, DateTime.UtcNow.AddDays(1));
                 await tokenRepository.AddAsync(activationToken);
@@ -157,7 +156,7 @@ namespace BudgetUnderControl.Infrastructure.Services
             return context;
         }
 
-        public async Task EditUserAsync(EditUser command)
+        public async Task EditUserAsync(UpdateUserCommand command)
         {
                 var user = await this.userRepository.GetAsync(command.ExternalId);
 
@@ -167,7 +166,7 @@ namespace BudgetUnderControl.Infrastructure.Services
                 user.EditUsername(command.Username);
                 user.EditRole(command.Role);
 
-                this.userRepository.UpdateUserAsync(user);
+                await this.userRepository.UpdateUserAsync(user);
         }
     }
 }

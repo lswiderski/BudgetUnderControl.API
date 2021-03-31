@@ -1,7 +1,6 @@
 ﻿using BudgetUnderControl.ApiInfrastructure.Services.EmailService.Contracts;
 using BudgetUnderControl.Common.Contracts.Email;
-using BudgetUnderControl.CommonInfrastructure.Interfaces.Email;
-using BudgetUnderControl.Domain.Repositiories;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
 using MoreLinq;
 using System;
@@ -10,7 +9,7 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BudgetUnderControl.ApiInfrastructure.Services.EmailService
+namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
     public class EmailService : IEmailService
     {

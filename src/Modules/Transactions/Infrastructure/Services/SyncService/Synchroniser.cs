@@ -1,4 +1,4 @@
-﻿using BudgetUnderControl.Common.Contracts;
+﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Domain;
 using BudgetUnderControl.Domain.Repositiories;
 using NLog;
@@ -8,12 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using BudgetUnderControl.CommonInfrastructure;
-using BudgetUnderControl.CommonInfrastructure.Commands;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 using Microsoft.EntityFrameworkCore;
 using BudgetUnderControl.ApiInfrastructure.Services;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 
-namespace BudgetUnderControl.Infrastructure.Services
+namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
     public class Synchroniser :  ISynchroniser
     {

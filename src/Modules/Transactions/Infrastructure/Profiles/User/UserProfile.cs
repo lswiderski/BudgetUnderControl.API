@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using BudgetUnderControl.Common.Contracts.User;
 using BudgetUnderControl.Common.Enums;
+using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using System;
 using System.Collections.Generic;
 using System.Text;

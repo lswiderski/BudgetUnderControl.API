@@ -1,12 +1,11 @@
-﻿using BudgetUnderControl.Common.Contracts;
-using BudgetUnderControl.CommonInfrastructure.Commands;
+﻿using BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.CreateAccount;
+using BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.UpdateAccount;
+using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace BudgetUnderControl.CommonInfrastructure
+namespace BudgetUnderControl.Modules.Transactions.Application.Services
 {
     public interface IAccountService
     {
@@ -17,8 +16,8 @@ namespace BudgetUnderControl.CommonInfrastructure
         Task<EditAccountDTO> GetAccountAsync(Guid id);
         Task<AccountDetailsDTO> GetAccountDetailsAsync(TransactionsFilterDTO filter);
 
-        Task AddAccountAsync(AddAccount account);
-        Task EditAccountAsync(EditAccount command);
+        Task AddAccountAsync(CreateAccountCommand account);
+        Task EditAccountAsync(UpdateAccountCommand command);
         Task DeleteAccountAsync(Guid id);
         Task<bool> IsValidAsync(int accountId);
     }

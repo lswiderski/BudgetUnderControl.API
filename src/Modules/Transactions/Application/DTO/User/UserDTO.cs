@@ -1,10 +1,8 @@
 ﻿using BudgetUnderControl.Common.Enums;
 using BudgetUnderControl.Common.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace BudgetUnderControl.Common.Contracts.User
+namespace BudgetUnderControl.Modules.Transactions.Application.DTO
 {
     public class UserDTO
     {

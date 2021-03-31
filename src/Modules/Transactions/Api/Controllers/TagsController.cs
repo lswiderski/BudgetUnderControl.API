@@ -1,4 +1,4 @@
-﻿using BudgetUnderControl.Common.Contracts;
+﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Tags.CreateTag;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Tags.GetActiveTags;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Tags.GetAllTags;

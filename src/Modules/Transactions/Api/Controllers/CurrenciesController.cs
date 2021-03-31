@@ -1,4 +1,4 @@
-﻿using BudgetUnderControl.Common.Contracts;
+﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Currencies.GetAllCurrencies;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Currencies.GetCurrency;
 using BudgetUnderControl.Modules.Transactions.Application.Contracts;

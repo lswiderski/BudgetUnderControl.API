@@ -1,4 +1,4 @@
-﻿using BudgetUnderControl.CommonInfrastructure;
+﻿using BudgetUnderControl.Modules.Transactions.Application.Services;
 using FluentValidation;
 using System;
 using System.Collections.Generic;

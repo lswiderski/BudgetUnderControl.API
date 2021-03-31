@@ -1,11 +1,8 @@
 ﻿using BudgetUnderControl.Common.Enums;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BudgetUnderControl.Common.Contracts
+namespace BudgetUnderControl.Modules.Transactions.Application.DTO
 {
     public class TransactionSyncDTO
     {

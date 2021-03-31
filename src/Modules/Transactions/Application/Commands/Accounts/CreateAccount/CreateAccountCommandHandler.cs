@@ -1,4 +1,4 @@
-﻿using BudgetUnderControl.CommonInfrastructure;
+﻿using BudgetUnderControl.Modules.Transactions.Application.Services;
 using BudgetUnderControl.Modules.Transactions.Application.Configuration.Commands;
 using MediatR;
 using System;
@@ -21,22 +21,9 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.
 
         public async Task<Guid> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
         {
-            var commandDTO = new CommonInfrastructure.Commands.AddAccount
-            {
-                AccountGroupId = request.AccountGroupId,
-                Amount = request.Amount,
-                Comment = request.Comment,
-                CurrencyId = request.CurrencyId,
-                ExternalId = request.ExternalId,
-                IsIncludedInTotal = request.IsIncludedInTotal,
-                Name = request.Name,
-                Order = request.Order,
-                ParentAccountId = request.ParentAccountId,
-                Type = request.Type
-            };
-            await this.accountService.AddAccountAsync(commandDTO);
+            await this.accountService.AddAccountAsync(request);
 
-            return commandDTO.ExternalId;
+            return request.ExternalId;
         }
     }
 }

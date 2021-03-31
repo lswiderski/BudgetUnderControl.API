@@ -1,11 +1,8 @@
 ﻿using BudgetUnderControl.Common.Enums;
-using BudgetUnderControl.CommonInfrastructure.Commands;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using System.Threading.Tasks;
 
-namespace BudgetUnderControl.CommonInfrastructure
+namespace BudgetUnderControl.Modules.Transactions.Application.Services
 {
     public interface ISyncRequestBuilder
     {

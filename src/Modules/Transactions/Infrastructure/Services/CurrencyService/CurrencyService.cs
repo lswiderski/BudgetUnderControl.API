@@ -1,17 +1,18 @@
-﻿using BudgetUnderControl.Common.Contracts;
+﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Domain;
 using BudgetUnderControl.Domain.Repositiories;
-using BudgetUnderControl.CommonInfrastructure.Commands;
 using BudgetUnderControl.Infrastructure.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BudgetUnderControl.CommonInfrastructure;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 using static MoreLinq.Extensions.MinByExtension;
+using BudgetUnderControl.Modules.Transactions.Application.Commands.Currencies.AddExchangeRate;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 
-namespace BudgetUnderControl.Infrastructure.Services
+namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
     public class CurrencyService : ICurrencyService
     {
@@ -96,7 +97,7 @@ namespace BudgetUnderControl.Infrastructure.Services
             return rates;
         }
 
-        public async Task AddExchangeRateAsync(AddExchangeRate command)
+        public async Task AddExchangeRateAsync(AddExchangeRateCommand command)
         {
             var rate = ExchangeRate.Create(command.FromCurrencyId, command.ToCurrencyId, command.Rate, userIdentityContext.UserId, command.ExternalId, false, command.Date);
 
@@ -107,12 +108,12 @@ namespace BudgetUnderControl.Infrastructure.Services
         {
             var exchangeRate = await this.currencyRepository.GetLatestExchangeRateAsync(fromCurrencyId, toCurrencyId);
 
-            var result = await this.GetValueInDifferentCurrency(amount, fromCurrencyId, toCurrencyId, exchangeRate);
+            var result = this.GetValueInDifferentCurrency(amount, fromCurrencyId, exchangeRate);
 
             return result;
         }
 
-        private async Task<decimal> GetValueInDifferentCurrency(decimal amount, int fromCurrencyId, int toCurrencyId, ExchangeRate exchangeRate)
+        private decimal GetValueInDifferentCurrency(decimal amount, int fromCurrencyId, ExchangeRate exchangeRate)
         {
             var result = amount;
             if (exchangeRate == null)

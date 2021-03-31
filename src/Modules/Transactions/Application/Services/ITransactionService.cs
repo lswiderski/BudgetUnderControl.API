@@ -1,17 +1,18 @@
-﻿using BudgetUnderControl.Common.Contracts;
-using BudgetUnderControl.CommonInfrastructure.Commands;
+﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
+using BudgetUnderControl.Modules.Transactions.Application.Transactions.AddTransaction;
+using BudgetUnderControl.Modules.Transactions.Application.Transactions.EditTransaction;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace BudgetUnderControl.CommonInfrastructure
+namespace BudgetUnderControl.Modules.Transactions.Application.Services
 {
     public interface ITransactionService
     {
         Task<ICollection<TransactionListItemDTO>> GetTransactionsAsync(TransactionsFilterDTO filter = null);
         Task<EditTransactionDTO> GetTransactionAsync(Guid transactionId);
-        Task EditTransactionAsync(EditTransaction command);
-        Task AddTransactionAsync(AddTransaction command);
+        Task EditTransactionAsync(EditTransactionCommand command);
+        Task AddTransactionAsync(AddTransactionCommand command);
         Task DeleteTransactionAsync(Guid transactionId);
         Task CreateTagsToTransaction(IEnumerable<int> tagsId, int transactionId);
     }

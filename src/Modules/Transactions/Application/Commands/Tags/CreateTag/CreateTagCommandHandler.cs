@@ -1,4 +1,4 @@
-﻿using BudgetUnderControl.CommonInfrastructure;
+﻿using BudgetUnderControl.Modules.Transactions.Application.Services;
 using BudgetUnderControl.Modules.Transactions.Application.Configuration.Commands;
 using System;
 using System.Collections.Generic;
@@ -20,14 +20,9 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Tags.Crea
 
         public async Task<Guid> Handle(CreateTagCommand request, CancellationToken cancellationToken)
         {
-            var commandDTO = new CommonInfrastructure.Commands.AddTag
-            {
-                ExternalId = request.ExternalId,
-                Name = request.Name,
-            };
-            await this.tagService.AddTagAsync(commandDTO);
+            await this.tagService.AddTagAsync(request);
 
-            return commandDTO.ExternalId;
+            return request.ExternalId;
         }
     }
 }

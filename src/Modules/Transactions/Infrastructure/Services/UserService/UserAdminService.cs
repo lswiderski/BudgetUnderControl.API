@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using BudgetUnderControl.Common.Contracts.User;
-using BudgetUnderControl.CommonInfrastructure.Interfaces;
+using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Domain.Repositiories;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 
-namespace BudgetUnderControl.ApiInfrastructure.Services.UserService
+namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
     public class UserAdminService : IUserAdminService
     {
