@@ -25,14 +25,11 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration
 {
     public class TransactionsAutofacModule : Autofac.Module
     {
-        private readonly IConfiguration configuration;
         private readonly GeneralSettings settings;
-        public TransactionsAutofacModule(IConfiguration configuration, GeneralSettings settings)
+        public TransactionsAutofacModule(GeneralSettings settings)
         {
-            this.configuration = configuration;
             this.settings = settings;
         }
-
 
         protected override void Load(ContainerBuilder builder)
         {
@@ -42,42 +39,22 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration
 
             var contextConfig = new ContextConfig() { DbName = settings.BUC_DB_Name, Application = settings.ApplicationType, ConnectionString = settings.ConnectionString };
 
+            builder.RegisterInstance(contextConfig).As<IContextConfig>();
 
-       
-          
+            var typeNamesEndings = new string[] { "Repository", "Service", "Builder" };
 
-           
-
-            builder.RegisterType<AccountService>().As<IAccountService>().InstancePerLifetimeScope();
-            builder.RegisterType<CurrencyService>().As<ICurrencyService>().InstancePerLifetimeScope();
-            builder.RegisterType<CategoryService>().As<ICategoryService>().InstancePerLifetimeScope();
-            builder.RegisterType<AccountGroupService>().As<IAccountGroupService>().InstancePerLifetimeScope();
-            builder.RegisterType<TransactionService>().As<ITransactionService>().InstancePerLifetimeScope();
-            builder.RegisterType<ReportService>().As<IReportService>().InstancePerLifetimeScope();
-            builder.RegisterType<ExpensesReportService>().As<IExpensesReportService>().InstancePerLifetimeScope();
-            builder.RegisterType<CurrencyRepository>().As<ICurrencyRepository>().InstancePerLifetimeScope();
-            builder.RegisterType<AccountRepository>().As<IAccountRepository>().InstancePerLifetimeScope();
-            builder.RegisterType<AccountGroupRepository>().As<IAccountGroupRepository>().InstancePerLifetimeScope();
-            builder.RegisterType<TransactionRepository>().As<ITransactionRepository>().InstancePerLifetimeScope();
-            builder.RegisterType<CategoryRepository>().As<ICategoryRepository>().InstancePerLifetimeScope();
-            builder.RegisterType<TagRepository>().As<ITagRepository>().InstancePerLifetimeScope();
-            builder.RegisterType<UserRepository>().As<IUserRepository>().InstancePerLifetimeScope();
-            builder.RegisterType<SyncService>().As<ISyncService>().InstancePerLifetimeScope();
-            builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();
-            builder.RegisterType<TagService>().As<ITagService>().InstancePerLifetimeScope();
+            foreach (var typeNameEnding in typeNamesEndings)
+            {
+                builder.RegisterAssemblyTypes(Assemblies.Infrastructure)
+                    .Where(type => type.Name.EndsWith(typeNameEnding))
+                    .AsImplementedInterfaces()
+                    .InstancePerLifetimeScope()
+                    .FindConstructorsWith(new AllConstructorFinder());
+            }
+         
             builder.RegisterType<TestDataSeeder>().As<ITestDataSeeder>().InstancePerLifetimeScope();
-            builder.RegisterType<SynchronizationRepository>().As<ISynchronizationRepository>().InstancePerLifetimeScope();
             builder.RegisterType<Synchroniser>().As<ISynchroniser>().InstancePerLifetimeScope();
-            builder.RegisterType<SyncRequestBuilder>().As<ISyncRequestBuilder>().InstancePerLifetimeScope();
-            builder.RegisterType<UserService>().As<IUserService>().InstancePerLifetimeScope();
-            builder.RegisterType<UserAdminService>().As<IUserAdminService>().InstancePerLifetimeScope();
             builder.RegisterType<Encrypter>().As<IEncrypter>().InstancePerLifetimeScope();
-            builder.RegisterType<JwtHandlerService>().As<IJwtHandlerService>().InstancePerLifetimeScope();
-            builder.RegisterType<FileService>().As<IFileService>().InstancePerLifetimeScope();
-            builder.RegisterType<EmailBuilder>().As<IEmailBuilder>().InstancePerLifetimeScope();
-            builder.RegisterType<EmailService>().As<IEmailService>().InstancePerLifetimeScope();
-            builder.RegisterType<NotificationService>().As<INotificationService>().InstancePerLifetimeScope();
-            builder.RegisterType<TokenRepository>().As<ITokenRepository>().InstancePerLifetimeScope();
 
             builder.Register<Func<IUserIdentityContext>>(c =>
             {

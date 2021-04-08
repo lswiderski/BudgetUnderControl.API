@@ -36,6 +36,8 @@ using Microsoft.AspNetCore.Http;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
 using BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration;
 using System.IO;
+using BudgetUnderControl.Shared.Abstractions.Modules;
+using System.Reflection;
 
 namespace BudgetUnderControl.API
 {
@@ -45,6 +47,13 @@ namespace BudgetUnderControl.API
         public IConfiguration Configuration { get; }
 
         private IWebHostEnvironment environment { get; }
+
+        public ILifetimeScope AutofacContainer { get; private set; }
+
+        public GeneralSettings Settings { get; private set; }
+
+        private readonly IList<Assembly> _assemblies;
+        private readonly IList<IModule> _modules;
 
         public Startup(IWebHostEnvironment env)
         {
@@ -56,108 +65,68 @@ namespace BudgetUnderControl.API
             .AddEnvironmentVariables();
             Configuration = configuration.Build();
             environment = env;
+
+            Settings = Configuration.GetSettings<GeneralSettings>().InjectEnvVariables();
+          
+            if (string.IsNullOrWhiteSpace(environment.WebRootPath))
+            {
+                environment.WebRootPath =Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            }
+            Settings.FileRootPath = environment.WebRootPath;
+
+            _assemblies = ModuleLoader.LoadAssemblies(Configuration);
+            _modules = ModuleLoader.LoadModules(_assemblies);
+
+            Console.WriteLine("Connection string: " + Settings.ConnectionString);
+            Console.WriteLine("Application Type:  " + Settings.ApplicationType.ToString());
+            Console.WriteLine("DB Name:  " + Settings.BUC_DB_Name);
+            Console.WriteLine($"Modules: {string.Join(", ", _modules.Select(x => x.Name))}");
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<TransactionsContext>(ServiceLifetime.Transient);
             services.AddAutofac();
             services.AddMemoryCache();
             services.AddCors();
             services.AddAutoMapper(typeof(UserProfile));
+            services.AddOptions();
+            //services.AddAuthorization();
             services.AddControllers()
                 .SetCompatibilityVersion(CompatibilityVersion.Latest)
                 .AddJsonOptions(x =>
                 {
                     x.JsonSerializerOptions.WriteIndented = true;
                 });
-               // .AddFluentValidation();
-            /*
-                .AddFluentValidation(fv =>
-                {
-                    fv.RegisterValidatorsFromAssemblyContaining<ApiInfrastructureModule>();
-                    fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
-                });*/
             services.AddHttpContextAccessor();
+            services.AddBUCAuthentication(Settings.SecretKey);
+            services.AddBUCAuthorization();
 
-            var settings = Configuration.GetSettings<GeneralSettings>().InjectEnvVariables();
-            Console.WriteLine("Connection string: " + settings.ConnectionString);
-            Console.WriteLine("Application Type:  " + settings.ApplicationType.ToString());
-            Console.WriteLine("DB Name:  " + settings.BUC_DB_Name);
-            if (string.IsNullOrWhiteSpace(environment.WebRootPath))
+            foreach (var module in _modules)
             {
-                environment.WebRootPath = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+                module.Register(services);
             }
-            settings.FileRootPath = environment.WebRootPath;
-
-            var key = Encoding.ASCII.GetBytes(settings.SecretKey);
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-           .AddJwtBearer(x =>
-           {
-               x.RequireHttpsMetadata = false;
-               x.SaveToken = true;
-               x.TokenValidationParameters = new TokenValidationParameters
-               {
-                   ValidateIssuerSigningKey = true,
-                   IssuerSigningKey = new SymmetricSecurityKey(key),
-                   ValidateIssuer = false,
-                   ValidateAudience = false
-               };
-           });
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy(UsersPolicy.AllUsers, policy =>
-                {
-                    policy.AddAuthenticationSchemes("Bearer");
-                    policy.RequireAuthenticatedUser();
-                    policy.RequireRole(UserRole.User.GetStringValue(), UserRole.LimitedUser.GetStringValue(), UserRole.PremiumUser.GetStringValue(), UserRole.Admin.GetStringValue());
-                });
-
-                options.AddPolicy(UsersPolicy.Admins, policy =>
-                {
-                    policy.AddAuthenticationSchemes("Bearer");
-                    policy.RequireAuthenticatedUser();
-                    policy.RequireRole(UserRole.Admin.GetStringValue());
-                });
-            });
-
-            var builder = new ContainerBuilder();
-
-            builder.RegisterInstance(settings)
-                .SingleInstance();
-      
-            var contextConfig = new ContextConfig() { DbName = settings.BUC_DB_Name, Application = settings.ApplicationType, ConnectionString = settings.ConnectionString };
-
-            builder.RegisterInstance(contextConfig).As<IContextConfig>();
-
-
-           
-            builder.RegisterModule(new ApiModule());
-            builder.RegisterModule(new TransactionsAutofacModule(Configuration, settings));
-            
-            builder.Populate(services);
-
-            var _container = builder.Build();
-            services.AddTransactionsModule();
-
-            return new AutofacServiceProvider(_container);
         }
 
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            // Add things to the Autofac ContainerBuilder.
+            builder.RegisterInstance(Settings)
+              .SingleInstance();
 
+            builder.RegisterModule(new ApiModule());
+
+            foreach (var module in _modules)
+            {
+                module.ConfigureContainer(builder, Settings);
+            }
+        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)//, IContextConfig contextConfig)//, ITestDataSeeder testDataSeeder)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            //if(contextConfig.Application == ApplicationType.Test)
-           // {
-                //testDataSeeder.SeedAsync().Wait();
-            //}
+
+            this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
 
             if (env.IsDevelopment())
             {
@@ -170,7 +139,6 @@ namespace BudgetUnderControl.API
             //app.UseHttpsRedirection();
 
             app.UseRouting();
-            app.UseTransactionsModule();
             app.UseCustomExceptionHandler();
             app.UseCors(options =>
                     options
@@ -183,11 +151,18 @@ namespace BudgetUnderControl.API
             app.UseAuthentication();
             app.UseAuthorization();
 
+            foreach (var module in _modules)
+            {
+                module.Use(app);
+            }
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
                 endpoints.MapGet("/", context => context.Response.WriteAsync("Budget Under Control API"));
             });
+
+            _assemblies.Clear();
+            _modules.Clear();
         }
     }
 }

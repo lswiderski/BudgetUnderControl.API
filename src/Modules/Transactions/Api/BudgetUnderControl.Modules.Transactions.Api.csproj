@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared\BudgetUnderControl.Shared.Abstractions\BudgetUnderControl.Shared.Abstractions.csproj" />
     <ProjectReference Include="..\Infrastructure\BudgetUnderControl.Modules.Transactions.Infrastructure.csproj" />
   </ItemGroup>
 
