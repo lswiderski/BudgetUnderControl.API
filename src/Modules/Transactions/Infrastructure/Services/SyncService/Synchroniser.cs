@@ -1,17 +1,13 @@
 ﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Domain;
 using BudgetUnderControl.Domain.Repositiories;
-using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Transactions;
 using BudgetUnderControl.Modules.Transactions.Application.Services;
 using Microsoft.EntityFrameworkCore;
-using BudgetUnderControl.ApiInfrastructure.Services;
-using BudgetUnderControl.Modules.Transactions.Application.Services;
+using Microsoft.Extensions.Logging;
 
 namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
@@ -301,7 +297,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                         categoryToUpdate.Delete(category.IsDeleted);
                         categoryToUpdate.SetModifiedOn(category.ModifiedOn);
                         await this.categoryRepository.UpdateAsync(categoryToUpdate);
-                        logger.Info("Category Updated:" + category.ExternalId.ToString());
+                        logger.LogInformation("Category Updated:" + category.ExternalId.ToString());
                     }
                     
                 }
@@ -311,7 +307,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                     categoryToAdd.Delete(category.IsDeleted);
                     categoryToAdd.SetModifiedOn(category.ModifiedOn);
                     await this.categoryRepository.AddCategoryAsync(categoryToAdd);
-                    logger.Info("Category Created:" + category.ExternalId.ToString());
+                    logger.LogInformation("Category Created:" + category.ExternalId.ToString());
                 }
             }
         }

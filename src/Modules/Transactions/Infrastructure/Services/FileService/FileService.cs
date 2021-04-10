@@ -2,7 +2,6 @@
 using BudgetUnderControl.Domain;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
 using Microsoft.AspNetCore.Http;
-using NLog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BudgetUnderControl.Modules.Transactions.Application.Services;
+using Microsoft.Extensions.Logging;
 
 namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {

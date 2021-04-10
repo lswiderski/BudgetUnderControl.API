@@ -7,10 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BudgetUnderControl.Modules.Transactions.Application.Services;
-using NLog;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.CreateAccount;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.UpdateAccount;
-using BudgetUnderControl.Modules.Transactions.Application.Services;
+using Microsoft.Extensions.Logging;
 
 namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {

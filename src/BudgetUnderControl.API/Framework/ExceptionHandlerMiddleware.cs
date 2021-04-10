@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +13,12 @@ namespace BudgetUnderControl.API.Framework
     {
         private readonly RequestDelegate next;
 
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly ILogger<ExceptionHandlerMiddleware> logger;
 
-        public ExceptionHandlerMiddleware(RequestDelegate next)
+        public ExceptionHandlerMiddleware(RequestDelegate next, ILogger<ExceptionHandlerMiddleware> logger)
         {
             this.next = next;
+            this.logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -32,9 +33,9 @@ namespace BudgetUnderControl.API.Framework
             }
         }
 
-        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            Logger.Error(exception, string.Format("{0} Request: {2}{3} | StackTrace: {1}", exception.Message, exception.StackTrace, context.Request.Path.ToString(), context.Request.QueryString.ToString()));
+            this.logger.LogError(exception, string.Format("{0} Request: {2}{3} | StackTrace: {1}", exception.Message, exception.StackTrace, context.Request.Path.ToString(), context.Request.QueryString.ToString()));
             var errorCode = "error";
             var statusCode = HttpStatusCode.InternalServerError;
             var exceptionType = exception.GetType();
@@ -43,7 +44,7 @@ namespace BudgetUnderControl.API.Framework
             var payload = JsonConvert.SerializeObject(response);
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)statusCode;
-            return context.Response.WriteAsync(payload);
+            await context.Response.WriteAsJsonAsync(payload);
         }
     }
 }

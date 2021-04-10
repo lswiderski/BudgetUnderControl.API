@@ -1,17 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Autofac.Extras.CommonServiceLocator;
 using BudgetUnderControl.API.Framework;
 using BudgetUnderControl.API.IoC;
-using BudgetUnderControl.Common;
-using BudgetUnderControl.Common.Enums;
-using BudgetUnderControl.Domain;
-
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -19,22 +12,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using NLog.Extensions.Logging;
-using NLog.Web;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using BudgetUnderControl.API.Extensions;
-using System.Text;
 using Microsoft.Extensions.Hosting;
-using BudgetUnderControl.Common.Extensions;
-using AutoMapper;
 using BudgetUnderControl.ApiInfrastructure.Profiles.User;
-using BudgetUnderControl.Modules.Transactions.Api;
 using Microsoft.AspNetCore.Http;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
-using BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration;
 using System.IO;
 using BudgetUnderControl.Shared.Abstractions.Modules;
 using System.Reflection;
@@ -76,11 +58,6 @@ namespace BudgetUnderControl.API
 
             _assemblies = ModuleLoader.LoadAssemblies(Configuration);
             _modules = ModuleLoader.LoadModules(_assemblies);
-
-            Console.WriteLine("Connection string: " + Settings.ConnectionString);
-            Console.WriteLine("Application Type:  " + Settings.ApplicationType.ToString());
-            Console.WriteLine("DB Name:  " + Settings.BUC_DB_Name);
-            Console.WriteLine($"Modules: {string.Join(", ", _modules.Select(x => x.Name))}");
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -91,7 +68,6 @@ namespace BudgetUnderControl.API
             services.AddCors();
             services.AddAutoMapper(typeof(UserProfile));
             services.AddOptions();
-            //services.AddAuthorization();
             services.AddControllers()
                 .SetCompatibilityVersion(CompatibilityVersion.Latest)
                 .AddJsonOptions(x =>
@@ -123,9 +99,12 @@ namespace BudgetUnderControl.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, ILogger<Startup> logger)
         {
-
+           logger.LogInformation("Connection string: " + Settings.ConnectionString);
+            logger.LogInformation("Application Type:  " + Settings.ApplicationType.ToString());
+            logger.LogInformation("DB Name:  " + Settings.BUC_DB_Name);
+            logger.LogInformation($"Modules: {string.Join(", ", _modules.Select(x => x.Name))}");
             this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
 
             if (env.IsDevelopment())

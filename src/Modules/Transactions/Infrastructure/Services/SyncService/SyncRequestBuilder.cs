@@ -1,20 +1,16 @@
 ﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Common.Enums;
 using BudgetUnderControl.Domain.Repositiories;
-using BudgetUnderControl.Modules.Transactions.Application.DTO;
-using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using BudgetUnderControl.Modules.Transactions.Application.Services;
 using BudgetUnderControl.Domain;
 using Microsoft.EntityFrameworkCore;
-using BudgetUnderControl.ApiInfrastructure.Services;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
 using BudgetUnderControl.Modules.Transactions.Core.ValueObjects;
-using BudgetUnderControl.Modules.Transactions.Application.Services;
+using Microsoft.Extensions.Logging;
 
 namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {

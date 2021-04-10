@@ -19,7 +19,6 @@ namespace BudgetUnderControl.Migrations.SqlServer
             {
 
             }
-                Console.WriteLine("Hello World!");
         }
 
         public TransactionsContext CreateDbContext(string[] args)
