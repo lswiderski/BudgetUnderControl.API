@@ -13,7 +13,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
     public class Synchroniser :  ISynchroniser
     {
-        private readonly ILogger logger;
+        private readonly ILogger<Synchroniser> logger;
         private readonly ITransactionRepository transactionRepository;
         private readonly IAccountRepository accountRepository;
         private readonly ICurrencyRepository currencyRepository;
@@ -38,7 +38,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             IUserIdentityContext userIdentityContext,
             ITagRepository tagRepository,
             ITransactionService transactionService,
-            ILogger logger,
+            ILogger<Synchroniser> logger,
             IFileService fileService)
         {
             this.transactionRepository = transactionRepository;

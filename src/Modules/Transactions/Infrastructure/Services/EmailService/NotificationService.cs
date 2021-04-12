@@ -12,8 +12,8 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
     public class NotificationService : INotificationService
     {
         private readonly IEmailService emailService;
-        private readonly GeneralSettings settings;
-        public NotificationService(IEmailService emailService, GeneralSettings settings)
+        private readonly EmailModuleSettings settings;
+        public NotificationService(IEmailService emailService, EmailModuleSettings settings)
         {
             this.emailService = emailService;
             this.settings = settings;

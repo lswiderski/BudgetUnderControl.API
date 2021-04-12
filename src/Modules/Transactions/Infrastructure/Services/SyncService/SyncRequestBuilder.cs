@@ -16,7 +16,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
     public class SyncRequestBuilder : ISyncRequestBuilder
     {
-        private readonly ILogger logger;
+        private readonly ILogger<SyncRequestBuilder> logger;
         private readonly ITransactionRepository transactionRepository;
         private readonly IAccountRepository accountRepository;
         private readonly ICurrencyRepository currencyRepository;
@@ -39,7 +39,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             ISynchronizationRepository synchronizationRepository,
             IUserIdentityContext userIdentityContext,
             ITagRepository tagRepository,
-            ILogger logger,
+            ILogger<SyncRequestBuilder> logger,
             GeneralSettings settings,
             IFileService fileService) 
         {

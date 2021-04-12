@@ -16,9 +16,9 @@ namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
     public class LoginController : ControllerBase
     {
         private readonly ITransactionsModule _transactionsModule;
-        private readonly GeneralSettings settings;
+        private readonly AuthSettings settings;
 
-        public LoginController(ITransactionsModule transactionsModule, GeneralSettings settings)
+        public LoginController(ITransactionsModule transactionsModule, AuthSettings settings)
         {
             _transactionsModule = transactionsModule;
             this.settings = settings;

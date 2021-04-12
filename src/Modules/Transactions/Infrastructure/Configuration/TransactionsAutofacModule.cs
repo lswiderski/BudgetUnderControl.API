@@ -25,10 +25,10 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration
 {
     public class TransactionsAutofacModule : Autofac.Module
     {
-        private readonly GeneralSettings settings;
-        public TransactionsAutofacModule(GeneralSettings settings)
+        private readonly IConfiguration configuration;
+        public TransactionsAutofacModule(IConfiguration configuration)
         {
-            this.settings = settings;
+            this.configuration = configuration;
         }
 
         protected override void Load(ContainerBuilder builder)
@@ -37,7 +37,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration
               .As<ITransactionsModule>()
               .InstancePerLifetimeScope();
 
-            var contextConfig = new ContextConfig() { DbName = settings.BUC_DB_Name, Application = settings.ApplicationType, ConnectionString = settings.ConnectionString };
+            var contextConfig = new ContextConfig() { DbName = configuration["transactionsModule:database:BUC_DB_Name"], ConnectionString = configuration["transactionsModule:database:ConnectionString"]};
 
             builder.RegisterInstance(contextConfig).As<IContextConfig>();
 

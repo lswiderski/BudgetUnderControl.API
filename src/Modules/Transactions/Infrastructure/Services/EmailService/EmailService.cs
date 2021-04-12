@@ -15,8 +15,8 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
     {
         private readonly IEmailBuilder emailBuilder;
        
-        private readonly GeneralSettings settings;
-        public EmailService(IEmailBuilder emailBuilder, GeneralSettings settings)
+        private readonly EmailModuleSettings settings;
+        public EmailService(IEmailBuilder emailBuilder, EmailModuleSettings settings)
         {
             this.emailBuilder = emailBuilder;
             this.settings = settings;

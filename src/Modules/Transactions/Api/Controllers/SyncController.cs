@@ -23,9 +23,9 @@ namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
     public class SyncController : ControllerBase
     {
         private readonly ITransactionsModule _transactionsModule;
-        private readonly GeneralSettings _settings;
+        private readonly AuthSettings _settings;
 
-        public SyncController(ITransactionsModule transactionsModule, GeneralSettings settings)
+        public SyncController(ITransactionsModule transactionsModule, AuthSettings settings)
         {
             _transactionsModule = transactionsModule;
             _settings = settings;

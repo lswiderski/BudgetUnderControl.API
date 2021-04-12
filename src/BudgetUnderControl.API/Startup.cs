@@ -20,6 +20,7 @@ using BudgetUnderControl.Shared.Infrastructure.Settings;
 using System.IO;
 using BudgetUnderControl.Shared.Abstractions.Modules;
 using System.Reflection;
+using Microsoft.Extensions.Options;
 
 namespace BudgetUnderControl.API
 {
@@ -32,7 +33,11 @@ namespace BudgetUnderControl.API
 
         public ILifetimeScope AutofacContainer { get; private set; }
 
-        public GeneralSettings Settings { get; private set; }
+        private GeneralSettings Settings { get; set; }
+
+        private TransactionsModuleSettings TransactionsModuleSettings { get; set; }
+        private FilesModuleSettings FilesModuleSettings { get; set; }
+        private AuthSettings AuthSettings { get; set; }
 
         private readonly IList<Assembly> _assemblies;
         private readonly IList<IModule> _modules;
@@ -47,14 +52,6 @@ namespace BudgetUnderControl.API
             .AddEnvironmentVariables();
             Configuration = configuration.Build();
             environment = env;
-
-            Settings = Configuration.GetSettings<GeneralSettings>().InjectEnvVariables();
-          
-            if (string.IsNullOrWhiteSpace(environment.WebRootPath))
-            {
-                environment.WebRootPath =Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-            }
-            Settings.FileRootPath = environment.WebRootPath;
 
             _assemblies = ModuleLoader.LoadAssemblies(Configuration);
             _modules = ModuleLoader.LoadModules(_assemblies);
@@ -74,8 +71,21 @@ namespace BudgetUnderControl.API
                 {
                     x.JsonSerializerOptions.WriteIndented = true;
                 });
+
+            Settings = Configuration.ConfigureSettings<GeneralSettings>(services);
+           var emailSettings = Configuration.ConfigureSettings<EmailModuleSettings>(services);
+            TransactionsModuleSettings = Configuration.ConfigureSettings<TransactionsModuleSettings>(services);
+            AuthSettings = Configuration.ConfigureSettings<AuthSettings>(services);
+            FilesModuleSettings = Configuration.ConfigureSettings<FilesModuleSettings>(services, false);
+
+            if (string.IsNullOrWhiteSpace(environment.WebRootPath))
+            {
+                environment.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            }
+            FilesModuleSettings.FileRootPath = environment.WebRootPath;
+
             services.AddHttpContextAccessor();
-            services.AddBUCAuthentication(Settings.SecretKey);
+            services.AddBUCAuthentication(AuthSettings.SecretKey);
             services.AddBUCAuthorization();
 
             foreach (var module in _modules)
@@ -87,23 +97,23 @@ namespace BudgetUnderControl.API
         public void ConfigureContainer(ContainerBuilder builder)
         {
             // Add things to the Autofac ContainerBuilder.
-            builder.RegisterInstance(Settings)
-              .SingleInstance();
+             builder.RegisterInstance(FilesModuleSettings)
+               .SingleInstance();
 
             builder.RegisterModule(new ApiModule());
 
             foreach (var module in _modules)
             {
-                module.ConfigureContainer(builder, Settings);
+                module.ConfigureContainer(builder, Configuration);
             }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, ILogger<Startup> logger)
         {
-           logger.LogInformation("Connection string: " + Settings.ConnectionString);
+            logger.LogInformation("Connection string: " + TransactionsModuleSettings.Database.ConnectionString);
             logger.LogInformation("Application Type:  " + Settings.ApplicationType.ToString());
-            logger.LogInformation("DB Name:  " + Settings.BUC_DB_Name);
+            logger.LogInformation("DB Name:  " + TransactionsModuleSettings.Database.BUC_DB_Name);
             logger.LogInformation($"Modules: {string.Join(", ", _modules.Select(x => x.Name))}");
             this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
 

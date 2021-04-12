@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BudgetUnderControl.Shared.Infrastructure.Settings
 {
-    public class SmtpClientSettings
+    public class SmtpClientConfig
     {
         public int Port { get; set; }
         public string Host { get; set; }

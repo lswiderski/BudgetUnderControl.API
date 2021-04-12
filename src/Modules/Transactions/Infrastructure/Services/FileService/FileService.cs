@@ -18,11 +18,11 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         private string _uploadCatalog = "uploads";
 
         private readonly IUserIdentityContext userIdentityContext;
-        private readonly GeneralSettings settings;
-        private readonly ILogger logger;
+        private readonly FilesModuleSettings settings;
+        private readonly ILogger<FileService> logger;
         private readonly TransactionsContext Context;
 
-        public FileService(TransactionsContext context, IUserIdentityContext userIdentityContext, GeneralSettings settings, ILogger logger)
+        public FileService(TransactionsContext context, IUserIdentityContext userIdentityContext, FilesModuleSettings settings, ILogger<FileService> logger)
         {
             this.userIdentityContext = userIdentityContext;
             this.settings = settings;

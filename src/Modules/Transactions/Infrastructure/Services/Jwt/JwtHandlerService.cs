@@ -13,9 +13,9 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
     public class JwtHandlerService : IJwtHandlerService
     {
-        private readonly GeneralSettings settings;
+        private readonly AuthSettings settings;
 
-        public JwtHandlerService(GeneralSettings settings)
+        public JwtHandlerService(AuthSettings settings)
         {
             this.settings = settings;
         }

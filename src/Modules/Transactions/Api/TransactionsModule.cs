@@ -10,6 +10,7 @@ using BudgetUnderControl.Shared.Abstractions.Modules;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 [assembly: InternalsVisibleTo("BudgetUnderControl.API")]
@@ -21,9 +22,10 @@ namespace BudgetUnderControl.Modules.Transactions.Api
         public string Name { get; } = "Transactions";
         public string Path => BasePath;
 
-        public void ConfigureContainer(ContainerBuilder builder, GeneralSettings settings)
+        public void ConfigureContainer(ContainerBuilder builder, IConfiguration configuration)
         {
-            builder.RegisterModule(new TransactionsAutofacModule(settings));
+            builder.RegisterModule(new TransactionsAutofacModule(configuration));
+           
         }
 
         public void Register(IServiceCollection services)

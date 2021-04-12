@@ -18,11 +18,11 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         private readonly IAccountRepository accountRepository;
         private readonly IUserRepository userRepository;
         private readonly IUserIdentityContext userIdentityContext;
-        private readonly ILogger logger;
+        private readonly ILogger<AccountService> logger;
 
         public AccountService(IAccountRepository accountRepository,
             IUserRepository userRepository, 
-            ILogger logger,
+            ILogger<AccountService> logger,
             IUserIdentityContext userIdentityContext)
         {
             this.accountRepository = accountRepository;
