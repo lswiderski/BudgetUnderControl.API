@@ -31,7 +31,6 @@ namespace BudgetUnderControl.Modules.Users.Api.Controllers
             _usersModule = usersModule;
         }
 
-
         [HttpPost("Logout")]
         [Authorize(Policy = UsersPolicy.AllUsers)]
         public async Task<IActionResult> Logout()

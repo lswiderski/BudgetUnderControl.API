@@ -1,13 +1,9 @@
-﻿using BudgetUnderControl.Modules.Transactions.Application.Commands.Login.Authenticate;
-using BudgetUnderControl.Modules.Transactions.Application.Commands.Login.CreateNewUser;
-using BudgetUnderControl.Modules.Transactions.Application.Contracts;
-using BudgetUnderControl.Shared.Application.CQRS.Contracts;
+﻿using BudgetUnderControl.Modules.Users.Application.Commands.Login.Authenticate;
+using BudgetUnderControl.Modules.Users.Application.Commands.Login.CreateNewUser;
+using BudgetUnderControl.Modules.Users.Application.Contracts;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+
 using System.Threading.Tasks;
 
 namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
@@ -16,12 +12,12 @@ namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-        private readonly ITransactionsModule _transactionsModule;
+        private readonly IUsersModule _usersModule;
         private readonly AuthSettings settings;
-/*
-        public LoginController(ITransactionsModule transactionsModule, AuthSettings settings)
+
+        public LoginController(IUsersModule usersModule, AuthSettings settings)
         {
-            _transactionsModule = transactionsModule;
+            _usersModule = usersModule;
             this.settings = settings;
         }
 
@@ -34,7 +30,7 @@ namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
                 return Unauthorized();
             }
 
-            var token = await _transactionsModule.ExecuteCommandAsync(command);
+            var token = await _usersModule.ExecuteCommandAsync(command);
 
             if (string.IsNullOrEmpty(token) || string.IsNullOrWhiteSpace(token))
             {
@@ -48,7 +44,7 @@ namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
         public async Task<IActionResult> Login([FromBody] AuthenticateCommand command)
         {
 
-            var token = await _transactionsModule.ExecuteCommandAsync(command);
+            var token = await _usersModule.ExecuteCommandAsync(command);
 
             if (string.IsNullOrEmpty(token) || string.IsNullOrWhiteSpace(token))
             {
@@ -61,7 +57,7 @@ namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] CreateNewUserCommand command)
         {
-            var token = await _transactionsModule.ExecuteCommandAsync(command);
+            var token = await _usersModule.ExecuteCommandAsync(command);
 
             if (string.IsNullOrEmpty(token) || string.IsNullOrWhiteSpace(token))
             {
@@ -70,6 +66,6 @@ namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
 
             return Ok(token);
         }
-*/
+
     }
 }

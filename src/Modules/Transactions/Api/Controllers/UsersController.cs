@@ -32,7 +32,7 @@ namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
             _transactionsModule = transactionsModule;
         }
 
-
+/*
         [HttpPost("Logout")]
         [Authorize(Policy = UsersPolicy.AllUsers)]
         public async Task<IActionResult> Logout()
@@ -104,6 +104,6 @@ namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
             await _transactionsModule.ExecuteCommandAsync(command);
             return NoContent();
         }
-
+*/
     }
 }

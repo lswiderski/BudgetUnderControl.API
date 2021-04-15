@@ -17,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
 using BudgetUnderControl.Modules.Transactions.Application.Contracts;
+using BudgetUnderControl.Shared.Abstractions.Contexts;
 
 namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
 {
@@ -26,10 +27,12 @@ namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
     public class TransactionsController : ControllerBase
     {
         private readonly ITransactionsModule _transactionsModule;
+        private readonly IContext _context;
 
-        public TransactionsController(ITransactionsModule transactionsModule)
+        public TransactionsController(ITransactionsModule transactionsModule, IContext context)
         {
             _transactionsModule = transactionsModule;
+            _context = context;
         }
 
         // GET api/Transactions

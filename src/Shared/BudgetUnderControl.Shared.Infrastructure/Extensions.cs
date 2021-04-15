@@ -1,13 +1,11 @@
 ﻿using BudgetUnderControl.Shared.Abstractions.Modules;
+using BudgetUnderControl.Shared.Infrastructure.Contexts;
 using BudgetUnderControl.Shared.Infrastructure.Database;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BudgetUnderControl.Shared.Infrastructure
 {
@@ -16,6 +14,10 @@ namespace BudgetUnderControl.Shared.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services,
            IList<Assembly> assemblies, IList<IModule> modules)
         {
+
+            services.AddSingleton<IContextFactory, ContextFactory>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient(sp => sp.GetRequiredService<IContextFactory>().Create());
             services.AddHostedService<DbMigrator>();
             return services;
         }
