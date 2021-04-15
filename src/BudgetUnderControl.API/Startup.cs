@@ -21,6 +21,7 @@ using System.IO;
 using BudgetUnderControl.Shared.Abstractions.Modules;
 using System.Reflection;
 using Microsoft.Extensions.Options;
+using BudgetUnderControl.Shared.Infrastructure;
 
 namespace BudgetUnderControl.API
 {
@@ -88,9 +89,10 @@ namespace BudgetUnderControl.API
             services.AddBUCAuthentication(AuthSettings.SecretKey);
             services.AddBUCAuthorization();
 
+            services.AddInfrastructure(_assemblies, _modules);
             foreach (var module in _modules)
             {
-                module.Register(services);
+                module.Register(services, Configuration);
             }
         }
 
@@ -140,6 +142,7 @@ namespace BudgetUnderControl.API
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseInfrastructure();
             foreach (var module in _modules)
             {
                 module.Use(app);

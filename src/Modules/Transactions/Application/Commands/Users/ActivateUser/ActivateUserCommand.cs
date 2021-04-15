@@ -1,9 +1,5 @@
-﻿using BudgetUnderControl.Modules.Transactions.Application.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BudgetUnderControl.Shared.Application.CQRS.Contracts;
+using BudgetUnderControl.Shared.Application.CQRS.Contracts;
 
 namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Users.ActivateUser
 {

@@ -1,5 +1,5 @@
 ﻿using BudgetUnderControl.Modules.Transactions.Application.Services;
-using BudgetUnderControl.Modules.Transactions.Application.Configuration.Commands;
+using BudgetUnderControl.Shared.Application.CQRS.Configuration.Commands;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using BudgetUnderControl.Shared.Application.CQRS.Configuration.Commands;
 
 namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.UpdateAccount
 {

@@ -1,4 +1,4 @@
-﻿using BudgetUnderControl.Modules.Transactions.Application.Configuration.Commands;
+﻿using BudgetUnderControl.Shared.Application.CQRS.Configuration.Commands;
 using BudgetUnderControl.Modules.Transactions.Application.Services;
 using System;
 using System.Collections.Generic;

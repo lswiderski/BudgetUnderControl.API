@@ -1,13 +1,10 @@
 ﻿using Autofac;
-using BudgetUnderControl.Modules.Transactions.Application.Contracts;
+using BudgetUnderControl.Shared.Application.CQRS.Contracts;
 using BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration;
 using BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration.Processing;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using BudgetUnderControl.Modules.Transactions.Application.Contracts;
 
 namespace BudgetUnderControl.Modules.Transactions.Infrastructure
 {

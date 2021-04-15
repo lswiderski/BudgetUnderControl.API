@@ -1,6 +1,6 @@
 ﻿
 using BudgetUnderControl.Modules.Transactions.Application.Services;
-using BudgetUnderControl.Modules.Transactions.Application.Configuration.Commands;
+using BudgetUnderControl.Shared.Application.CQRS.Configuration.Commands;
 using MediatR;
 using System;
 using System.Collections.Generic;

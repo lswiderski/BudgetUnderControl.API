@@ -1,6 +1,6 @@
 ﻿using BudgetUnderControl.Domain;
 using BudgetUnderControl.Modules.Transactions.Application.Services;
-using BudgetUnderControl.Shared.Infrastructure.Extensions;
+using BudgetUnderControl.Shared.Infrastructure;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
 using Microsoft.IdentityModel.Tokens;
 using System;

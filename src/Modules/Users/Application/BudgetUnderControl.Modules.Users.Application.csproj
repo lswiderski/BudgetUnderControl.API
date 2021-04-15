@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared\BudgetUnderControl.Shared.Abstractions\BudgetUnderControl.Shared.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\Shared\BudgetUnderControl.Shared.Application\BudgetUnderControl.Shared.Application.csproj" />
+    <ProjectReference Include="..\Domain\BudgetUnderControl.Modules.Users.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="10.0.2" />
+  </ItemGroup>
+
+</Project>

@@ -5,7 +5,7 @@ using BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.GetA
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.GetAccountDetails;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.GetAccounts;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.UpdateAccount;
-using BudgetUnderControl.Modules.Transactions.Application.Contracts;
+using BudgetUnderControl.Shared.Application.CQRS.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -14,6 +14,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using BudgetUnderControl.Modules.Transactions.Application.Contracts;
 
 namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
 {

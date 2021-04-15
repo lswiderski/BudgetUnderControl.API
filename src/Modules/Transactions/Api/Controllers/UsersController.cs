@@ -6,7 +6,7 @@ using BudgetUnderControl.Modules.Transactions.Application.Commands.Users.GetUser
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Users.GetUsers;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Users.ResetUserActivation;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Users.UpdateUser;
-using BudgetUnderControl.Modules.Transactions.Application.Contracts;
+using BudgetUnderControl.Shared.Application.CQRS.Contracts;
 using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +16,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using BudgetUnderControl.Modules.Transactions.Application.Contracts;
 
 namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
 {

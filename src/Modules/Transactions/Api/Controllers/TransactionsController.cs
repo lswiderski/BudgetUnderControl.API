@@ -1,6 +1,6 @@
 ﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Common.Enums;
-using BudgetUnderControl.Modules.Transactions.Application.Contracts;
+using BudgetUnderControl.Shared.Application.CQRS.Contracts;
 using BudgetUnderControl.Modules.Transactions.Application.Transactions.AddTransaction;
 using BudgetUnderControl.Modules.Transactions.Application.Transactions.DeleteTransaction;
 using BudgetUnderControl.Modules.Transactions.Application.Transactions.EditTransaction;
@@ -16,6 +16,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
+using BudgetUnderControl.Modules.Transactions.Application.Contracts;
 
 namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
 {

@@ -1,5 +1,5 @@
-﻿using BudgetUnderControl.Common.Attributes;
-using BudgetUnderControl.Common.Enums;
+﻿using BudgetUnderControl.Common.Enums;
+using BudgetUnderControl.Shared.Abstractions.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Reflection;

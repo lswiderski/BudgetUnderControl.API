@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using BudgetUnderControl.Modules.Transactions.Application.Configuration.Commands;
+using BudgetUnderControl.Shared.Application.CQRS.Configuration.Commands;
 using BudgetUnderControl.Shared.Infrastructure.UnitOfWork;
 using MediatR;
 using System;

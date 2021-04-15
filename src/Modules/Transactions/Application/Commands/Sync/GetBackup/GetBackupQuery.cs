@@ -1,5 +1,5 @@
 ﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
-using BudgetUnderControl.Modules.Transactions.Application.Configuration.Queries;
+using BudgetUnderControl.Shared.Application.CQRS.Configuration.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using BudgetUnderControl.Shared.Application.CQRS.Contracts;
 using System.Threading.Tasks;
 
 namespace BudgetUnderControl.Modules.Transactions.Application.Contracts

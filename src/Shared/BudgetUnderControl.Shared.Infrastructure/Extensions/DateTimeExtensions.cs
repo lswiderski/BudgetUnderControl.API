@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BudgetUnderControl.Shared.Infrastructure.Extensions
+namespace BudgetUnderControl.Shared.Infrastructure
 {
     public static class DateTimeExtensions
     {

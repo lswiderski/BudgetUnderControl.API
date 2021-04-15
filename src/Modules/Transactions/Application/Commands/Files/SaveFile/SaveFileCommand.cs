@@ -1,4 +1,4 @@
-﻿using BudgetUnderControl.Modules.Transactions.Application.Contracts;
+﻿using BudgetUnderControl.Shared.Application.CQRS.Contracts;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;

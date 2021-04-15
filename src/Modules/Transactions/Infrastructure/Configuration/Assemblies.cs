@@ -1,5 +1,4 @@
-﻿using BudgetUnderControl.Modules.Transactions.Application.Configuration;
-using BudgetUnderControl.Modules.Transactions.Application.Configuration.Commands;
+﻿using BudgetUnderControl.Modules.Transactions.Application.Transactions.AddTransaction;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +10,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration
 {
     internal static class Assemblies
     {
-        public static readonly Assembly Application = typeof(InternalCommandBase<>).Assembly;
+        public static readonly Assembly Application = typeof(AddTransactionCommand).Assembly;
 
         public static readonly Assembly Infrastructure = typeof(TransactionsModuleExecutor).Assembly;
     }

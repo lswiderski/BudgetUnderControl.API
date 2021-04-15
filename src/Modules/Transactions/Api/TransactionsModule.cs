@@ -28,7 +28,7 @@ namespace BudgetUnderControl.Modules.Transactions.Api
            
         }
 
-        public void Register(IServiceCollection services)
+        public void Register(IServiceCollection services, IConfiguration configuration)
         {
             services.AddApplication();
             services.AddInfractructure();

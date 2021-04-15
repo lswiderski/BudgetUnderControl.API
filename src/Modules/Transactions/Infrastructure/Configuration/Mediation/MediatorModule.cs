@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using Autofac.Core;
 using Autofac.Features.Variance;
-using BudgetUnderControl.Modules.Transactions.Application.Configuration.Commands;
+using BudgetUnderControl.Shared.Application.CQRS.Configuration.Commands;
 using BudgetUnderControl.Modules.Transactions.Application.Transactions.EditTransaction;
 using BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration.Processing;
 using BudgetUnderControl.Shared.Infrastructure.UnitOfWork;
@@ -14,6 +14,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using BudgetUnderControl.Shared.Infrastructure.Configuration;
 
 namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration.Mediation
 {

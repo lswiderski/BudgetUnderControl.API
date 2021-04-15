@@ -1,7 +1,7 @@
 ﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.AccountGroups.GetAccountGroup;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.AccountGroups.GetAllAccountGroups;
-using BudgetUnderControl.Modules.Transactions.Application.Contracts;
+using BudgetUnderControl.Shared.Application.CQRS.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using BudgetUnderControl.Modules.Transactions.Application.Contracts;
 
 namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
 {

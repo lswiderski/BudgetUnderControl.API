@@ -40,16 +40,6 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.DataAccess
                 .AsSelf()
                 .As<DbContext>()
                 .InstancePerLifetimeScope();
-
-            /*
-           var infrastructureAssembly = typeof(TransactionsContext).Assembly;
-
-           builder.RegisterAssemblyTypes(infrastructureAssembly)
-               .Where(type => type.Name.EndsWith("Repository"))
-               .AsImplementedInterfaces()
-               .InstancePerLifetimeScope()
-               .FindConstructorsWith(new AllConstructorFinder());
-           */
         }
     }
 }

@@ -1,13 +1,14 @@
 ﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Categories.GetAllCategories;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Categories.GetCategory;
-using BudgetUnderControl.Modules.Transactions.Application.Contracts;
+using BudgetUnderControl.Shared.Application.CQRS.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using BudgetUnderControl.Modules.Transactions.Application.Contracts;
 
 namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
 {

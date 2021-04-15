@@ -12,4 +12,8 @@
     <Folder Include="Domain\Enums\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared\BudgetUnderControl.Shared.Abstractions\BudgetUnderControl.Shared.Abstractions.csproj" />
+  </ItemGroup>
+
 </Project>

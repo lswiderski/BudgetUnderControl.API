@@ -6,7 +6,7 @@ using BudgetUnderControl.Domain.Repositiories;
 using BudgetUnderControl.Infrastructure;
 using BudgetUnderControl.Infrastructure.Repositories;
 using BudgetUnderControl.Infrastructure.Services;
-using BudgetUnderControl.Modules.Transactions.Application.Contracts;
+using BudgetUnderControl.Shared.Application.CQRS.Contracts;
 using BudgetUnderControl.Modules.Transactions.Application.Services;
 using BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration.Mediation;
 using BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration.Processing;
@@ -20,6 +20,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BudgetUnderControl.Modules.Transactions.Application.Contracts;
+using BudgetUnderControl.Shared.Infrastructure.Configuration;
 
 namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration
 {

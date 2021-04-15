@@ -16,6 +16,23 @@ namespace BudgetUnderControl.API
 {
     public class Program
     {
+
+        public static IHostBuilder CreateWebHostBuilder(string[] args)
+           => Host.CreateDefaultBuilder(args)
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+                    .UseSerilog((context, services, configuration) => configuration
+                        .ReadFrom.Configuration(context.Configuration)
+                        .ReadFrom.Services(services)
+                        .ConfigureLogger()
+                        )
+                    .ConfigureWebHostDefaults(webHostBuilder =>
+                    {
+                        webHostBuilder
+                         .UseUrls("http://*:5000", "http://*:45455")
+                       .UseStartup<Startup>();
+                    });
+
+
         public static void Main(string[] args)
         {
 
@@ -27,25 +44,19 @@ namespace BudgetUnderControl.API
             {
                 Log.Information("Starting up");
 
-                var host = Host.CreateDefaultBuilder(args)
-                    .UseServiceProviderFactory(new AutofacServiceProviderFactory())
-                    .UseSerilog((context, services, configuration) => configuration
-                        .ReadFrom.Configuration(context.Configuration)
-                        .ReadFrom.Services(services)
-                        .ConfigureLogger()
-                        )
-                    .ConfigureWebHostDefaults(webHostBuilder =>
-                    {
-                        webHostBuilder
-                         .UseUrls("http://*:5000", "http://*:45455")
-                       .UseStartup<Startup>();
-                    })
-                    .Build();
-
+                using var host = CreateWebHostBuilder(args).Build();
                 host.Run();
             }
             catch (Exception ex)
             {
+                if (Log.Logger == null || Log.Logger.GetType().Name == "SilentLogger")
+                {
+                    Log.Logger = new LoggerConfiguration()
+                        .MinimumLevel.Debug()
+                        .WriteTo.Console()
+                        .CreateLogger();
+                }
+
                 Log.Fatal(ex, "Application start-up failed");
             }
             finally

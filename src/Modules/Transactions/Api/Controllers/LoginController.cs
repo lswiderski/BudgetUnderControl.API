@@ -1,6 +1,7 @@
 ﻿using BudgetUnderControl.Modules.Transactions.Application.Commands.Login.Authenticate;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Login.CreateNewUser;
 using BudgetUnderControl.Modules.Transactions.Application.Contracts;
+using BudgetUnderControl.Shared.Application.CQRS.Contracts;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
 using Microsoft.AspNetCore.Mvc;
 using System;
