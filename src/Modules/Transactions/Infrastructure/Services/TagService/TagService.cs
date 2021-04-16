@@ -69,14 +69,14 @@ namespace BudgetUnderControl.Infrastructure.Services
 
         public async Task AddTagAsync(CreateTagCommand command)
         {
-            var tag = Tag.Create(command.Name, context.Identity.ObsoleteUserId, false, command.ExternalId);
+            var tag = Tag.Create(command.Name, context.Identity.Id, false, command.ExternalId);
             await this.tagRepository.AddAsync(tag);
         }
 
         public async Task EditTagAsync(UpdateTagCommand command)
         {
             var tag = await this.tagRepository.GetAsync(command.ExternalId);
-            tag.Edit(command.Name, tag.OwnerId,  command.IsDeleted);
+            tag.Edit(command.Name, tag.UserId,  command.IsDeleted);
             await this.tagRepository.UpdateAsync(tag);
         }
     }

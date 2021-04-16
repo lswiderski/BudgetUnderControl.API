@@ -20,7 +20,6 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         private readonly ICurrencyRepository currencyRepository;
         private readonly ICategoryRepository categoryRepository;
         private readonly IAccountGroupRepository accountGroupRepository;
-        private readonly IUserRepository userRepository;
         private readonly ISynchronizationRepository synchronizationRepository;
         private readonly IContext context;
         private readonly ITagRepository tagRepository;
@@ -34,7 +33,6 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             ICurrencyRepository currencyRepository,
             ICategoryRepository categoryRepository,
             IAccountGroupRepository accountGroupRepository,
-            IUserRepository userRepository,
             ISynchronizationRepository synchronizationRepository,
             IContext context,
             ITagRepository tagRepository,
@@ -47,7 +45,6 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             this.currencyRepository = currencyRepository;
             this.categoryRepository = categoryRepository;
             this.accountGroupRepository = accountGroupRepository;
-            this.userRepository = userRepository;
             this.synchronizationRepository = synchronizationRepository;
             this.context = context;
             this.tagRepository = tagRepository;
@@ -75,7 +72,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 
         private async Task UpdateLastSyncDateAsync(SyncRequest syncRequest)
         {
-            var userId = context.Identity.ObsoleteUserId;
+            var userId = context.Identity.Id;
             var syncObject = await this.synchronizationRepository.GetSynchronizationAsync(syncRequest.Component, syncRequest.ComponentId, userId);// syncRequest.UserId)
 
             if (syncObject != null)
@@ -90,7 +87,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                     LastSyncAt = DateTime.UtcNow,
                     Component = syncRequest.Component,
                     ComponentId = syncRequest.ComponentId,
-                    UserId = userId,
+                    OwnerId = userId,
                 };
 
                 await this.synchronizationRepository.AddSynchronizationAsync(syncObject);
@@ -131,7 +128,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                     {
                         if (transactionToUpdate.ModifiedOn < transaction.ModifiedOn)
                         {
-                            transactionToUpdate.Edit(accountId, transaction.Type, transaction.Amount, transaction.Date, transaction.Name, transaction.Comment, this.context.Identity.ObsoleteUserId, transaction.IsDeleted, categoryId, transaction.Latitude, transaction.Longitude);
+                            transactionToUpdate.Edit(accountId, transaction.Type, transaction.Amount, transaction.Date, transaction.Name, transaction.Comment, this.context.Identity.Id, transaction.IsDeleted, categoryId, transaction.Latitude, transaction.Longitude);
                             transactionToUpdate.SetCreatedOn(transaction.CreatedOn);
                             transactionToUpdate.SetModifiedOn(transaction.ModifiedOn);
                             transactionsToUpdate.Add(transactionToUpdate);
@@ -141,7 +138,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                     }
                     else
                     {
-                        var transactionToAdd = Domain.Transaction.Create(accountId, transaction.Type, transaction.Amount, transaction.Date, transaction.Name, transaction.Comment, this.context.Identity.ObsoleteUserId, false, categoryId, transaction.ExternalId, transaction.Latitude, transaction.Longitude);
+                        var transactionToAdd = Domain.Transaction.Create(accountId, transaction.Type, transaction.Amount, transaction.Date, transaction.Name, transaction.Comment, this.context.Identity.Id, false, categoryId, transaction.ExternalId, transaction.Latitude, transaction.Longitude);
                         transactionToAdd.SetCreatedOn(transaction.CreatedOn);
                         transactionToAdd.SetModifiedOn(transaction.ModifiedOn);
                         transactionsToAdd.Add(transactionToAdd);
@@ -251,7 +248,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                 return;
             }
 
-            var userId = context.Identity.ObsoleteUserId;
+            var userId = context.Identity.Id;
             foreach (var tag in tags)
             {
                
@@ -284,7 +281,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                 return;
             }
 
-            var userId = context.Identity.ObsoleteUserId;
+            var userId = context.Identity.Id;
 
             foreach (var category in categories)
             {
@@ -326,7 +323,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             {
                 var parentAccountId = account.ParentAccountExternalId.HasValue ? (await this.accountRepository.GetAccountAsync(account.ParentAccountExternalId.Value)).Id : (int?)null;
                 var accountGroupId = (await this.accountGroupRepository.GetAccountGroupAsync(account.AccountGroupExternalId)).Id;
-                var userId = this.context.Identity.ObsoleteUserId;
+                var userId = this.context.Identity.Id;
                 var accountToUpdate = await this.accountRepository.GetAccountAsync(account.ExternalId.Value);
                 if (accountToUpdate != null)
                 {
@@ -357,7 +354,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 
             foreach (var accountGroup in accountGroups)
             {
-                var userId = context.Identity.ObsoleteUserId;
+                var userId = context.Identity.Id;
                 var accountGroupToUpdate = await this.accountGroupRepository.GetAccountGroupAsync(accountGroup.ExternalId);
                 if (accountGroupToUpdate != null )
                 {
@@ -388,7 +385,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 
             var localRates = (await this.currencyRepository.GetExchangeRatesAsync());
 
-            var userId = context.Identity.ObsoleteUserId;
+            var userId = context.Identity.Id;
             var currenciesDict = (await this.currencyRepository.GetCurriencesAsync())
                              .ToDictionary(x => x.Code, x => x.Id);
 
@@ -420,7 +417,6 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                 return;
             }
 
-            var userId = context.Identity.ObsoleteUserId;
             foreach (var file in files)
             {
 

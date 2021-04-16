@@ -17,17 +17,14 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
     public class AccountService : IAccountService
     {
         private readonly IAccountRepository accountRepository;
-        private readonly IUserRepository userRepository;
         private readonly IContext context;
         private readonly ILogger<AccountService> logger;
 
         public AccountService(IAccountRepository accountRepository,
-            IUserRepository userRepository, 
             ILogger<AccountService> logger,
             IContext context)
         {
             this.accountRepository = accountRepository;
-            this.userRepository = userRepository;
             this.logger = logger;
             this.context = context;
         }
@@ -122,7 +119,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         public async Task AddAccountAsync(CreateAccountCommand command)
         {
             var identity = this.context.Identity;
-            var account = Account.Create(command.Name, command.CurrencyId, command.AccountGroupId, command.IsIncludedInTotal, command.Comment, command.Order, command.Type, command.ParentAccountId, true, identity.ObsoleteUserId, command.ExternalId);
+            var account = Account.Create(command.Name, command.CurrencyId, command.AccountGroupId, command.IsIncludedInTotal, command.Comment, command.Order, command.Type, command.ParentAccountId, true, identity.Id, command.ExternalId);
             await accountRepository.AddAccountAsync(account);
 
             if (account.Id <= 0)

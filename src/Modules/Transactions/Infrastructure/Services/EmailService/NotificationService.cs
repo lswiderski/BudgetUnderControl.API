@@ -19,7 +19,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             this.settings = settings;
         }
 
-        public async Task SendRegisterNotificationAsync(UserDTO user, string code)
+        public async Task SendRegisterNotificationAsync(string emailAddress, string firstName, string lastName, string code)
         {
             var subject = "Welcome in Budget Under Control";
            
@@ -27,9 +27,9 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             var body = $"Welcome in BUC app. To Activate your account please use this code: {code} or open this link in a browser: {link}";
             var notificationArgs = new UserActivationNotificationArgs
             {
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
+                Email = emailAddress,
+                FirstName = firstName,
+                LastName = lastName,
                 ActivationToken = code
             };
             var email = await emailService.CreateRegistrationEmailAsync(notificationArgs, subject, body);

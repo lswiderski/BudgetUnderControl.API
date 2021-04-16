@@ -32,7 +32,7 @@ namespace BudgetUnderControl.Infrastructure.Repositories
         public async Task<ICollection<Tag>> GetAsync()
         {
             var list = await this.transactionsContext.Tags
-                .Where(t => t.OwnerId == context.Identity.ObsoleteUserId)
+                .Where(t => t.UserId == context.Identity.Id)
                 .OrderByDescending(t => t.ModifiedOn)
                 .ToListAsync();
 
@@ -42,7 +42,7 @@ namespace BudgetUnderControl.Infrastructure.Repositories
         public async Task<ICollection<Tag>> GetAsync(List<int> tagIds)
         {
             var list = await this.transactionsContext.Tags
-                .Where(t => t.OwnerId == context.Identity.ObsoleteUserId
+                .Where(t => t.UserId == context.Identity.Id
                 && tagIds.Contains(t.Id))
                 .OrderByDescending(t => t.ModifiedOn)
                 .ToListAsync();
@@ -53,7 +53,7 @@ namespace BudgetUnderControl.Infrastructure.Repositories
         public async Task<ICollection<Tag>> GetAsync(List<Guid> tagIds)
         {
             var list = await this.transactionsContext.Tags
-                .Where(t => t.OwnerId == context.Identity.ObsoleteUserId
+                .Where(t => t.UserId == context.Identity.Id
                 && tagIds.Contains(t.ExternalId))
                 .OrderByDescending(t => t.ModifiedOn)
                 .ToListAsync();
@@ -64,7 +64,7 @@ namespace BudgetUnderControl.Infrastructure.Repositories
         public async Task<Tag> GetAsync(int id)
         {
             var tag = await this.transactionsContext.Tags
-                .Where(t => t.OwnerId == context.Identity.ObsoleteUserId)
+                .Where(t => t.UserId == context.Identity.Id)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             return tag;
@@ -72,7 +72,7 @@ namespace BudgetUnderControl.Infrastructure.Repositories
 
         public async Task<Tag> GetAsync(Guid id)
         {
-            var tag = await this.transactionsContext.Tags.Where(t => t.OwnerId == context.Identity.ObsoleteUserId).FirstOrDefaultAsync(x => x.ExternalId == id);
+            var tag = await this.transactionsContext.Tags.Where(t => t.UserId == context.Identity.Id).FirstOrDefaultAsync(x => x.ExternalId == id);
 
             return tag;
         }

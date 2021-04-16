@@ -1,22 +1,25 @@
 ﻿using Autofac.Extensions.DependencyInjection;
 using BudgetUnderControl.Domain;
 using BudgetUnderControl.Modules.Users.Infrastructure.Configuration;
+using BudgetUnderControl.Modules.Users.Profiles;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AutoMapper;
 
 namespace BudgetUnderControl.Modules.Users.Infrastructure
 {
     public static class Extensions
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, string connectionString)
-            => services
-            .AddDbContext<UsersDbContext>(x => x.UseSqlServer(connectionString));
+        {
+            services
+
+               .AddAutoMapper(typeof(UserProfile))
+               .AddDbContext<UsersDbContext>(x => x.UseSqlServer(connectionString));
+
+            return services;
+        }
 
         public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder app)
         {

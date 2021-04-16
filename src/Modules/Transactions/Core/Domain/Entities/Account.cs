@@ -26,7 +26,7 @@ namespace BudgetUnderControl.Domain
         public string Icon { get; set; }
 
         public bool IsActive { get; protected set; }
-        public int OwnerId { get; protected set; }
+        public Guid UserId { get; protected set; }
         public DateTime? ModifiedOn { get; protected set; }
         public Guid ExternalId { get; protected set; }
         public bool IsDeleted { get; protected set; }
@@ -35,7 +35,6 @@ namespace BudgetUnderControl.Domain
         public Currency Currency { get;  set; }
         public List<AccountSnapshot> AccountSnapshots { get; protected set; }
         public List<Transaction> Transactions { get; protected set; }
-        public virtual User Owner { get; set; }
 
 
         protected Account()
@@ -45,7 +44,7 @@ namespace BudgetUnderControl.Domain
 
         public static Account Create(string name, int currencyId, int accountGroupId,
             bool isIncludedToTotal, string comment, int order, AccountType type, 
-            int? parentAccountId, bool isActive, int ownerId, Guid? externalId = null, string icon = null)
+            int? parentAccountId, bool isActive, Guid ownerId, Guid? externalId = null, string icon = null)
         {
             return new Account()
             {
@@ -59,7 +58,7 @@ namespace BudgetUnderControl.Domain
                 Type = type,
                 ParentAccountId = parentAccountId,
                 ExternalId = externalId ?? Guid.NewGuid(),
-                OwnerId = ownerId,
+                UserId = ownerId,
                 ModifiedOn = DateTime.UtcNow,
                 IsDeleted = !isActive,
                 Icon = icon,
@@ -68,7 +67,7 @@ namespace BudgetUnderControl.Domain
 
         public void Edit(string name, int currencyId, int accountGroupId,
             bool isIncludedToTotal, string comment, int order, AccountType type,
-            int? parentAccountId, bool isActive, int? ownerId = null, string icon = null )
+            int? parentAccountId, bool isActive, Guid? ownerId = null, string icon = null )
         {
             this.Name = name;
             this.CurrencyId = currencyId;
@@ -83,7 +82,7 @@ namespace BudgetUnderControl.Domain
             this.Icon = icon;
             if(ownerId != null)
             {
-                this.OwnerId = ownerId.Value;
+                this.UserId = ownerId.Value;
             }
 
             this.UpdateModify();

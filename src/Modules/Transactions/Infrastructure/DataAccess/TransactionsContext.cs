@@ -13,8 +13,6 @@ namespace BudgetUnderControl.Domain
 {
     public class TransactionsContext : DbContext, IDisposable
     {
-        private readonly IContextConfig config;
-
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<AccountGroup> AccountGroup { get; set; }
         public virtual DbSet<AccountSnapshot> AccountSnapshot { get; set; }
@@ -28,7 +26,6 @@ namespace BudgetUnderControl.Domain
         public virtual DbSet<TagToTransaction> TagsToTransactions { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
         public virtual DbSet<Transfer> Transfers { get; set; }
-        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Token> Tokens { get; set; }
         public virtual DbSet<Synchronization> Synchronizations { get; set; }
 
@@ -39,24 +36,8 @@ namespace BudgetUnderControl.Domain
 
         public TransactionsContext(DbContextOptions options, IContextConfig config) : base(options)
         {
-            this.config = config;
-            if (config.Application == ApplicationType.Test)
-            {
-                Database.Migrate();
-            }
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (config != null)
-            {
-                if (config.Application == ApplicationType.Web || config.Application == ApplicationType.SqlServerMigrations)
-                {
-                    optionsBuilder.UseSqlServer(config.ConnectionString, options => options.MigrationsAssembly("BudgetUnderControl.Migrations.SqlServer"));
-                }
-            }
-
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -73,7 +54,6 @@ namespace BudgetUnderControl.Domain
             modelBuilder.Entity<TagToTransaction>().ToTable("TagToTransaction");
             modelBuilder.Entity<Transaction>().ToTable("Transaction");
             modelBuilder.Entity<Transfer>().ToTable("Transfer");
-            modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<Synchronization>().ToTable("Synchronization");
             modelBuilder.Entity<Token>().ToTable("Token");
 
@@ -160,27 +140,6 @@ namespace BudgetUnderControl.Domain
                 .WithMany()
                 .HasForeignKey(e => e.PreviousAccountSnapshotId);
 
-            modelBuilder.Entity<Account>()
-                 .HasOne(x => x.Owner)
-                .WithMany(y => y.Accounts)
-                .HasForeignKey(x => x.OwnerId)
-                .HasConstraintName("ForeignKey_Account_User")
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Transaction>()
-                 .HasOne(x => x.AddedBy)
-                .WithMany(y => y.Transactions)
-                .HasForeignKey(x => x.AddedById)
-                .HasConstraintName("ForeignKey_Transaction_User")
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<AccountGroup>()
-                 .HasOne(x => x.Owner)
-                .WithMany(y => y.AccountGroups)
-                .HasForeignKey(x => x.OwnerId)
-                .HasConstraintName("ForeignKey_AccountGroup_User")
-                .OnDelete(DeleteBehavior.Restrict);
-
             modelBuilder.Entity<FileToTransaction>()
               .HasOne(x => x.File)
               .WithMany(y => y.FileToTransactions)
@@ -192,12 +151,6 @@ namespace BudgetUnderControl.Domain
                .WithMany(y => y.FilesToTransaction)
                .HasForeignKey(x => x.TransactionId)
                .HasConstraintName("ForeignKey_FileToTransaction_Transaction");
-
-            modelBuilder.Entity<Token>()
-            .HasOne(x => x.User)
-            .WithMany(y => y.Tokens)
-            .HasForeignKey(x => x.UserId)
-            .HasConstraintName("ForeignKey_Token_User");
         }
 
     }

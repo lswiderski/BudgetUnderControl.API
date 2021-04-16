@@ -27,8 +27,6 @@ namespace BudgetUnderControl.Domain
 
         public bool IsValid { get; set; }
 
-        public virtual User User { get; set; }
-
         public static Token Create(TokenType type, Guid userExternalId, int userId, DateTime validUntil, string code = null)
         {
             return new Token

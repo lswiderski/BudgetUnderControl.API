@@ -31,7 +31,7 @@ namespace BudgetUnderControl.Modules.Transactions.Api
         public void Register(IServiceCollection services, IConfiguration configuration)
         {
             services.AddApplication();
-            services.AddInfractructure();
+            services.AddInfractructure(configuration["transactionsModule:database:ConnectionString"]);
         }
 
         public void Use(IApplicationBuilder app)

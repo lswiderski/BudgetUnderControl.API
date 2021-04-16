@@ -10,7 +10,6 @@ namespace BudgetUnderControl.Domain
     public interface IContextConfig
     {
         string DbName { get; set; }
-        ApplicationType Application { get; set; }
         string ConnectionString { get;}
     }
 }

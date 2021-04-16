@@ -18,12 +18,11 @@ namespace BudgetUnderControl.Domain
         public bool IsDefault { get; set; }
         public string Icon { get; set; }
 
-        public int OwnerId { get; protected set; }
+        public Guid UserId { get; protected set; }
         public DateTime? ModifiedOn { get; protected set; }
         public Guid ExternalId { get; protected set; }
         public bool IsDeleted { get; protected set; }
 
-        public virtual User Owner { get; set; }
         public List<Transaction> Transactions { get; set; }
 
         [NotMapped]
@@ -35,12 +34,12 @@ namespace BudgetUnderControl.Domain
             }
         }
 
-        public static Category Create(string name, int ownerId, Guid? externalId, string icon = null)
+        public static Category Create(string name, Guid ownerId, Guid? externalId, string icon = null)
         {
             return new Category
             {
                 Name = name,
-                OwnerId = ownerId,
+                UserId = ownerId,
                 ExternalId = externalId ?? Guid.NewGuid(),
                 ModifiedOn = DateTime.UtcNow,
                 IsDeleted = false,
@@ -49,10 +48,10 @@ namespace BudgetUnderControl.Domain
             };
         }
 
-        public void Edit(string name, int ownerId, string icon = null)
+        public void Edit(string name, Guid ownerId, string icon = null)
         {
             this.Name = name;
-            this.OwnerId = ownerId;
+            this.UserId = ownerId;
             this.Icon = icon;
             this.UpdateModify();
         }

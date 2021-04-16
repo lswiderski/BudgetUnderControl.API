@@ -15,8 +15,8 @@ namespace BudgetUnderControl.Migrations.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
+                .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("BudgetUnderControl.Domain.Account", b =>
@@ -54,13 +54,10 @@ namespace BudgetUnderControl.Migrations.SqlServer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<int>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OwnerId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ParentAccountId")
@@ -69,13 +66,14 @@ namespace BudgetUnderControl.Migrations.SqlServer.Migrations
                     b.Property<byte>("Type")
                         .HasColumnType("tinyint");
 
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AccountGroupId");
 
                     b.HasIndex("CurrencyId");
-
-                    b.HasIndex("OwnerId");
 
                     b.ToTable("Account");
                 });
@@ -97,15 +95,13 @@ namespace BudgetUnderControl.Migrations.SqlServer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
 
                     b.ToTable("AccountGroup");
                 });
@@ -172,15 +168,13 @@ namespace BudgetUnderControl.Migrations.SqlServer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
 
                     b.ToTable("Category");
                 });
@@ -193,19 +187,19 @@ namespace BudgetUnderControl.Migrations.SqlServer.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Code")
-                        .HasColumnType("nvarchar(3)")
-                        .HasMaxLength(3);
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
 
                     b.Property<string>("FullName")
-                        .HasColumnType("nvarchar(250)")
-                        .HasMaxLength(250);
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<short>("Number")
                         .HasColumnType("smallint");
 
                     b.Property<string>("Symbol")
-                        .HasColumnType("nvarchar(3)")
-                        .HasMaxLength(3);
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
 
                     b.HasKey("Id");
 
@@ -234,13 +228,13 @@ namespace BudgetUnderControl.Migrations.SqlServer.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<double>("Rate")
                         .HasColumnType("float");
 
                     b.Property<int>("ToCurrencyId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -344,12 +338,10 @@ namespace BudgetUnderControl.Migrations.SqlServer.Migrations
                     b.Property<DateTime>("LastSyncAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("OwnerId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Synchronization");
                 });
@@ -371,15 +363,13 @@ namespace BudgetUnderControl.Migrations.SqlServer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("OwnerId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OwnerId");
 
                     b.ToTable("Tag");
                 });
@@ -435,8 +425,6 @@ namespace BudgetUnderControl.Migrations.SqlServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Token");
                 });
 
@@ -450,9 +438,6 @@ namespace BudgetUnderControl.Migrations.SqlServer.Migrations
                     b.Property<int>("AccountId")
                         .HasColumnType("int");
 
-                    b.Property<int>("AddedById")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
@@ -461,6 +446,9 @@ namespace BudgetUnderControl.Migrations.SqlServer.Migrations
 
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("CreatedById")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -492,8 +480,6 @@ namespace BudgetUnderControl.Migrations.SqlServer.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
-
-                    b.HasIndex("AddedById");
 
                     b.HasIndex("CategoryId");
 
@@ -534,59 +520,6 @@ namespace BudgetUnderControl.Migrations.SqlServer.Migrations
                     b.ToTable("Transfer");
                 });
 
-            modelBuilder.Entity("BudgetUnderControl.Domain.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime?>("ActivatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(150)")
-                        .HasMaxLength(150);
-
-                    b.Property<Guid>("ExternalId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActivated")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Role")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Salt")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Username")
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("User");
-                });
-
             modelBuilder.Entity("BudgetUnderControl.Domain.Account", b =>
                 {
                     b.HasOne("BudgetUnderControl.Domain.AccountGroup", "AccountGroup")
@@ -603,22 +536,9 @@ namespace BudgetUnderControl.Migrations.SqlServer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BudgetUnderControl.Domain.User", "Owner")
-                        .WithMany("Accounts")
-                        .HasForeignKey("OwnerId")
-                        .HasConstraintName("ForeignKey_Account_User")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
+                    b.Navigation("AccountGroup");
 
-            modelBuilder.Entity("BudgetUnderControl.Domain.AccountGroup", b =>
-                {
-                    b.HasOne("BudgetUnderControl.Domain.User", "Owner")
-                        .WithMany("AccountGroups")
-                        .HasForeignKey("OwnerId")
-                        .HasConstraintName("ForeignKey_AccountGroup_User")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                    b.Navigation("Currency");
                 });
 
             modelBuilder.Entity("BudgetUnderControl.Domain.AccountSnapshot", b =>
@@ -640,15 +560,12 @@ namespace BudgetUnderControl.Migrations.SqlServer.Migrations
                     b.HasOne("BudgetUnderControl.Domain.AccountSnapshot", "PreviousAccountSnapshot")
                         .WithMany()
                         .HasForeignKey("PreviousAccountSnapshotId");
-                });
 
-            modelBuilder.Entity("BudgetUnderControl.Domain.Category", b =>
-                {
-                    b.HasOne("BudgetUnderControl.Domain.User", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Account");
+
+                    b.Navigation("LastTransaction");
+
+                    b.Navigation("PreviousAccountSnapshot");
                 });
 
             modelBuilder.Entity("BudgetUnderControl.Domain.ExchangeRate", b =>
@@ -666,6 +583,10 @@ namespace BudgetUnderControl.Migrations.SqlServer.Migrations
                         .HasConstraintName("ForeignKey_ExchangeRate_ToCurrency")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("FromCurrency");
+
+                    b.Navigation("ToCurrency");
                 });
 
             modelBuilder.Entity("BudgetUnderControl.Domain.FileToTransaction", b =>
@@ -683,24 +604,10 @@ namespace BudgetUnderControl.Migrations.SqlServer.Migrations
                         .HasConstraintName("ForeignKey_FileToTransaction_Transaction")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("BudgetUnderControl.Domain.Synchronization", b =>
-                {
-                    b.HasOne("BudgetUnderControl.Domain.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
+                    b.Navigation("File");
 
-            modelBuilder.Entity("BudgetUnderControl.Domain.Tag", b =>
-                {
-                    b.HasOne("BudgetUnderControl.Domain.User", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Transaction");
                 });
 
             modelBuilder.Entity("BudgetUnderControl.Domain.TagToTransaction", b =>
@@ -718,16 +625,10 @@ namespace BudgetUnderControl.Migrations.SqlServer.Migrations
                         .HasConstraintName("ForeignKey_TagToTransaction_Transaction")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("BudgetUnderControl.Domain.Token", b =>
-                {
-                    b.HasOne("BudgetUnderControl.Domain.User", "User")
-                        .WithMany("Tokens")
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("ForeignKey_Token_User")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Tag");
+
+                    b.Navigation("Transaction");
                 });
 
             modelBuilder.Entity("BudgetUnderControl.Domain.Transaction", b =>
@@ -739,17 +640,14 @@ namespace BudgetUnderControl.Migrations.SqlServer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BudgetUnderControl.Domain.User", "AddedBy")
-                        .WithMany("Transactions")
-                        .HasForeignKey("AddedById")
-                        .HasConstraintName("ForeignKey_Transaction_User")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("BudgetUnderControl.Domain.Category", "Category")
                         .WithMany("Transactions")
                         .HasForeignKey("CategoryId")
                         .HasConstraintName("ForeignKey_Transaction_Category");
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("BudgetUnderControl.Domain.Transfer", b =>
@@ -767,6 +665,59 @@ namespace BudgetUnderControl.Migrations.SqlServer.Migrations
                         .HasConstraintName("ForeignKey_Transfer_ToTransaction")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("FromTransaction");
+
+                    b.Navigation("ToTransaction");
+                });
+
+            modelBuilder.Entity("BudgetUnderControl.Domain.Account", b =>
+                {
+                    b.Navigation("AccountSnapshots");
+
+                    b.Navigation("Transactions");
+                });
+
+            modelBuilder.Entity("BudgetUnderControl.Domain.AccountGroup", b =>
+                {
+                    b.Navigation("Accounts");
+                });
+
+            modelBuilder.Entity("BudgetUnderControl.Domain.Category", b =>
+                {
+                    b.Navigation("Transactions");
+                });
+
+            modelBuilder.Entity("BudgetUnderControl.Domain.Currency", b =>
+                {
+                    b.Navigation("Accounts");
+
+                    b.Navigation("FromExchangeRates");
+
+                    b.Navigation("ToExchangeRates");
+                });
+
+            modelBuilder.Entity("BudgetUnderControl.Domain.File", b =>
+                {
+                    b.Navigation("FileToTransactions");
+                });
+
+            modelBuilder.Entity("BudgetUnderControl.Domain.Tag", b =>
+                {
+                    b.Navigation("TagToTransactions");
+                });
+
+            modelBuilder.Entity("BudgetUnderControl.Domain.Transaction", b =>
+                {
+                    b.Navigation("AccountSnapshots");
+
+                    b.Navigation("FilesToTransaction");
+
+                    b.Navigation("FromTransfers");
+
+                    b.Navigation("TagsToTransaction");
+
+                    b.Navigation("ToTransfers");
                 });
 #pragma warning restore 612, 618
         }

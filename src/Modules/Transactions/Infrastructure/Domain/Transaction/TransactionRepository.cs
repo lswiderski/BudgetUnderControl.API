@@ -127,7 +127,7 @@ namespace BudgetUnderControl.Infrastructure
             }
             else
             {
-                query = query.Where(q => q.Account.OwnerId == context.Identity.ObsoleteUserId).AsQueryable();
+                query = query.Where(q => q.Account.UserId == context.Identity.Id).AsQueryable();
             }
 
             if (filter != null && filter.CategoryIds != null && filter.CategoryIds.Any())

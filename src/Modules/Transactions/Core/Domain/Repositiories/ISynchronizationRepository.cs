@@ -10,7 +10,7 @@ namespace BudgetUnderControl.Domain.Repositiories
     {
         Task<IEnumerable<Synchronization>> GetSynchronizationsAsync();
         Task AddSynchronizationAsync(Synchronization synchronization);
-        Task<Synchronization> GetSynchronizationAsync(SynchronizationComponent component, Guid componentId, int userId);
+        Task<Synchronization> GetSynchronizationAsync(SynchronizationComponent component, Guid componentId, Guid userId);
         Task UpdateAsync(Synchronization synchronization);
         Task ClearSynchronizationAsync();
     }

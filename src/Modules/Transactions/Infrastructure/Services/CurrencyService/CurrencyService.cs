@@ -88,7 +88,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                     ToCurrencyId = x.ToCurrencyId,
                     FromCurrencyCode = x.FromCurrency.Code,
                     ToCurrencyCode = x.ToCurrency.Code,
-                    CanDelete = x.UserId == this.context.Identity.ObsoleteUserId,
+                    CanDelete = x.OwnerId == this.context.Identity.Id,
                 })
                 .ToList();
 
@@ -97,7 +97,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 
         public async Task AddExchangeRateAsync(AddExchangeRateCommand command)
         {
-            var rate = ExchangeRate.Create(command.FromCurrencyId, command.ToCurrencyId, command.Rate, context.Identity.ObsoleteUserId, command.ExternalId, false, command.Date);
+            var rate = ExchangeRate.Create(command.FromCurrencyId, command.ToCurrencyId, command.Rate, context.Identity.Id, command.ExternalId, false, command.Date);
 
             await this.currencyRepository.AddExchangeRateAsync(rate);
         }

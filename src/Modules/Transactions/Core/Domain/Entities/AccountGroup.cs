@@ -16,30 +16,29 @@ namespace BudgetUnderControl.Domain
         [StringLength(100)]
         public string Name { get; set; }
 
-        public int OwnerId { get; protected set; }
+        public Guid UserId { get; protected set; }
         public DateTime? ModifiedOn { get; protected set; }
         public Guid ExternalId { get; protected set; }
         public bool IsDeleted { get; protected set; }
 
-        public virtual User Owner { get; set; }
         public List<Account> Accounts { get; set; }
 
-        public static AccountGroup Create(string name, int ownerId, Guid? externalId)
+        public static AccountGroup Create(string name, Guid ownerId, Guid? externalId)
         {
             return new AccountGroup
             {
                 Name = name,
-                OwnerId = ownerId,
+                UserId = ownerId,
                 ExternalId = externalId ?? Guid.NewGuid(),
                 ModifiedOn = DateTime.UtcNow,
                 IsDeleted = false,
             };
         }
 
-        public void Edit(string name, int ownerId)
+        public void Edit(string name, Guid ownerId)
         {
             this.Name = name;
-            this.OwnerId = ownerId;
+            this.UserId = ownerId;
             this.UpdateModify();
         }
 

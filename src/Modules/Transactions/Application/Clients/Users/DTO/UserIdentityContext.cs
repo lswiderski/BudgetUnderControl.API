@@ -7,8 +7,6 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
     public class UserIdentityContext
     {
-        public int OldId { get; set; }
-
         public Guid UserId { get; set; }
 
         public UserRole Role
@@ -36,6 +34,15 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         public string LastName { get; set; }
 
         public string Email { get; set; }
+
+        public DateTime? ModifiedOn { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+
+        public string Username { get; set; }
+
+        public bool IsDeleted { get; set; }
+
 
     }
 }

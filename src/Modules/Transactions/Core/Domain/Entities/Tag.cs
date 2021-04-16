@@ -16,12 +16,11 @@ namespace BudgetUnderControl.Domain
         [StringLength(100)]
         public string Name { get; set; }
 
-        public int OwnerId { get; protected set; }
+        public Guid UserId { get; protected set; }
         public DateTime? ModifiedOn { get; protected set; }
         public Guid ExternalId { get; protected set; }
         public bool IsDeleted { get; protected set; }
 
-        public virtual User Owner { get; set; }
         public ICollection<TagToTransaction> TagToTransactions { get; set; }
 
         public void Delete(bool delete = true)
@@ -44,22 +43,22 @@ namespace BudgetUnderControl.Domain
             this.ModifiedOn = date;
         }
 
-        public static Tag Create(string name, int ownerId, bool isDeleted, Guid? externalId)
+        public static Tag Create(string name, Guid ownerId, bool isDeleted, Guid? externalId)
         {
             return new Tag
             {
                 Name = name,
                 ExternalId = externalId ?? Guid.NewGuid(),
-                OwnerId = ownerId,
+                UserId = ownerId,
                 IsDeleted = isDeleted,
                 ModifiedOn = DateTime.UtcNow,
             };
         }
 
-        public void Edit(string name, int ownerId, bool isDeleted)
+        public void Edit(string name, Guid ownerId, bool isDeleted)
         {
             this.Name = name;
-            this.OwnerId = ownerId;
+            this.UserId = ownerId;
             this.IsDeleted = isDeleted;
             this.UpdateModify();
         }

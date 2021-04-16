@@ -9,6 +9,6 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
     public interface INotificationService
     {
-       Task SendRegisterNotificationAsync(UserDTO user,string code);
+       Task SendRegisterNotificationAsync(string emailAddress, string firstName, string lastName, string code);
     }
 }

@@ -210,7 +210,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             
             foreach (var item in accounts)
             {
-                var account = Account.Create(item.Name, item.CurrencyId, item.AccountGroupId, item.IsIncludedToTotal, item.Comment, item.Order, item.Type, item.ParentAccountId, true, context.Identity.ObsoleteUserId, item.ExternalId);
+                var account = Account.Create(item.Name, item.CurrencyId, item.AccountGroupId, item.IsIncludedToTotal, item.Comment, item.Order, item.Type, item.ParentAccountId, true, context.Identity.Id, item.ExternalId);
                 await this.accountRepository.AddAccountAsync(account);
 
                 accountsMap.Add(item.Id, account.Id);
@@ -248,7 +248,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                 {
                     categoryId = item.CategoryId;
                 }
-                var transaction = Domain.Transaction.Create(accountsMap[item.AccountId], item.Type, item.Amount, item.Date, item.Name, item.Comment, context.Identity.ObsoleteUserId, item.IsDeleted, categoryId, item.ExternalId, item.Latitude, item.Longitude);
+                var transaction = Domain.Transaction.Create(accountsMap[item.AccountId], item.Type, item.Amount, item.Date, item.Name, item.Comment, context.Identity.Id, item.IsDeleted, categoryId, item.ExternalId, item.Latitude, item.Longitude);
                 transaction.SetCreatedOn(item.CreatedOn);
                 transaction.SetModifiedOn(item.ModifiedOn);
                 tempTransactionsMap.Add(item.Id, transaction);
@@ -275,7 +275,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         {
             foreach (var item in tags)
             {
-                var tag = Tag.Create(item.Name, context.Identity.ObsoleteUserId, item.IsDeleted, item.ExternalId);
+                var tag = Tag.Create(item.Name, context.Identity.Id, item.IsDeleted, item.ExternalId);
                 tag.SetModifiedOn(item.ModifiedOn);
                 await this.tagRepository.AddAsync(tag);
             }
@@ -315,7 +315,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                     var toCurrencyId = currenciesDict.ContainsKey(item.ToCurrency) ? currenciesDict[item.ToCurrency] : (int?)null;
                     if (fromCurrencyId.HasValue && toCurrencyId.HasValue)
                     {
-                        var exchangeRate = ExchangeRate.Create(fromCurrencyId.Value, toCurrencyId.Value, item.Rate, context.Identity.ObsoleteUserId, item.ExternalId, item.IsDeleted, item.Date);
+                        var exchangeRate = ExchangeRate.Create(fromCurrencyId.Value, toCurrencyId.Value, item.Rate, context.Identity.Id, item.ExternalId, item.IsDeleted, item.Date);
                         await this.currencyRepository.AddExchangeRateAsync(exchangeRate);
                     }
                 }

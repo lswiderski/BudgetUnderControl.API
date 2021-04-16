@@ -12,6 +12,7 @@ using BudgetUnderControl.Shared.Infrastructure.Settings;
 using BudgetUnderControl.Modules.Transactions.Core.ValueObjects;
 using Microsoft.Extensions.Logging;
 using BudgetUnderControl.Shared.Abstractions.Contexts;
+using BudgetUnderControl.Modules.Transactions.Application.Clients.Users;
 
 namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
@@ -23,33 +24,34 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         private readonly ICurrencyRepository currencyRepository;
         private readonly ICategoryRepository categoryRepository;
         private readonly IAccountGroupRepository accountGroupRepository;
-        private readonly IUserRepository userRepository;
         private readonly ISynchronizationRepository synchronizationRepository;
         private readonly IContext context;
         private readonly ITagRepository tagRepository;
         private readonly GeneralSettings settings;
         private readonly IFileService fileService;
         private readonly TransactionsContext transactionsContext;
+        private readonly IUsersApiClient userApiClient;
+
+        private readonly int _oldHardcodedUserIdForXamarinSyncWork = 1; // remove after change xamarin code
 
         public SyncRequestBuilder(TransactionsContext transactionContext, ITransactionRepository transactionRepository,
             IAccountRepository accountRepository,
             ICurrencyRepository currencyRepository,
             ICategoryRepository categoryRepository,
             IAccountGroupRepository accountGroupRepository,
-            IUserRepository userRepository,
             ISynchronizationRepository synchronizationRepository,
             IContext context,
             ITagRepository tagRepository,
             ILogger<SyncRequestBuilder> logger,
             GeneralSettings settings,
-            IFileService fileService) 
+            IFileService fileService,
+            IUsersApiClient userApiClient) 
         {
             this.transactionRepository = transactionRepository;
             this.accountRepository = accountRepository;
             this.currencyRepository = currencyRepository;
             this.categoryRepository = categoryRepository;
             this.accountGroupRepository = accountGroupRepository;
-            this.userRepository = userRepository;
             this.synchronizationRepository = synchronizationRepository;
             this.context = context;
             this.settings = settings;
@@ -57,13 +59,14 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             this.logger = logger;
             this.fileService = fileService;
             this.transactionsContext = transactionContext;
+            this.userApiClient = userApiClient;
         }
 
         public async Task<SyncRequest> CreateSyncRequestAsync(SynchronizationComponent source, SynchronizationComponent target)
         {
             //get
             var synchronizations = await this.synchronizationRepository.GetSynchronizationsAsync();
-            var synchronization = synchronizations.Where(x => x.Component == target && x.UserId == context.Identity.ObsoleteUserId).FirstOrDefault();
+            var synchronization = synchronizations.Where(x => x.Component == target && x.OwnerId == context.Identity.Id).FirstOrDefault();
 
             var request = new SyncRequest
             {
@@ -215,7 +218,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                     Name = x.Name,
                     ModifiedOn = x.ModifiedOn,
                     IsDeleted = x.IsDeleted,
-                    OwnerId = x.OwnerId,
+                    OwnerId = _oldHardcodedUserIdForXamarinSyncWork,
                 }).ToList();
 
             var userExternalId = context.Identity.Id;
@@ -231,18 +234,18 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         private async Task<IEnumerable<UserSyncDTO>> GetUsersToSyncAsync(DateTime changedSince)
         {
             //temporary I do not support multi users
-            var user = await this.userRepository.GetAsync(context.Identity.Id);
+            var user = await this.userApiClient.GetCurrentUserContextAsync();
             var result = new List<UserSyncDTO>();
 
             result.Add(new UserSyncDTO
             {
-                ExternalId = user.ExternalId,
+                ExternalId = user.UserId,
                 Email = user.Email,
                 ModifiedOn = user.ModifiedOn,
                 CreatedAt = user.CreatedAt,
-                Id = user.Id,
+                Id = _oldHardcodedUserIdForXamarinSyncWork,
                 IsDeleted = user.IsDeleted,
-                Role = user.Role,
+                Role = user.Role.ToString(),
                 Username = user.Username
             });
 
@@ -262,7 +265,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                     ModifiedOn = x.ModifiedOn,
                     IsDeleted = x.IsDeleted,
                     Icon = x.Icon,
-                    OwnerId = x.OwnerId,
+                    OwnerId = _oldHardcodedUserIdForXamarinSyncWork,
                 }).ToList();
 
             var userExternalId = context.Identity.Id;

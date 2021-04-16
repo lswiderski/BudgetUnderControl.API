@@ -13,7 +13,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Profiles.Transa
     {
         public TransactionsFilterProfile()
         {
-            CreateMap< TransactionsFilterDTO, TransactionsFilter>();
+            CreateMap<TransactionsFilterDTO, TransactionsFilter>();
         }
 
     }

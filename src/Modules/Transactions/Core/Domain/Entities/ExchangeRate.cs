@@ -17,16 +17,11 @@ namespace BudgetUnderControl.Domain
         public int ToCurrencyId { get; set; }
         public double Rate { get; set; }
         public DateTime Date { get; set; }
-
         public Currency FromCurrency { get; set; }
         public Currency ToCurrency { get; set; }
-
         public DateTime? ModifiedOn { get; set; }
-
         public Guid ExternalId { get; set; }
-
-        public int? UserId { get; set; }
-
+        public Guid? OwnerId { get; protected set; }
         public bool IsDeleted { get; set; }
 
         protected ExchangeRate()
@@ -34,7 +29,7 @@ namespace BudgetUnderControl.Domain
 
         }
 
-        public static ExchangeRate Create(int fromCurrencyId, int toCurrencyId, double rate, int userId, Guid? externalId, bool isDeleted = false, DateTime? date = null)
+        public static ExchangeRate Create(int fromCurrencyId, int toCurrencyId, double rate, Guid userId, Guid? externalId, bool isDeleted = false, DateTime? date = null)
         {
             return new ExchangeRate
             {
@@ -44,7 +39,7 @@ namespace BudgetUnderControl.Domain
                 Date = date ?? DateTime.UtcNow,
                 ExternalId = externalId ?? Guid.NewGuid(),
                 IsDeleted = isDeleted,
-                UserId = userId
+                OwnerId = userId
             };
         }
 

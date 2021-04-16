@@ -14,7 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using BudgetUnderControl.API.Extensions;
 using Microsoft.Extensions.Hosting;
-using BudgetUnderControl.ApiInfrastructure.Profiles.User;
 using Microsoft.AspNetCore.Http;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
 using System.IO;
@@ -64,7 +63,6 @@ namespace BudgetUnderControl.API
             services.AddAutofac();
             services.AddMemoryCache();
             services.AddCors();
-            services.AddAutoMapper(typeof(UserProfile));
             services.AddOptions();
             services.AddControllers()
                 .SetCompatibilityVersion(CompatibilityVersion.Latest)

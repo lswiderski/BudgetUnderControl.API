@@ -21,7 +21,7 @@ namespace BudgetUnderControl.Domain
         public DateTime CreatedOn { get; protected set; }
         public DateTime? ModifiedOn { get; protected set; }
         public Guid ExternalId { get; protected set; }
-        public int AddedById { get; protected set; }
+        public Guid CreatedById { get; protected set; }
         public bool IsDeleted { get; protected set; }
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
@@ -39,13 +39,12 @@ namespace BudgetUnderControl.Domain
         public Account Account { get; set; }
         public ICollection<Transfer> ToTransfers { get; set; }
         public ICollection<Transfer> FromTransfers { get; set; }
-        public User AddedBy { get; protected set; }
 
         public Transaction()
         {
         }
         
-        public static Transaction Create(int accountId, TransactionType type, decimal amount, DateTime date, string name, string comment, int addedById, bool isDeleted, int? categoryId = null, Guid? guid = null, double? latitude = null, double? longitude = null)
+        public static Transaction Create(int accountId, TransactionType type, decimal amount, DateTime date, string name, string comment, Guid addedById, bool isDeleted, int? categoryId = null, Guid? guid = null, double? latitude = null, double? longitude = null)
         {
             return new Transaction()
             {
@@ -58,7 +57,7 @@ namespace BudgetUnderControl.Domain
                 CategoryId = categoryId,
                 CreatedOn = DateTime.UtcNow,
                 ExternalId = guid ?? Guid.NewGuid(),
-                AddedById = addedById,
+                CreatedById = addedById,
                 IsDeleted = isDeleted,
                 ModifiedOn = DateTime.UtcNow,
                 Latitude = latitude,
@@ -66,7 +65,7 @@ namespace BudgetUnderControl.Domain
             };
         }
 
-        public void Edit(int accountId, TransactionType type, decimal amount, DateTime date, string name, string comment, int addedById, bool isDeleted, int? categoryId = null, double? latitude = null, double? longitude = null)
+        public void Edit(int accountId, TransactionType type, decimal amount, DateTime date, string name, string comment, Guid addedById, bool isDeleted, int? categoryId = null, double? latitude = null, double? longitude = null)
         {
             this.AccountId = accountId;
             this.Type = type;
@@ -76,7 +75,7 @@ namespace BudgetUnderControl.Domain
             this.Comment = comment;
             this.CategoryId = categoryId;
             this.ModifiedOn = DateTime.UtcNow;
-            this.AddedById = addedById;
+            this.CreatedById = addedById;
             this.IsDeleted = isDeleted;
             this.Latitude = latitude;
             this.Longitude = longitude;

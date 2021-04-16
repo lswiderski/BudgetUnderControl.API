@@ -22,5 +22,13 @@ namespace BudgetUnderControl.Modules.Users.Application.Services
         public string LastName { get; }
 
         public string Email { get; }
+
+        public DateTime? ModifiedOn { set; }
+
+        public DateTime CreatedAt {  set; }
+
+        public string Username { set; }
+
+        public bool IsDeleted { set; }
     }
 }

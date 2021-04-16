@@ -20,6 +20,7 @@
     <PackageReference Include="Autofac" Version="6.1.0" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
     <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="FluentValidation" Version="10.0.2" />
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
@@ -32,6 +33,10 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Shared\BudgetUnderControl.Shared.Infrastructure\BudgetUnderControl.Shared.Infrastructure.csproj" />
     <ProjectReference Include="..\Application\BudgetUnderControl.Modules.Transactions.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Profiles\User\" />
   </ItemGroup>
 
 </Project>

@@ -68,7 +68,7 @@ namespace BudgetUnderControl.Infrastructure
         public async Task<ICollection<ExchangeRate>> GetExchangeRatesAsync()
         {
             var collection = await this.transactionsContext.ExchangeRates
-                .Where(x => x.UserId == null || x.UserId == context.Identity.ObsoleteUserId)
+                .Where(x => x.OwnerId == null || x.OwnerId == context.Identity.Id)
                 .Include(x => x.ToCurrency)
                 .Include(x => x.FromCurrency)
                 .OrderByDescending(x => x.Date)
@@ -79,7 +79,7 @@ namespace BudgetUnderControl.Infrastructure
         public async Task<ICollection<ExchangeRate>> GetExchangeRatesAsync(int currencyId)
         {
             var collection = await this.transactionsContext.ExchangeRates
-                .Where(x => x.UserId == null || x.UserId == context.Identity.ObsoleteUserId)
+                .Where(x => x.OwnerId == null || x.OwnerId == context.Identity.Id)
                 .Where(x => x.ToCurrencyId == currencyId
            || x.FromCurrencyId == currencyId)
             .OrderByDescending(x => x.Date)
@@ -89,7 +89,7 @@ namespace BudgetUnderControl.Infrastructure
 
         public async Task<ExchangeRate> GetExchangeRateAsync(int exchangeRateId)
         {
-            var rate = await this.transactionsContext.ExchangeRates.Where(x => x.Id == exchangeRateId && (x.UserId == null || x.UserId == context.Identity.ObsoleteUserId)).FirstOrDefaultAsync();
+            var rate = await this.transactionsContext.ExchangeRates.Where(x => x.Id == exchangeRateId && (x.OwnerId == null || x.OwnerId == context.Identity.Id)).FirstOrDefaultAsync();
             return rate;
         }
 
@@ -98,7 +98,7 @@ namespace BudgetUnderControl.Infrastructure
             var rate = await this.transactionsContext.ExchangeRates
                 .Where(x => x.ToCurrencyId == toCurrencyId
             && x.FromCurrencyId == fromCurrencyId
-            && (x.UserId == null || x.UserId == context.Identity.ObsoleteUserId))
+            && (x.OwnerId == null || x.OwnerId == context.Identity.Id))
             .OrderByDescending(x => x.Date)
             .FirstOrDefaultAsync();
 
@@ -107,7 +107,7 @@ namespace BudgetUnderControl.Infrastructure
                 rate = await this.transactionsContext.ExchangeRates
                 .Where(x => x.ToCurrencyId == fromCurrencyId
                  && x.FromCurrencyId == toCurrencyId
-                 && (x.UserId == null || x.UserId == context.Identity.ObsoleteUserId))
+                 && (x.OwnerId == null || x.OwnerId == context.Identity.Id))
                 .OrderByDescending(x => x.Date)
                 .FirstOrDefaultAsync();
             }

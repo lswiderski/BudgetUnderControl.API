@@ -38,7 +38,7 @@ namespace BudgetUnderControl.Infrastructure
 
             var accounts = await (from account in query
                                   join currency in this.transactionsContext.Currencies on account.CurrencyId equals currency.Id
-                                  where account.OwnerId == context.Identity.ObsoleteUserId
+                                  where account.UserId == context.Identity.Id
                                   select account)
                                  .Include(p => p.Currency)
                                  .OrderBy(a => a.Order)
@@ -165,10 +165,9 @@ namespace BudgetUnderControl.Infrastructure
             if (!decimal.Equals(actualBalance, targetBalance))
             {
                 decimal amount = (decimal.Subtract(targetBalance, actualBalance));
-                var user = await this.transactionsContext.Users.FirstOrDefaultAsync();
                 var type = Math.Sign(amount) < 0 ? TransactionType.Expense : TransactionType.Income;
                 var defaultCategoryId = this.transactionsContext.Categories.Where(x => x.IsDefault && !x.IsDeleted).Select(x => (int?)x.Id).FirstOrDefault();
-                var transaction = Transaction.Create(accountId, type, amount, DateTime.UtcNow, "BalanceAdjustment", string.Empty, user.Id, false, defaultCategoryId);
+                var transaction = Transaction.Create(accountId, type, amount, DateTime.UtcNow, "BalanceAdjustment", string.Empty, this.context.Identity.Id, false, defaultCategoryId);
 
                 this.transactionsContext.Transactions.Add(transaction);
                 await this.transactionsContext.SaveChangesAsync();
