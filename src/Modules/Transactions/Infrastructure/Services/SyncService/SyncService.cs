@@ -1,16 +1,13 @@
-﻿using BudgetUnderControl.Common;
-using BudgetUnderControl.Modules.Transactions.Application.DTO;
+﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Common.Enums;
 using BudgetUnderControl.Domain;
 using BudgetUnderControl.Domain.Repositiories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Transactions;
 using BudgetUnderControl.Modules.Transactions.Application.Services;
-using BudgetUnderControl.Modules.Transactions.Application.Services;
+using BudgetUnderControl.Shared.Abstractions.Contexts;
 
 namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
@@ -21,7 +18,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         private readonly IAccountRepository accountRepository;
         private readonly ICurrencyRepository currencyRepository;
         private readonly ICategoryRepository categoryRepository;
-        private readonly IUserIdentityContext userIdentityContext;
+        private readonly IContext context;
         private readonly ISyncRequestBuilder syncRequestBuilder;
         private readonly ISynchroniser synchroniser;
         private readonly ITagRepository tagRepository;
@@ -34,7 +31,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             ICurrencyRepository currencyRepository,
             ICategoryRepository categoryRepository,
             ITagRepository tagRepository,
-            IUserIdentityContext userIdentityContext,
+            IContext context,
             ISyncRequestBuilder syncRequestBuilder,
             ISynchroniser synchroniser)
         {
@@ -42,7 +39,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             this.accountRepository = accountRepository;
             this.currencyRepository = currencyRepository;
             this.categoryRepository = categoryRepository;
-            this.userIdentityContext = userIdentityContext;
+            this.context = context;
 
             this.syncRequestBuilder = syncRequestBuilder;
             this.synchroniser = synchroniser;
@@ -213,7 +210,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             
             foreach (var item in accounts)
             {
-                var account = Account.Create(item.Name, item.CurrencyId, item.AccountGroupId, item.IsIncludedToTotal, item.Comment, item.Order, item.Type, item.ParentAccountId, true, userIdentityContext.UserId, item.ExternalId);
+                var account = Account.Create(item.Name, item.CurrencyId, item.AccountGroupId, item.IsIncludedToTotal, item.Comment, item.Order, item.Type, item.ParentAccountId, true, context.Identity.ObsoleteUserId, item.ExternalId);
                 await this.accountRepository.AddAccountAsync(account);
 
                 accountsMap.Add(item.Id, account.Id);
@@ -251,7 +248,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                 {
                     categoryId = item.CategoryId;
                 }
-                var transaction = Domain.Transaction.Create(accountsMap[item.AccountId], item.Type, item.Amount, item.Date, item.Name, item.Comment, userIdentityContext.UserId, item.IsDeleted, categoryId, item.ExternalId, item.Latitude, item.Longitude);
+                var transaction = Domain.Transaction.Create(accountsMap[item.AccountId], item.Type, item.Amount, item.Date, item.Name, item.Comment, context.Identity.ObsoleteUserId, item.IsDeleted, categoryId, item.ExternalId, item.Latitude, item.Longitude);
                 transaction.SetCreatedOn(item.CreatedOn);
                 transaction.SetModifiedOn(item.ModifiedOn);
                 tempTransactionsMap.Add(item.Id, transaction);
@@ -278,7 +275,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         {
             foreach (var item in tags)
             {
-                var tag = Tag.Create(item.Name, userIdentityContext.UserId, item.IsDeleted, item.ExternalId);
+                var tag = Tag.Create(item.Name, context.Identity.ObsoleteUserId, item.IsDeleted, item.ExternalId);
                 tag.SetModifiedOn(item.ModifiedOn);
                 await this.tagRepository.AddAsync(tag);
             }
@@ -318,7 +315,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                     var toCurrencyId = currenciesDict.ContainsKey(item.ToCurrency) ? currenciesDict[item.ToCurrency] : (int?)null;
                     if (fromCurrencyId.HasValue && toCurrencyId.HasValue)
                     {
-                        var exchangeRate = ExchangeRate.Create(fromCurrencyId.Value, toCurrencyId.Value, item.Rate, userIdentityContext.UserId, item.ExternalId, item.IsDeleted, item.Date);
+                        var exchangeRate = ExchangeRate.Create(fromCurrencyId.Value, toCurrencyId.Value, item.Rate, context.Identity.ObsoleteUserId, item.ExternalId, item.IsDeleted, item.Date);
                         await this.currencyRepository.AddExchangeRateAsync(exchangeRate);
                     }
                 }

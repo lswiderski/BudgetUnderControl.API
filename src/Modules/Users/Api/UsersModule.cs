@@ -1,9 +1,13 @@
 ﻿using Autofac;
 using BudgetUnderControl.Modules.Users.Application;
+using BudgetUnderControl.Modules.Users.Application.Commands.Users.GetUserIdentity;
+using BudgetUnderControl.Modules.Users.Application.Contracts;
+using BudgetUnderControl.Modules.Users.Application.Services;
 using BudgetUnderControl.Modules.Users.Domain;
 using BudgetUnderControl.Modules.Users.Infrastructure;
 using BudgetUnderControl.Modules.Users.Infrastructure.Configuration;
 using BudgetUnderControl.Shared.Abstractions.Modules;
+using BudgetUnderControl.Shared.Infrastructure.Modules;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -41,6 +45,10 @@ namespace BudgetUnderControl.Modules.Users.Api
             app.UseDomain();
             app.UseApplication();
             app.UseInfrastructure();
+
+            app.UseModuleRequests()
+               .Subscribe<GetUserIdentityQuery, IUserIdentityContext>("users/get",
+                   (query, sp) => sp.GetRequiredService<IUsersModule>().ExecuteQueryAsync(query));
         }
     }
 }

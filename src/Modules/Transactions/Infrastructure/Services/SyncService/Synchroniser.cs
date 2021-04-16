@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using BudgetUnderControl.Modules.Transactions.Application.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using BudgetUnderControl.Shared.Abstractions.Contexts;
 
 namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
@@ -21,21 +22,21 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         private readonly IAccountGroupRepository accountGroupRepository;
         private readonly IUserRepository userRepository;
         private readonly ISynchronizationRepository synchronizationRepository;
-        private readonly IUserIdentityContext userIdentityContext;
+        private readonly IContext context;
         private readonly ITagRepository tagRepository;
         private readonly ITransactionService transactionService;
         private readonly IFileService fileService;
         private Dictionary<Guid, int> _tags;
-        private readonly TransactionsContext Context;
+        private readonly TransactionsContext transactionsContext;
 
-        public Synchroniser(TransactionsContext context, ITransactionRepository transactionRepository,
+        public Synchroniser(TransactionsContext transactionsContext, ITransactionRepository transactionRepository,
             IAccountRepository accountRepository,
             ICurrencyRepository currencyRepository,
             ICategoryRepository categoryRepository,
             IAccountGroupRepository accountGroupRepository,
             IUserRepository userRepository,
             ISynchronizationRepository synchronizationRepository,
-            IUserIdentityContext userIdentityContext,
+            IContext context,
             ITagRepository tagRepository,
             ITransactionService transactionService,
             ILogger<Synchroniser> logger,
@@ -48,12 +49,12 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             this.accountGroupRepository = accountGroupRepository;
             this.userRepository = userRepository;
             this.synchronizationRepository = synchronizationRepository;
-            this.userIdentityContext = userIdentityContext;
+            this.context = context;
             this.tagRepository = tagRepository;
             this.transactionService = transactionService;
             this.logger = logger;
             this.fileService = fileService;
-            this.Context = context;
+            this.transactionsContext = transactionsContext;
         }
 
         public async Task SynchroniseAsync(SyncRequest syncRequest)
@@ -74,7 +75,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 
         private async Task UpdateLastSyncDateAsync(SyncRequest syncRequest)
         {
-            var userId = userIdentityContext.UserId;
+            var userId = context.Identity.ObsoleteUserId;
             var syncObject = await this.synchronizationRepository.GetSynchronizationAsync(syncRequest.Component, syncRequest.ComponentId, userId);// syncRequest.UserId)
 
             if (syncObject != null)
@@ -130,7 +131,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                     {
                         if (transactionToUpdate.ModifiedOn < transaction.ModifiedOn)
                         {
-                            transactionToUpdate.Edit(accountId, transaction.Type, transaction.Amount, transaction.Date, transaction.Name, transaction.Comment, this.userIdentityContext.UserId, transaction.IsDeleted, categoryId, transaction.Latitude, transaction.Longitude);
+                            transactionToUpdate.Edit(accountId, transaction.Type, transaction.Amount, transaction.Date, transaction.Name, transaction.Comment, this.context.Identity.ObsoleteUserId, transaction.IsDeleted, categoryId, transaction.Latitude, transaction.Longitude);
                             transactionToUpdate.SetCreatedOn(transaction.CreatedOn);
                             transactionToUpdate.SetModifiedOn(transaction.ModifiedOn);
                             transactionsToUpdate.Add(transactionToUpdate);
@@ -140,7 +141,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                     }
                     else
                     {
-                        var transactionToAdd = Domain.Transaction.Create(accountId, transaction.Type, transaction.Amount, transaction.Date, transaction.Name, transaction.Comment, this.userIdentityContext.UserId, false, categoryId, transaction.ExternalId, transaction.Latitude, transaction.Longitude);
+                        var transactionToAdd = Domain.Transaction.Create(accountId, transaction.Type, transaction.Amount, transaction.Date, transaction.Name, transaction.Comment, this.context.Identity.ObsoleteUserId, false, categoryId, transaction.ExternalId, transaction.Latitude, transaction.Longitude);
                         transactionToAdd.SetCreatedOn(transaction.CreatedOn);
                         transactionToAdd.SetModifiedOn(transaction.ModifiedOn);
                         transactionsToAdd.Add(transactionToAdd);
@@ -250,7 +251,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                 return;
             }
 
-            var userId = userIdentityContext.UserId;
+            var userId = context.Identity.ObsoleteUserId;
             foreach (var tag in tags)
             {
                
@@ -283,7 +284,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                 return;
             }
 
-            var userId = userIdentityContext.UserId;
+            var userId = context.Identity.ObsoleteUserId;
 
             foreach (var category in categories)
             {
@@ -325,7 +326,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             {
                 var parentAccountId = account.ParentAccountExternalId.HasValue ? (await this.accountRepository.GetAccountAsync(account.ParentAccountExternalId.Value)).Id : (int?)null;
                 var accountGroupId = (await this.accountGroupRepository.GetAccountGroupAsync(account.AccountGroupExternalId)).Id;
-                var userId = this.userIdentityContext.UserId;
+                var userId = this.context.Identity.ObsoleteUserId;
                 var accountToUpdate = await this.accountRepository.GetAccountAsync(account.ExternalId.Value);
                 if (accountToUpdate != null)
                 {
@@ -356,7 +357,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 
             foreach (var accountGroup in accountGroups)
             {
-                var userId = userIdentityContext.UserId;
+                var userId = context.Identity.ObsoleteUserId;
                 var accountGroupToUpdate = await this.accountGroupRepository.GetAccountGroupAsync(accountGroup.ExternalId);
                 if (accountGroupToUpdate != null )
                 {
@@ -387,7 +388,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 
             var localRates = (await this.currencyRepository.GetExchangeRatesAsync());
 
-            var userId = userIdentityContext.UserId;
+            var userId = context.Identity.ObsoleteUserId;
             var currenciesDict = (await this.currencyRepository.GetCurriencesAsync())
                              .ToDictionary(x => x.Code, x => x.Id);
 
@@ -419,24 +420,24 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                 return;
             }
 
-            var userId = userIdentityContext.UserId;
+            var userId = context.Identity.ObsoleteUserId;
             foreach (var file in files)
             {
 
-                var fileToUpdate = await this.Context.Files.Where(x => x.Id == file.ExternalId).FirstOrDefaultAsync();
+                var fileToUpdate = await this.transactionsContext.Files.Where(x => x.Id == file.ExternalId).FirstOrDefaultAsync();
                 if (fileToUpdate != null)
                 {
                     if (fileToUpdate.ModifiedOn < file.ModifiedOn)
                     {
                         if (file.IsDeleted)
                         {
-                            this.fileService.RemoveFileContent(file.Id, userIdentityContext.ExternalId, file.CreatedOn);
+                            this.fileService.RemoveFileContent(file.Id, context.Identity.Id, file.CreatedOn);
                         }
                         fileToUpdate.FileName = file.FileName;
                         fileToUpdate.ContentType = file.ContentType;
                         fileToUpdate.Delete(file.IsDeleted);
                         fileToUpdate.SetModifiedOn(file.ModifiedOn);
-                        this.Context.Files.Update(fileToUpdate);
+                        this.transactionsContext.Files.Update(fileToUpdate);
                     }
                 }
                 else
@@ -449,12 +450,12 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                         ExternalId = file.ExternalId,
                         FileName = file.FileName,
                         ModifiedOn = file.ModifiedOn,
-                        UserId = userIdentityContext.ExternalId,
+                        UserId = context.Identity.Id,
                         Id = file.Id,
                     };
                     fileToAdd.Delete(file.IsDeleted);
                     fileToAdd.SetModifiedOn(file.ModifiedOn);
-                    await this.Context.Files.AddAsync(fileToAdd);
+                    await this.transactionsContext.Files.AddAsync(fileToAdd);
 
                     if(!file.IsDeleted && file.Content != null)
                     {
@@ -464,7 +465,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                 }
             }
 
-            this.Context.SaveChanges();
+            this.transactionsContext.SaveChanges();
         }
 
         private async Task DealWithTransactionToFilesAsync(int transactionId, List<FileToTransactionSyncDTO> filesToSync)
@@ -475,7 +476,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             }
 
             var f2tIds = filesToSync.Select(x => x.Id).ToList();
-            var currentFiles2Transactions = await this.Context.FilesToTransactions.Where(x => x.TransactionId == transactionId).ToListAsync();
+            var currentFiles2Transactions = await this.transactionsContext.FilesToTransactions.Where(x => x.TransactionId == transactionId).ToListAsync();
 
             foreach (var f2t in filesToSync)
             {
@@ -487,7 +488,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                         entity.Delete(f2t.IsDeleted);
                     }
                     entity.SetModifiedOn(f2t.ModifiedOn);
-                    this.Context.FilesToTransactions.Update(entity);
+                    this.transactionsContext.FilesToTransactions.Update(entity);
                 }
                 else
                 {
@@ -500,11 +501,11 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                         IsDeleted = f2t.IsDeleted,
                         FileId = f2t.FileId,
                     };
-                    this.Context.FilesToTransactions.Add(entity);
+                    this.transactionsContext.FilesToTransactions.Add(entity);
                 }
             }
 
-            this.Context.SaveChanges();
+            this.transactionsContext.SaveChanges();
         }
     }
 }

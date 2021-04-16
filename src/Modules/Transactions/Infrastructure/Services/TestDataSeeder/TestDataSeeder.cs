@@ -16,20 +16,17 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         private readonly IAccountService accountService;
         private readonly IAccountGroupService accountGroupService;
         private readonly ITransactionService transactionService;
-        private readonly IUserIdentityContext userContext;
         private readonly ICurrencyService currencyService;
         private readonly ICategoryService categoryService;
 
         public TestDataSeeder(IAccountService accountService, ITransactionService transactionService,
-            IAccountGroupService accountGroupService, ICurrencyService currencyService, ICategoryService categoryService,
-            IUserIdentityContext userContext)
+            IAccountGroupService accountGroupService, ICurrencyService currencyService, ICategoryService categoryService)
         {
             this.accountService = accountService;
             this.transactionService = transactionService;
             this.accountGroupService = accountGroupService;
             this.currencyService = currencyService;
             this.categoryService = categoryService;
-            this.userContext = userContext;
         }
 
         public async Task SeedAsync()

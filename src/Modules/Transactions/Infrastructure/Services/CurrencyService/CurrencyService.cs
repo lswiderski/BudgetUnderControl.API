@@ -1,28 +1,26 @@
 ﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Domain;
 using BudgetUnderControl.Domain.Repositiories;
-using BudgetUnderControl.Infrastructure.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using BudgetUnderControl.Modules.Transactions.Application.Services;
-using static MoreLinq.Extensions.MinByExtension;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Currencies.AddExchangeRate;
-using BudgetUnderControl.Modules.Transactions.Application.Services;
+using BudgetUnderControl.Shared.Abstractions.Contexts;
+using static MoreLinq.Extensions.MinByExtension;
 
 namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
     public class CurrencyService : ICurrencyService
     {
         private readonly ICurrencyRepository currencyRepository;
-        private readonly IUserIdentityContext userIdentityContext;
+        private readonly IContext context;
 
-        public CurrencyService(ICurrencyRepository currencyRepository, IUserIdentityContext userIdentityContext)
+        public CurrencyService(ICurrencyRepository currencyRepository, IContext context)
         {
             this.currencyRepository = currencyRepository;
-            this.userIdentityContext = userIdentityContext;
+            this.context = context;
         }
 
         public async Task<ICollection<CurrencyDTO>> GetCurriencesAsync()
@@ -90,7 +88,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                     ToCurrencyId = x.ToCurrencyId,
                     FromCurrencyCode = x.FromCurrency.Code,
                     ToCurrencyCode = x.ToCurrency.Code,
-                    CanDelete = x.UserId == this.userIdentityContext.UserId,
+                    CanDelete = x.UserId == this.context.Identity.ObsoleteUserId,
                 })
                 .ToList();
 
@@ -99,7 +97,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 
         public async Task AddExchangeRateAsync(AddExchangeRateCommand command)
         {
-            var rate = ExchangeRate.Create(command.FromCurrencyId, command.ToCurrencyId, command.Rate, userIdentityContext.UserId, command.ExternalId, false, command.Date);
+            var rate = ExchangeRate.Create(command.FromCurrencyId, command.ToCurrencyId, command.Rate, context.Identity.ObsoleteUserId, command.ExternalId, false, command.Date);
 
             await this.currencyRepository.AddExchangeRateAsync(rate);
         }

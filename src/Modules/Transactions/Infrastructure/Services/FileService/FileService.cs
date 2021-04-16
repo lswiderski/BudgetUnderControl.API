@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BudgetUnderControl.Modules.Transactions.Application.Services;
 using Microsoft.Extensions.Logging;
+using BudgetUnderControl.Shared.Abstractions.Contexts;
 
 namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
@@ -17,24 +18,24 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
     {
         private string _uploadCatalog = "uploads";
 
-        private readonly IUserIdentityContext userIdentityContext;
+        private readonly IContext context;
         private readonly FilesModuleSettings settings;
         private readonly ILogger<FileService> logger;
-        private readonly TransactionsContext Context;
+        private readonly TransactionsContext transactionsContext;
 
-        public FileService(TransactionsContext context, IUserIdentityContext userIdentityContext, FilesModuleSettings settings, ILogger<FileService> logger)
+        public FileService(TransactionsContext transactionsContext, IContext context, FilesModuleSettings settings, ILogger<FileService> logger)
         {
-            this.userIdentityContext = userIdentityContext;
+            this.context = context;
             this.settings = settings;
             this.logger = logger;
-            this.Context = context;
+            this.transactionsContext = transactionsContext;
         }
 
         public async Task<Guid> SaveFileAsync(IFormFile file)
         {
             var createdOn = DateTime.UtcNow;
             var rootPath = settings.FileRootPath;
-            var uploadsRootFolder = Path.Combine(rootPath, _uploadCatalog, userIdentityContext.ExternalId.ToString(), createdOn.Year.ToString(), createdOn.Month.ToString());
+            var uploadsRootFolder = Path.Combine(rootPath, _uploadCatalog, context.Identity.Id.ToString(), createdOn.Year.ToString(), createdOn.Month.ToString());
             if (!Directory.Exists(uploadsRootFolder))
             {
                 Directory.CreateDirectory(uploadsRootFolder);
@@ -46,7 +47,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             {
                 ContentType = file.ContentType,
                 FileName = file.FileName,
-                UserId = userIdentityContext.ExternalId,
+                UserId = this.context.Identity.Id,
                 CreatedOn = createdOn,
                 ExternalId = id,
                 Id = id,
@@ -54,10 +55,10 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                 IsDeleted = false,
             };
 
-            this.Context.Files.Add(fileEntity);
-            await this.Context.SaveChangesAsync();
+            this.transactionsContext.Files.Add(fileEntity);
+            await this.transactionsContext.SaveChangesAsync();
             fileEntity.ExternalId = fileEntity.Id;
-            await this.Context.SaveChangesAsync();
+            await this.transactionsContext.SaveChangesAsync();
 
             var filePath = Path.Combine(uploadsRootFolder, fileEntity.Id.ToString());
             using (var fileStream = new FileStream(filePath, FileMode.Create))
@@ -72,7 +73,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         {
             var createdOn = date ?? DateTime.UtcNow;
             var rootPath = settings.FileRootPath;
-            var uploadsRootFolder = Path.Combine(rootPath, _uploadCatalog, userIdentityContext.ExternalId.ToString(), createdOn.Year.ToString(), createdOn.Month.ToString());
+            var uploadsRootFolder = Path.Combine(rootPath, _uploadCatalog, context.Identity.Id.ToString(), createdOn.Year.ToString(), createdOn.Month.ToString());
             if (!Directory.Exists(uploadsRootFolder))
             {
                 Directory.CreateDirectory(uploadsRootFolder);
@@ -95,11 +96,11 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                 return null;
             }
             var rootPath = settings.FileRootPath;
-            var fileEntity = this.Context.Files.Where(x => x.Id == id).FirstOrDefault();
+            var fileEntity = this.transactionsContext.Files.Where(x => x.Id == id).FirstOrDefault();
 
             if (fileEntity != null)
             {
-                var filePath = Path.Combine(rootPath, _uploadCatalog, userIdentityContext.ExternalId.ToString(), fileEntity.CreatedOn.Year.ToString(), fileEntity.CreatedOn.Month.ToString(), id.ToString());
+                var filePath = Path.Combine(rootPath, _uploadCatalog, context.Identity.Id.ToString(), fileEntity.CreatedOn.Year.ToString(), fileEntity.CreatedOn.Month.ToString(), id.ToString());
 
                 var file = new FileDto
                 {
@@ -117,7 +118,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 
         public async Task<byte[]> GetFileBytesAsync(Guid id)
         {
-            var fileEntity = this.Context.Files.Where(x => x.Id == id).FirstOrDefault();
+            var fileEntity = this.transactionsContext.Files.Where(x => x.Id == id).FirstOrDefault();
             if (fileEntity == null)
             {
                 return null;
@@ -126,7 +127,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             try
             {
                 var rootPath = settings.FileRootPath;
-                var filePath = Path.Combine(rootPath, _uploadCatalog, userIdentityContext.ExternalId.ToString(), fileEntity.CreatedOn.Year.ToString(), fileEntity.CreatedOn.Month.ToString(), id.ToString());
+                var filePath = Path.Combine(rootPath, _uploadCatalog, context.Identity.Id.ToString(), fileEntity.CreatedOn.Year.ToString(), fileEntity.CreatedOn.Month.ToString(), id.ToString());
                 using (var stream = new FileStream(filePath, FileMode.Open))
                 {
                     using (MemoryStream memStream = new MemoryStream())
@@ -148,22 +149,22 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             //check if user hass access
 
             //remove connections with other objects like transactions
-            var fileEntity = this.Context.Files.Where(x => x.Id == id).FirstOrDefault();
+            var fileEntity = this.transactionsContext.Files.Where(x => x.Id == id).FirstOrDefault();
 
             if (fileEntity == null)
             {
                 return;
             }
 
-            if (fileEntity.UserId != userIdentityContext.ExternalId)
+            if (fileEntity.UserId != context.Identity.Id)
             {
                 throw new UnauthorizedAccessException();
             }
-            var f2t = this.Context.FilesToTransactions.Where(x => x.FileId == id).ToList();
+            var f2t = this.transactionsContext.FilesToTransactions.Where(x => x.FileId == id).ToList();
             f2t.ForEach(x => x.Delete());
             fileEntity.Delete();
-            await this.Context.SaveChangesAsync();
-            this.RemoveFileContent(id, userIdentityContext.ExternalId, fileEntity.CreatedOn);
+            await this.transactionsContext.SaveChangesAsync();
+            this.RemoveFileContent(id, context.Identity.Id, fileEntity.CreatedOn);
 
         }
 

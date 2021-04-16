@@ -4,23 +4,22 @@ using BudgetUnderControl.Domain.Repositiories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using BudgetUnderControl.Modules.Transactions.Application.Services;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Tags.CreateTag;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Tags.UpdateTag;
-using BudgetUnderControl.Modules.Transactions.Application.Services;
+using BudgetUnderControl.Shared.Abstractions.Contexts;
 
 namespace BudgetUnderControl.Infrastructure.Services
 {
     public class TagService : ITagService
     {
         private readonly ITagRepository tagRepository;
-        private readonly IUserIdentityContext userIdentityContext;
-        public TagService(ITagRepository tagRepository, IUserIdentityContext userIdentityContext)
+        private readonly IContext context;
+        public TagService(ITagRepository tagRepository, IContext context)
         {
             this.tagRepository = tagRepository;
-            this.userIdentityContext = userIdentityContext;
+            this.context = context;
         }
 
 
@@ -70,7 +69,7 @@ namespace BudgetUnderControl.Infrastructure.Services
 
         public async Task AddTagAsync(CreateTagCommand command)
         {
-            var tag = Tag.Create(command.Name, userIdentityContext.UserId, false, command.ExternalId);
+            var tag = Tag.Create(command.Name, context.Identity.ObsoleteUserId, false, command.ExternalId);
             await this.tagRepository.AddAsync(tag);
         }
 

@@ -14,6 +14,7 @@ namespace BudgetUnderControl.Shared.Infrastructure.Contexts
         public Guid Id { get; }
         public string Role { get; }
         public Dictionary<string, IEnumerable<string>> Claims { get; }
+        public int ObsoleteUserId {get;}
 
         public IdentityContext(ClaimsPrincipal principal)
         {
@@ -22,6 +23,8 @@ namespace BudgetUnderControl.Shared.Infrastructure.Contexts
             Role = principal.Claims.SingleOrDefault(x => x.Type == ClaimTypes.Role)?.Value;
             Claims = principal.Claims.GroupBy(x => x.Type)
                 .ToDictionary(x => x.Key, x => x.Select(c => c.Value.ToString()));
+            ObsoleteUserId = 1; // temporary for development to delete
+            
         }
     }
 }

@@ -16,6 +16,7 @@ using BudgetUnderControl.Modules.Users.Application.DTO;
 using BudgetUnderControl.Modules.Users.Application.Commands.Users.GetUser;
 using BudgetUnderControl.Modules.Users.Application.Commands.Users.GetUsers;
 using BudgetUnderControl.Modules.Users.Application.Commands.Users.UpdateUser;
+using BudgetUnderControl.Shared.Abstractions.Contexts;
 
 namespace BudgetUnderControl.Modules.Users.Api.Controllers
 {

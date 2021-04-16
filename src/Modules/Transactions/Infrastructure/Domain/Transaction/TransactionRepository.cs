@@ -7,39 +7,40 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BudgetUnderControl.Shared.Abstractions.Contexts;
 
 namespace BudgetUnderControl.Infrastructure
 {
     public class TransactionRepository : ITransactionRepository
     {
         private readonly IAccountRepository accountRepository;
-        private readonly IUserIdentityContext userIdentityContext;
-        private readonly TransactionsContext Context;
+        private readonly IContext context;
+        private readonly TransactionsContext transactionsContext;
 
-        public TransactionRepository(TransactionsContext context, IAccountRepository accountRepository,
-            IUserIdentityContext userIdentityContext)
+        public TransactionRepository(TransactionsContext transactionsContext, IAccountRepository accountRepository,
+            IContext context)
         {
             this.accountRepository = accountRepository;
-            this.userIdentityContext = userIdentityContext;
-            this.Context = context;
+            this.context = context;
+            this.transactionsContext = transactionsContext;
         }
 
         public async Task AddTransactionAsync(Transaction transaction)
         {
-            this.Context.Transactions.Add(transaction);
-            await this.Context.SaveChangesAsync();
+            this.transactionsContext.Transactions.Add(transaction);
+            await this.transactionsContext.SaveChangesAsync();
         }
 
         public async Task AddTransactionsAsync(IEnumerable<Transaction> transactions)
         {
-            this.Context.Transactions.AddRange(transactions);
-            await this.Context.SaveChangesAsync();
+            this.transactionsContext.Transactions.AddRange(transactions);
+            await this.transactionsContext.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(Transaction transaction)
         {
             transaction.UpdateModify();
-            this.Context.Transactions.Update(transaction);
+            this.transactionsContext.Transactions.Update(transaction);
             //await this.Context.SaveChangesAsync();
             await Task.CompletedTask;
         }
@@ -51,51 +52,51 @@ namespace BudgetUnderControl.Infrastructure
                 transaction.UpdateModify();
             }
 
-            this.Context.Transactions.UpdateRange(transactions);
-            await this.Context.SaveChangesAsync();
+            this.transactionsContext.Transactions.UpdateRange(transactions);
+            await this.transactionsContext.SaveChangesAsync();
         }
 
         public async Task AddTransferAsync(Transfer transfer)
         {
-            this.Context.Transfers.Add(transfer);
-            await this.Context.SaveChangesAsync();
+            this.transactionsContext.Transfers.Add(transfer);
+            await this.transactionsContext.SaveChangesAsync();
         }
 
         public async Task UpdateTransferAsync(Transfer transfer)
         {
             transfer.UpdateModify();
-            this.Context.Transfers.Update(transfer);
-            await this.Context.SaveChangesAsync();
+            this.transactionsContext.Transfers.Update(transfer);
+            await this.transactionsContext.SaveChangesAsync();
         }
 
         public async Task RemoveTransactionAsync(Transaction transaction)
         {
             transaction.Delete();
-            await this.Context.SaveChangesAsync();
+            await this.transactionsContext.SaveChangesAsync();
         }
 
         public async Task RemoveTransferAsync(Transfer transfer)
         {
             transfer.Delete();
-            await this.Context.SaveChangesAsync();
+            await this.transactionsContext.SaveChangesAsync();
         }
 
         public async Task HardRemoveTransactionsAsync(IEnumerable<Transaction> transactions)
         {
-            this.Context.Transactions.RemoveRange(transactions);
-            await this.Context.SaveChangesAsync();
+            this.transactionsContext.Transactions.RemoveRange(transactions);
+            await this.transactionsContext.SaveChangesAsync();
         }
 
         public async Task HardRemoveTransfersAsync(IEnumerable<Transfer> transfers)
         {
-            this.Context.Transfers.RemoveRange(transfers);
-            await this.Context.SaveChangesAsync();
+            this.transactionsContext.Transfers.RemoveRange(transfers);
+            await this.transactionsContext.SaveChangesAsync();
         }
 
         public async Task<ICollection<Transaction>> GetTransactionsAsync(TransactionsFilter filter = null)
         {
 
-            var query = this.Context.Transactions
+            var query = this.transactionsContext.Transactions
                         .Include(p => p.Category)
                         .Include(p => p.Account)
                             .ThenInclude(p => p.Currency)
@@ -126,7 +127,7 @@ namespace BudgetUnderControl.Infrastructure
             }
             else
             {
-                query = query.Where(q => q.Account.OwnerId == userIdentityContext.UserId).AsQueryable();
+                query = query.Where(q => q.Account.OwnerId == context.Identity.ObsoleteUserId).AsQueryable();
             }
 
             if (filter != null && filter.CategoryIds != null && filter.CategoryIds.Any())
@@ -137,7 +138,7 @@ namespace BudgetUnderControl.Infrastructure
             if (filter != null && filter.TagIds != null && filter.TagIds.Any())
             {
                 query = (from transaction in query
-                         join t2t in this.Context.TagsToTransactions on transaction.Id equals t2t.TransactionId
+                         join t2t in this.transactionsContext.TagsToTransactions on transaction.Id equals t2t.TransactionId
                          where filter.TagIds.Contains(t2t.TagId)
                          select transaction).AsQueryable();
             }
@@ -199,32 +200,32 @@ namespace BudgetUnderControl.Infrastructure
 
         public async Task<Transaction> GetTransactionAsync(int id)
         {
-            var transaction = await this.Context.Transactions.Where(t => t.Id == id).SingleOrDefaultAsync();
+            var transaction = await this.transactionsContext.Transactions.Where(t => t.Id == id).SingleOrDefaultAsync();
             return transaction;
         }
 
         public async Task<Transaction> GetTransactionAsync(Guid id)
         {
-            var transaction = await this.Context.Transactions.Where(t => t.ExternalId.ToString() == id.ToString()).SingleOrDefaultAsync();
+            var transaction = await this.transactionsContext.Transactions.Where(t => t.ExternalId.ToString() == id.ToString()).SingleOrDefaultAsync();
             return transaction;
         }
 
         public async Task<Transfer> GetTransferAsync(int transactionId)
         {
-            var transfer = await this.Context.Transfers.Where(t => t.FromTransactionId == transactionId || t.ToTransactionId == transactionId).SingleOrDefaultAsync();
+            var transfer = await this.transactionsContext.Transfers.Where(t => t.FromTransactionId == transactionId || t.ToTransactionId == transactionId).SingleOrDefaultAsync();
             return transfer;
         }
 
         public async Task<Transfer> GetTransferAsync(Guid transactionId)
         {
-            var transfer = await this.Context.Transfers.Where(t => t.ExternalId == transactionId).SingleOrDefaultAsync();
+            var transfer = await this.transactionsContext.Transfers.Where(t => t.ExternalId == transactionId).SingleOrDefaultAsync();
             return transfer;
         }
 
 
         public async Task<ICollection<Transfer>> GetTransfersAsync()
         {
-            var transfers = await this.Context.Transfers
+            var transfers = await this.transactionsContext.Transfers
                 .Include(t => t.FromTransaction)
                 .Include(t => t.ToTransaction)
                 .ToListAsync();
@@ -234,7 +235,7 @@ namespace BudgetUnderControl.Infrastructure
 
         public async Task<ICollection<Transfer>> GetTransfersModifiedSinceAsync(DateTime changedSince)
         {
-            var transfers = await this.Context.Transfers
+            var transfers = await this.transactionsContext.Transfers
                 .Include(t => t.FromTransaction)
                 .Include(t => t.ToTransaction)
                 .Where(q => q.ModifiedOn >= changedSince)

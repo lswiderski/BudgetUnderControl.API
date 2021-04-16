@@ -17,6 +17,9 @@ using AutoMapper;
 using BudgetUnderControl.Modules.Transactions.Application.Transactions.EditTransaction;
 using BudgetUnderControl.Modules.Transactions.Application.Transactions.AddTransaction;
 using BudgetUnderControl.Modules.Transactions.Application.Services;
+using BudgetUnderControl.Modules.Transactions.Infrastructure.Services;
+using BudgetUnderControl.Modules.Transactions.Application.Clients.Users;
+using BudgetUnderControl.Shared.Abstractions.Contexts;
 
 namespace BudgetUnderControl.Infrastructure.Services
 {
@@ -27,27 +30,32 @@ namespace BudgetUnderControl.Infrastructure.Services
         private readonly IFileService fileService;
         private readonly ICurrencyService currencyService;
         private readonly ICurrencyRepository currencyRepository;
-        private readonly IUserIdentityContext userIdentityContext;
         private readonly IMapper mapper;
-        private readonly TransactionsContext Context;
+        private readonly TransactionsContext transactionsContext;
+        private readonly IContext context;
+        // private readonly UserIdentityContext userIdentityContext;
 
-        public TransactionService(TransactionsContext context,
+        public TransactionService(TransactionsContext transactionsContext,
             ITransactionRepository transactionRepository,
             ITagRepository tagRepository,
             IFileService fileService,
             ICurrencyService currencyService,
             ICurrencyRepository currencyRepository,
-            IUserIdentityContext userIdentityContext,
-            IMapper mapper)
+            IMapper mapper,
+             IContext context
+             // IUsersApiClient userApiClient,
+             )
         {
             this.transactionRepository = transactionRepository;
             this.tagRepository = tagRepository;
             this.fileService = fileService;
             this.currencyService = currencyService;
             this.currencyRepository = currencyRepository;
-            this.userIdentityContext = userIdentityContext;
-            this.Context = context;
+            this.context = context;
+            this.transactionsContext = transactionsContext;
             this.mapper = mapper;
+
+            //this.userIdentityContext = userApiClient.GetCurrentUserContextAsync().Result;
         }
 
         public async Task<ICollection<TransactionListItemDTO>> GetTransactionsAsync(TransactionsFilterDTO filter = null)
@@ -82,7 +90,7 @@ namespace BudgetUnderControl.Infrastructure.Services
                 CreatedOn = t.CreatedOn,
                 CategoryId = t.CategoryId,
                 Category = t.Category?.Name,
-                Tags = t.TagsToTransaction.Where(x => !x.Tag.IsDeleted).Select(x => new TagDTO {ExternalId =x.Tag.ExternalId, Id = x.Tag.Id, IsDeleted = x.Tag.IsDeleted, Name = x.Tag.Name}).ToList()
+                Tags = t.TagsToTransaction.Where(x => !x.Tag.IsDeleted).Select(x => new TagDTO { ExternalId = x.Tag.ExternalId, Id = x.Tag.Id, IsDeleted = x.Tag.IsDeleted, Name = x.Tag.Name }).ToList()
 
             }).Select(t => t.Result)
                 .OrderByDescending(t => t.Date)
@@ -93,7 +101,7 @@ namespace BudgetUnderControl.Infrastructure.Services
 
         public async Task AddTransactionAsync(AddTransactionCommand command)
         {
-            var user = userIdentityContext;
+            var user = this.context.Identity;
 
             if (command.Type == ExtendedTransactionType.Transfer)
             {
@@ -105,10 +113,10 @@ namespace BudgetUnderControl.Infrastructure.Services
                 {
                     command.TransferAmount *= (-1);
                 }
-                var transactionExpense = Transaction.Create(command.AccountId, TransactionType.Expense, command.Amount, command.Date, command.Name, command.Comment, user.UserId, false, command.CategoryId, command.ExternalId, command.Latitude, command.Longitude);
+                var transactionExpense = Transaction.Create(command.AccountId, TransactionType.Expense, command.Amount, command.Date, command.Name, command.Comment, user.ObsoleteUserId, false, command.CategoryId, command.ExternalId, command.Latitude, command.Longitude);
                 await transactionRepository.AddTransactionAsync(transactionExpense);
 
-                var transactionIncome = Transaction.Create(command.TransferAccountId.Value, TransactionType.Income, command.TransferAmount, command.TransferDate, command.Name, command.Comment, user.UserId, false, command.CategoryId, command.TransferExternalId, command.Latitude, command.Longitude);
+                var transactionIncome = Transaction.Create(command.TransferAccountId.Value, TransactionType.Income, command.TransferAmount, command.TransferDate, command.Name, command.Comment, user.ObsoleteUserId, false, command.CategoryId, command.TransferExternalId, command.Latitude, command.Longitude);
                 await transactionRepository.AddTransactionAsync(transactionIncome);
 
                 var transfer = Transfer.Create(transactionExpense.Id, transactionIncome.Id, command.Rate);
@@ -127,7 +135,7 @@ namespace BudgetUnderControl.Infrastructure.Services
                 {
                     command.Amount *= (-1);
                 }
-                var transaction = Transaction.Create(command.AccountId, type, command.Amount, command.Date, command.Name, command.Comment, user.UserId, false, command.CategoryId, command.ExternalId, command.Latitude, command.Longitude);
+                var transaction = Transaction.Create(command.AccountId, type, command.Amount, command.Date, command.Name, command.Comment, user.ObsoleteUserId, false, command.CategoryId, command.ExternalId, command.Latitude, command.Longitude);
                 await this.transactionRepository.AddTransactionAsync(transaction);
                 await this.CreateTagsToTransaction(command.Tags, transaction.Id);
                 await this.MergeFiles(command.FileGuid, transaction);
@@ -149,7 +157,7 @@ namespace BudgetUnderControl.Infrastructure.Services
 
         public async Task EditTransactionAsync(EditTransactionCommand command)
         {
-            var user = userIdentityContext;
+            var user = this.context.Identity;
 
             var firstTransaction = await this.transactionRepository.GetTransactionAsync(command.Id);
             Transaction secondTransaction = null;
@@ -169,7 +177,7 @@ namespace BudgetUnderControl.Infrastructure.Services
             //merge files
             await this.MergeFiles(command.FileGuid, firstTransaction);
 
-            var transfer = await transactionRepository.GetTransferAsync(command.Id); 
+            var transfer = await transactionRepository.GetTransferAsync(command.Id);
 
             if (transfer != null)
             {
@@ -183,17 +191,17 @@ namespace BudgetUnderControl.Infrastructure.Services
             {
                 await this.transactionRepository.RemoveTransferAsync(transfer);
                 await this.transactionRepository.RemoveTransactionAsync(secondTransaction);
-                firstTransaction.Edit(command.AccountId, command.ExtendedType.ToTransactionType(), command.Amount, command.Date, command.Name, command.Comment, user.UserId, command.IsDeleted, command.CategoryId, command.Latitude, command.Longitude);
+                firstTransaction.Edit(command.AccountId, command.ExtendedType.ToTransactionType(), command.Amount, command.Date, command.Name, command.Comment, user.ObsoleteUserId, command.IsDeleted, command.CategoryId, command.Latitude, command.Longitude);
                 await this.transactionRepository.UpdateAsync(firstTransaction);
             }
             //new Transfer, no transfer before
             else if (command.ExtendedType == ExtendedTransactionType.Transfer
                 && transfer == null && secondTransaction == null)
             {
-                firstTransaction.Edit(command.AccountId, TransactionType.Expense, command.Amount, command.Date, command.Name, command.Comment, user.UserId, command.IsDeleted, command.CategoryId, command.Latitude, command.Longitude);
+                firstTransaction.Edit(command.AccountId, TransactionType.Expense, command.Amount, command.Date, command.Name, command.Comment, user.ObsoleteUserId, command.IsDeleted, command.CategoryId, command.Latitude, command.Longitude);
                 await this.transactionRepository.UpdateAsync(firstTransaction);
 
-                var transactionIncome = Transaction.Create(command.TransferAccountId.Value, TransactionType.Income, command.TransferAmount.Value, command.TransferDate.Value, command.Name, command.Comment, user.UserId, command.IsDeleted, command.CategoryId, null, command.Latitude, command.Longitude);
+                var transactionIncome = Transaction.Create(command.TransferAccountId.Value, TransactionType.Income, command.TransferAmount.Value, command.TransferDate.Value, command.Name, command.Comment, user.ObsoleteUserId, command.IsDeleted, command.CategoryId, null, command.Latitude, command.Longitude);
                 await transactionRepository.AddTransactionAsync(transactionIncome);
 
                 var newTransfer = Transfer.Create(firstTransaction.Id, transactionIncome.Id, command.Rate.Value);
@@ -205,10 +213,10 @@ namespace BudgetUnderControl.Infrastructure.Services
             else if (command.ExtendedType == ExtendedTransactionType.Transfer
                 && transfer != null && secondTransaction != null)
             {
-                firstTransaction.Edit(command.AccountId, TransactionType.Expense, command.Amount, command.Date, command.Name, command.Comment, user.UserId, command.IsDeleted, command.CategoryId, command.Latitude, command.Longitude);
+                firstTransaction.Edit(command.AccountId, TransactionType.Expense, command.Amount, command.Date, command.Name, command.Comment, user.ObsoleteUserId, command.IsDeleted, command.CategoryId, command.Latitude, command.Longitude);
                 await this.transactionRepository.UpdateAsync(firstTransaction);
 
-                secondTransaction.Edit(command.TransferAccountId.Value, TransactionType.Income, command.TransferAmount.Value, command.TransferDate.Value, command.Name, command.Comment, user.UserId, command.IsDeleted, command.CategoryId, command.Latitude, command.Longitude);
+                secondTransaction.Edit(command.TransferAccountId.Value, TransactionType.Income, command.TransferAmount.Value, command.TransferDate.Value, command.Name, command.Comment, user.ObsoleteUserId, command.IsDeleted, command.CategoryId, command.Latitude, command.Longitude);
                 await this.transactionRepository.UpdateAsync(firstTransaction);
 
                 transfer.SetRate(command.Rate.Value);
@@ -233,7 +241,7 @@ namespace BudgetUnderControl.Infrastructure.Services
                     amount = command.Amount;
                 }
 
-                firstTransaction.Edit(command.AccountId, command.ExtendedType.ToTransactionType(), amount, command.Date, command.Name, command.Comment, user.UserId, command.IsDeleted, command.CategoryId, command.Latitude, command.Longitude);
+                firstTransaction.Edit(command.AccountId, command.ExtendedType.ToTransactionType(), amount, command.Date, command.Name, command.Comment, user.ObsoleteUserId, command.IsDeleted, command.CategoryId, command.Latitude, command.Longitude);
                 await this.transactionRepository.UpdateAsync(firstTransaction);
             }
         }
@@ -242,7 +250,7 @@ namespace BudgetUnderControl.Infrastructure.Services
         {
             var _fileGuid = !string.IsNullOrWhiteSpace(fileGuid) ? Guid.Parse(fileGuid) : (Guid?)null;
             var now = DateTime.UtcNow;
-            var file = await this.Context.Files.Where(x => x.Id == _fileGuid).FirstOrDefaultAsync();
+            var file = await this.transactionsContext.Files.Where(x => x.Id == _fileGuid).FirstOrDefaultAsync();
             var currentFile = firstTransaction.FilesToTransaction?.Where(x => !x.IsDeleted).Select(x => x.File).FirstOrDefault();
 
             if (file != null && currentFile != null)
@@ -250,10 +258,10 @@ namespace BudgetUnderControl.Infrastructure.Services
                 if (file.ExternalId != currentFile.ExternalId)
                 {
                     currentFile.Delete();
-                    var f2ts = this.Context.FilesToTransactions.Where(x => x.FileId == currentFile.Id || x.TransactionId == firstTransaction.Id).ToList();
+                    var f2ts = this.transactionsContext.FilesToTransactions.Where(x => x.FileId == currentFile.Id || x.TransactionId == firstTransaction.Id).ToList();
                     f2ts.ForEach(x => x.Delete());
                     var guid = Guid.NewGuid();
-                    this.Context.FilesToTransactions.Add(new FileToTransaction
+                    this.transactionsContext.FilesToTransactions.Add(new FileToTransaction
                     {
                         FileId = file.Id,
                         TransactionId = firstTransaction.Id,
@@ -270,7 +278,7 @@ namespace BudgetUnderControl.Infrastructure.Services
             {
                 var guid = Guid.NewGuid();
                 //assign to transaction
-                this.Context.FilesToTransactions.Add(new FileToTransaction
+                this.transactionsContext.FilesToTransactions.Add(new FileToTransaction
                 {
                     FileId = file.Id,
                     TransactionId = firstTransaction.Id,
@@ -284,21 +292,21 @@ namespace BudgetUnderControl.Infrastructure.Services
             {
                 //remove old
                 currentFile.Delete();
-                var f2ts = this.Context.FilesToTransactions.Where(x => x.FileId == currentFile.Id || x.TransactionId == firstTransaction.Id).ToList();
+                var f2ts = this.transactionsContext.FilesToTransactions.Where(x => x.FileId == currentFile.Id || x.TransactionId == firstTransaction.Id).ToList();
                 f2ts.ForEach(x => x.Delete());
             }
             else // both null
             {
-                
+
             }
 
-            await this.Context.SaveChangesAsync();
+            await this.transactionsContext.SaveChangesAsync();
         }
 
         public async Task DeleteTransactionAsync(Guid transactionId)
         {
             Transaction firstTransaction = await this.transactionRepository.GetTransactionAsync(transactionId);
-            if (firstTransaction  == null)
+            if (firstTransaction == null)
             {
                 throw new ArgumentException("No Transaction to remove");
             }
@@ -307,12 +315,12 @@ namespace BudgetUnderControl.Infrastructure.Services
             var transfer = await this.transactionRepository.GetTransferAsync(firstTransaction.Id);
             var tags2Transaction = await this.tagRepository.GetTagToTransactionsAsync(firstTransaction.Id);
             await this.tagRepository.RemoveAsync(tags2Transaction);
-            var files = this.Context.FilesToTransactions.Where(x => x.TransactionId == firstTransaction.Id && !x.IsDeleted).Select(x => x.FileId).ToList();
+            var files = this.transactionsContext.FilesToTransactions.Where(x => x.TransactionId == firstTransaction.Id && !x.IsDeleted).Select(x => x.FileId).ToList();
             foreach (var fileId in files)
             {
                 await fileService.RemoveFileAsync(fileId);
             }
-            
+
             if (transfer != null)
             {
                 var secondTRansactionId = transfer.ToTransactionId != firstTransaction.Id ? transfer.ToTransactionId : transfer.FromTransactionId;
@@ -415,7 +423,7 @@ namespace BudgetUnderControl.Infrastructure.Services
 
             }
 
-            var fileToTransactions = this.Context.FilesToTransactions.Where(x => x.TransactionId == transaction.Id && !x.IsDeleted).FirstOrDefault();
+            var fileToTransactions = this.transactionsContext.FilesToTransactions.Where(x => x.TransactionId == transaction.Id && !x.IsDeleted).FirstOrDefault();
             if (fileToTransactions != null)
             {
                 transaction.FileGuid = fileToTransactions.FileId.ToString();

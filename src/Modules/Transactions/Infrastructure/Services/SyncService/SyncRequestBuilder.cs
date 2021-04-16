@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
 using BudgetUnderControl.Modules.Transactions.Core.ValueObjects;
 using Microsoft.Extensions.Logging;
+using BudgetUnderControl.Shared.Abstractions.Contexts;
 
 namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
@@ -24,20 +25,20 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         private readonly IAccountGroupRepository accountGroupRepository;
         private readonly IUserRepository userRepository;
         private readonly ISynchronizationRepository synchronizationRepository;
-        private readonly IUserIdentityContext userIdentityContext;
+        private readonly IContext context;
         private readonly ITagRepository tagRepository;
         private readonly GeneralSettings settings;
         private readonly IFileService fileService;
-        private readonly TransactionsContext Context;
+        private readonly TransactionsContext transactionsContext;
 
-        public SyncRequestBuilder(TransactionsContext context, ITransactionRepository transactionRepository,
+        public SyncRequestBuilder(TransactionsContext transactionContext, ITransactionRepository transactionRepository,
             IAccountRepository accountRepository,
             ICurrencyRepository currencyRepository,
             ICategoryRepository categoryRepository,
             IAccountGroupRepository accountGroupRepository,
             IUserRepository userRepository,
             ISynchronizationRepository synchronizationRepository,
-            IUserIdentityContext userIdentityContext,
+            IContext context,
             ITagRepository tagRepository,
             ILogger<SyncRequestBuilder> logger,
             GeneralSettings settings,
@@ -50,25 +51,25 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             this.accountGroupRepository = accountGroupRepository;
             this.userRepository = userRepository;
             this.synchronizationRepository = synchronizationRepository;
-            this.userIdentityContext = userIdentityContext;
+            this.context = context;
             this.settings = settings;
             this.tagRepository = tagRepository;
             this.logger = logger;
             this.fileService = fileService;
-            this.Context = context;
+            this.transactionsContext = transactionContext;
         }
 
         public async Task<SyncRequest> CreateSyncRequestAsync(SynchronizationComponent source, SynchronizationComponent target)
         {
             //get
             var synchronizations = await this.synchronizationRepository.GetSynchronizationsAsync();
-            var synchronization = synchronizations.Where(x => x.Component == target && x.UserId == userIdentityContext.UserId).FirstOrDefault();
+            var synchronization = synchronizations.Where(x => x.Component == target && x.UserId == context.Identity.ObsoleteUserId).FirstOrDefault();
 
             var request = new SyncRequest
             {
                 Component = source,
                 ComponentId = new Guid(settings.ApplicationId),
-                UserId = userIdentityContext.ExternalId,
+                UserId = context.Identity.Id,
                 LastSync = synchronization != null ? synchronization.LastSyncAt : new DateTime(),
             };
 
@@ -217,7 +218,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                     OwnerId = x.OwnerId,
                 }).ToList();
 
-            var userExternalId = userIdentityContext.ExternalId;
+            var userExternalId = context.Identity.Id;
 
             foreach (var account in accountgroups)
             {
@@ -230,7 +231,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         private async Task<IEnumerable<UserSyncDTO>> GetUsersToSyncAsync(DateTime changedSince)
         {
             //temporary I do not support multi users
-            var user = await this.userRepository.GetAsync(userIdentityContext.ExternalId);
+            var user = await this.userRepository.GetAsync(context.Identity.Id);
             var result = new List<UserSyncDTO>();
 
             result.Add(new UserSyncDTO
@@ -264,7 +265,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                     OwnerId = x.OwnerId,
                 }).ToList();
 
-            var userExternalId = userIdentityContext.ExternalId;
+            var userExternalId = context.Identity.Id;
 
             foreach (var category in categories)
             {
@@ -292,8 +293,8 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 
         private async Task<IEnumerable<FileSyncDTO>> GetFilesToSyncAsync(DateTime changedSince)
         {
-            var files = await this.Context.Files
-                .Where(x => x.ModifiedOn >= changedSince && x.UserId == userIdentityContext.ExternalId)
+            var files = await this.transactionsContext.Files
+                .Where(x => x.ModifiedOn >= changedSince && x.UserId == context.Identity.Id)
                 .Select(x => new FileSyncDTO
                 {
                     Id = x.Id,

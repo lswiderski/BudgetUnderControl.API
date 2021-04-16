@@ -130,18 +130,10 @@ namespace BudgetUnderControl.Modules.Users.Infrastructure.Services
                  IsActivated = user.IsActivated,
                  FirstName = user.FirstName,
                  LastName = user.LastName,
-                 Email = user.Email
+                 Email = user.Email,
+                 OldId = 1 // temporary only for dev
              };
-           /* var context = new UserIdentityContext
-            {
-                UserId = 1,
-                ExternalId = new Guid("10000000-0000-0000-0000-000000000001"),
-                RoleName = "User",
-                IsActivated = true,
-                FirstName = "Demo",
-                LastName = "Demo",
-                Email = "Demo"
-            };*/
+         
 
             return context;
         }

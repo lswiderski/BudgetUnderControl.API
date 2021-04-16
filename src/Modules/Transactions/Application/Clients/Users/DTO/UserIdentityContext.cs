@@ -1,11 +1,11 @@
 ﻿using System;
 using BudgetUnderControl.Common.Enums;
-using BudgetUnderControl.Modules.Users.Application.Services;
-using BudgetUnderControl.Shared.Abstractions.Enums;
+using BudgetUnderControl.Common.Extensions;
+using BudgetUnderControl.Modules.Transactions.Application.Services;
 
-namespace BudgetUnderControl.Modules.Users.Infrastructure.Services
+namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
-    public class UserIdentityContext : IUserIdentityContext
+    public class UserIdentityContext
     {
         public int OldId { get; set; }
 

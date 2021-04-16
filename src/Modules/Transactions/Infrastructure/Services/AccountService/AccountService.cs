@@ -10,6 +10,7 @@ using BudgetUnderControl.Modules.Transactions.Application.Services;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.CreateAccount;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.UpdateAccount;
 using Microsoft.Extensions.Logging;
+using BudgetUnderControl.Shared.Abstractions.Contexts;
 
 namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
@@ -17,18 +18,18 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
     {
         private readonly IAccountRepository accountRepository;
         private readonly IUserRepository userRepository;
-        private readonly IUserIdentityContext userIdentityContext;
+        private readonly IContext context;
         private readonly ILogger<AccountService> logger;
 
         public AccountService(IAccountRepository accountRepository,
             IUserRepository userRepository, 
             ILogger<AccountService> logger,
-            IUserIdentityContext userIdentityContext)
+            IContext context)
         {
             this.accountRepository = accountRepository;
             this.userRepository = userRepository;
             this.logger = logger;
-            this.userIdentityContext = userIdentityContext;
+            this.context = context;
         }
 
         public async Task<EditAccountDTO> GetAccountAsync(Guid id)
@@ -120,8 +121,8 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 
         public async Task AddAccountAsync(CreateAccountCommand command)
         {
-            var user = this.userIdentityContext;
-            var account = Account.Create(command.Name, command.CurrencyId, command.AccountGroupId, command.IsIncludedInTotal, command.Comment, command.Order, command.Type, command.ParentAccountId, true, user.UserId, command.ExternalId);
+            var identity = this.context.Identity;
+            var account = Account.Create(command.Name, command.CurrencyId, command.AccountGroupId, command.IsIncludedInTotal, command.Comment, command.Order, command.Type, command.ParentAccountId, true, identity.ObsoleteUserId, command.ExternalId);
             await accountRepository.AddAccountAsync(account);
 
             if (account.Id <= 0)

@@ -7,12 +7,7 @@ using System.Threading.Tasks;
 
 namespace BudgetUnderControl.Modules.Users.Application.Contracts
 {
-    public interface IUsersModule
+    public interface IUsersModule : ICommandDispatcher
     {
-        Task<TResult> ExecuteCommandAsync<TResult>(ICommand<TResult> command);
-
-        Task ExecuteCommandAsync(ICommand command);
-
-        Task<TResult> ExecuteQueryAsync<TResult>(IQuery<TResult> query);
     }
 }

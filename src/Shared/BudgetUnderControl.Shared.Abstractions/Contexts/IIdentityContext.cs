@@ -12,5 +12,6 @@ namespace BudgetUnderControl.Shared.Abstractions.Contexts
         public Guid Id { get; }
         string Role { get; }
         Dictionary<string, IEnumerable<string>> Claims { get; }
+        int ObsoleteUserId { get; }
     }
 }

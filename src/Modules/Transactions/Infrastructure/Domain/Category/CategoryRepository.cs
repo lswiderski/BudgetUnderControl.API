@@ -9,15 +9,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BudgetUnderControl.Shared.Abstractions.Contexts;
 
 namespace BudgetUnderControl.Infrastructure
 {
     public class CategoryRepository : ICategoryRepository
     {
-        private readonly IUserIdentityContext userIdentityContext;
+        private readonly IContext userIdentityContext;
         private readonly TransactionsContext Context;
 
-        public CategoryRepository(TransactionsContext context, IUserIdentityContext userIdentityContext) 
+        public CategoryRepository(TransactionsContext context, IContext userIdentityContext) 
         {
             this.userIdentityContext = userIdentityContext;
             this.Context = context;
@@ -25,7 +26,7 @@ namespace BudgetUnderControl.Infrastructure
 
         public async Task<ICollection<Category>> GetCategoriesAsync()
         {
-            var list = await this.Context.Categories.Where(x => x.OwnerId == userIdentityContext.UserId).ToListAsync();
+            var list = await this.Context.Categories/*Where(x => x.OwnerId == userIdentityContext.Identity.Id)*/.ToListAsync();
             return list;
         }
 

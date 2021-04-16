@@ -1,4 +1,5 @@
 ﻿using BudgetUnderControl.Modules.Users.Application.Services;
+using BudgetUnderControl.Shared.Abstractions.Contexts;
 using BudgetUnderControl.Shared.Application.CQRS.Configuration.Queries;
 using System;
 using System.Collections.Generic;

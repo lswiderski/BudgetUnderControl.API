@@ -1,6 +1,7 @@
 ﻿using BudgetUnderControl.Shared.Abstractions.Modules;
 using BudgetUnderControl.Shared.Infrastructure.Contexts;
 using BudgetUnderControl.Shared.Infrastructure.Database;
+using BudgetUnderControl.Shared.Infrastructure.Modules;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +19,8 @@ namespace BudgetUnderControl.Shared.Infrastructure
             services.AddSingleton<IContextFactory, ContextFactory>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient(sp => sp.GetRequiredService<IContextFactory>().Create());
+            services.AddModuleInfo(modules);
+            services.AddModuleRequests(assemblies);
             services.AddHostedService<DbMigrator>();
             return services;
         }
