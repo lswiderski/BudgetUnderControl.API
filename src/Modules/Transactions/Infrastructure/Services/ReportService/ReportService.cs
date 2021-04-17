@@ -1,5 +1,4 @@
-﻿using BudgetUnderControl.ApiInfrastructure.Services;
-using BudgetUnderControl.Modules.Transactions.Application.DTO;
+﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Modules.Transactions.Application.Services;
 using BudgetUnderControl.Domain;
 using BudgetUnderControl.Domain.Repositiories;

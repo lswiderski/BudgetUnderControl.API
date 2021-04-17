@@ -1,10 +1,6 @@
-﻿using BudgetUnderControl.Common.Contracts.Email;
-using BudgetUnderControl.Modules.Transactions.Application.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using BudgetUnderControl.Modules.Notifications.Core.DTO.Email;
 
-namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
+namespace BudgetUnderControl.Modules.Notifications.Core.Services.EmailService
 {
     public class EmailBuilder : IEmailBuilder
     {

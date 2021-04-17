@@ -1,25 +1,25 @@
-﻿using BudgetUnderControl.ApiInfrastructure.Services.EmailService.Contracts;
-using BudgetUnderControl.Common.Contracts.Email;
-using BudgetUnderControl.Modules.Transactions.Application.Services;
+﻿using System;
+using System.Net.Mail;
+using System.Threading.Tasks;
+using BudgetUnderControl.Modules.Notifications.Core.DTO.Email;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
 using MoreLinq;
-using System;
-using System.Collections.Generic;
-using System.Net.Mail;
-using System.Text;
-using System.Threading.Tasks;
+using Core.Services.EmailService.Contracts;
+using Microsoft.Extensions.Logging;
 
-namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
+namespace BudgetUnderControl.Modules.Notifications.Core.Services.EmailService
 {
     public class EmailService : IEmailService
     {
-        private readonly IEmailBuilder emailBuilder;
+        private readonly IEmailBuilder _emailBuilder;
+        private readonly ILogger<EmailService> _logger;
        
-        private readonly EmailModuleSettings settings;
-        public EmailService(IEmailBuilder emailBuilder, EmailModuleSettings settings)
+        private readonly EmailModuleSettings _settings;
+        public EmailService(IEmailBuilder emailBuilder, EmailModuleSettings settings, ILogger<EmailService> logger)
         {
-            this.emailBuilder = emailBuilder;
-            this.settings = settings;
+            this._emailBuilder = emailBuilder;
+            this._settings = settings;
+            _logger = logger;
         }
 
 
@@ -27,10 +27,10 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         {
             using (SmtpClient client = new SmtpClient())
             {
-                client.Port = settings.SmtpClient.Port;
-                client.Host = settings.SmtpClient.Host;
-                client.DeliveryMethod = settings.SmtpClient.DeliveryMethod;
-                client.Credentials = new System.Net.NetworkCredential(settings.SmtpClient.User, settings.SmtpClient.Password);
+                client.Port = _settings.SmtpClient.Port;
+                client.Host = _settings.SmtpClient.Host;
+                client.DeliveryMethod = _settings.SmtpClient.DeliveryMethod;
+                client.Credentials = new System.Net.NetworkCredential(_settings.SmtpClient.User, _settings.SmtpClient.Password);
 
                 var recipients = new MailAddressCollection();
 
@@ -44,7 +44,15 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                     mailMessage.IsBodyHtml = mail.IsBodyHtml;
                     mailMessage.Subject = mail.Subject;
 
-                    client.Send(mailMessage);
+                    try
+                    {
+                        client.Send(mailMessage);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.Log(LogLevel.Error,e, "smtp client error");
+                    }
+                   
                 }
             }
         }
@@ -58,8 +66,8 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 
         private async Task<EmailMessage> CreateRegistrationEmailAsync(EmailParticipant emailParticipant, string subject, string body, bool isHtml)
         {
-            var content = this.emailBuilder
-                .SentBy(new EmailParticipant { Address = settings.SmtpClient.SenderAddress, DisplayName = settings.SmtpClient.SenderName })
+            var content = this._emailBuilder
+                .SentBy(new EmailParticipant { Address = _settings.SmtpClient.SenderAddress, DisplayName = _settings.SmtpClient.SenderName })
                 .To(emailParticipant)
                 .Entitled(subject);
 

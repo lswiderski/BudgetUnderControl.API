@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BudgetUnderControl.ApiInfrastructure.Services.EmailService.Contracts
+﻿namespace Core.Services.EmailService.Contracts
 {
     public class UserActivationNotificationArgs : INotificationArgs
     {

@@ -18,7 +18,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\UserIdentityContext\" />
+    <Folder Include="Services\Email" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Services\UserIdentityContext\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Services\UserIdentityContext\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Services\UserIdentityContext\**" />
   </ItemGroup>
 
 </Project>

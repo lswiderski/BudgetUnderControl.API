@@ -12,6 +12,8 @@ using BudgetUnderControl.Modules.Users.Domain.Entities;
 using BudgetUnderControl.Modules.Users.Application.Commands.Users.UpdateUser;
 using BudgetUnderControl.Modules.Users.Application.DTO;
 using BudgetUnderControl.Modules.Users.Domain.Enums;
+using BudgetUnderControl.Modules.Users.Infrastructure.Clients;
+using BudgetUnderControl.Modules.Users.Infrastructure.Clients.Requests;
 
 namespace BudgetUnderControl.Modules.Users.Infrastructure.Services
 {
@@ -21,15 +23,17 @@ namespace BudgetUnderControl.Modules.Users.Infrastructure.Services
         private readonly IEncrypter _encryptor;
         private readonly IJwtHandlerService _jwtHandlerService;
         private readonly ITokenRepository _tokenRepository;
+        private readonly INotificationsApiClient _notificationsApiClient;
         public UserService(IUserRepository userRepository, IEncrypter encryptor,
             IJwtHandlerService jwtHandlerService,
             IMemoryCache cache,
-            IMapper mapper, ITokenRepository tokenRepository)
+            IMapper mapper, ITokenRepository tokenRepository, INotificationsApiClient notificationsApiClient)
         {
             this._userRepository = userRepository;
             this._encryptor = encryptor;
             this._jwtHandlerService = jwtHandlerService;
             this._tokenRepository = tokenRepository;
+            _notificationsApiClient = notificationsApiClient;
         }
 
         public async Task<string> ValidateLoginAsync(string username, string password)
@@ -67,7 +71,8 @@ namespace BudgetUnderControl.Modules.Users.Infrastructure.Services
              var activationToken = Token.Create(TokenType.Activation, user.Id, DateTime.UtcNow.AddDays(1));
             await  _tokenRepository.AddAsync(activationToken);
 
-            //await this.notificationService.SendRegisterNotificationAsync(this.mapper.Map<UserDTO>(user), activationToken.Code);
+            await this._notificationsApiClient.CreateActivateUserNotificationAsync(
+                new CreateActivateUserNotification(user.Id, user.FirstName, user.LastName, user.Email, activationToken.Code));
             return token;
         }
 
@@ -81,7 +86,8 @@ namespace BudgetUnderControl.Modules.Users.Infrastructure.Services
                         var activationToken = Token.Create(TokenType.Activation, user.Id, DateTime.UtcNow.AddDays(1));
                         await _tokenRepository.AddAsync(activationToken);
             
-            // await this.notificationService.SendRegisterNotificationAsync(this.mapper.Map<UserDTO>(user), activationToken.Code);
+                        await this._notificationsApiClient.CreateActivateUserNotificationAsync(
+                            new CreateActivateUserNotification(user.Id, user.FirstName, user.LastName, user.Email, activationToken.Code));
         }
 
         public async Task<bool> ActivateUserAsync(Guid userId, string code)

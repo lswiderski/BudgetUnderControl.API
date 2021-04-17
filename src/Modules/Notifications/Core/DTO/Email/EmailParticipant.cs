@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BudgetUnderControl.Common.Contracts.Email
+﻿namespace BudgetUnderControl.Modules.Notifications.Core.DTO.Email
 {
     public class EmailParticipant
     {

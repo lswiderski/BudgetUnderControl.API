@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
+using BudgetUnderControl.Modules.Users.Infrastructure.Clients;
+using BudgetUnderControl.Modules.Users.Infrastructure.Clients.Requests;
 using BudgetUnderControl.Modules.Users.Infrastructure.DataAccess;
 
 namespace BudgetUnderControl.Modules.Users.Infrastructure
@@ -17,6 +19,7 @@ namespace BudgetUnderControl.Modules.Users.Infrastructure
             services
 
                .AddAutoMapper(typeof(UserProfile))
+               .AddSingleton<INotificationsApiClient, NotificationsApiClient>()
                .AddDbContext<UsersDbContext>(x => x.UseSqlServer(connectionString));
 
             return services;

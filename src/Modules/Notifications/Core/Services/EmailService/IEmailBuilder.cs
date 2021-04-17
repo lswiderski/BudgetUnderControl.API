@@ -1,6 +1,6 @@
-﻿using BudgetUnderControl.Common.Contracts.Email;
+﻿using BudgetUnderControl.Modules.Notifications.Core.DTO.Email;
 
-namespace BudgetUnderControl.Modules.Transactions.Application.Services
+namespace BudgetUnderControl.Modules.Notifications.Core.Services.EmailService
 {
     public interface IEmailBuilder : IFrom, ITo, IAfterTo, IContent, IAfterCc
     {

@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace BudgetUnderControl.Common.Contracts.Email
+namespace BudgetUnderControl.Modules.Notifications.Core.DTO.Email
 {
     public class EmailMessage
     {

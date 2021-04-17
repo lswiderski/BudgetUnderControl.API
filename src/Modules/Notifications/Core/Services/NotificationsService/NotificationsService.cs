@@ -1,19 +1,15 @@
-﻿using BudgetUnderControl.ApiInfrastructure.Services.EmailService.Contracts;
-using BudgetUnderControl.Modules.Transactions.Application.DTO;
-using BudgetUnderControl.Domain.Repositiories;
+﻿using System.Threading.Tasks;
+using BudgetUnderControl.Modules.Notifications.Core.Services.EmailService;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+using Core.Services.EmailService.Contracts;
 
-namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
+namespace BudgetUnderControl.Modules.Notifications.Core.Services.NotificationsService
 {
-    public class NotificationService : INotificationService
+    public class NotificationsService : INotificationsService
     {
         private readonly IEmailService emailService;
         private readonly EmailModuleSettings settings;
-        public NotificationService(IEmailService emailService, EmailModuleSettings settings)
+        public NotificationsService(IEmailService emailService, EmailModuleSettings settings)
         {
             this.emailService = emailService;
             this.settings = settings;
