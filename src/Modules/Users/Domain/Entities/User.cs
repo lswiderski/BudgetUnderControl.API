@@ -27,7 +27,8 @@ namespace BudgetUnderControl.Modules.Users.Domain.Entities
         public bool IsDeleted { get; protected set; }
         public bool IsActivated { get; set; }
         public DateTime? ActivatedOn { get; protected set; }
-
+        
+        public  virtual ICollection<Token> Tokens { get; protected set; }
 
         protected User()
         {

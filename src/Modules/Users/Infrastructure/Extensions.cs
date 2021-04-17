@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
+using BudgetUnderControl.Modules.Users.Infrastructure.DataAccess;
 
 namespace BudgetUnderControl.Modules.Users.Infrastructure
 {

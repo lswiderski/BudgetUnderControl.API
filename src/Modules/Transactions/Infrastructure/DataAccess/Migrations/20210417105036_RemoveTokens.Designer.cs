@@ -4,14 +4,16 @@ using BudgetUnderControl.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace BudgetUnderControl.Migrations.SqlServer.Migrations
+namespace BudgetUnderControl.Modules.Transactions.Infrastructure.DataAccess.Migrations
 {
     [DbContext(typeof(TransactionsContext))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20210417105036_RemoveTokens")]
+    partial class RemoveTokens
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

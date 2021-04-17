@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using BudgetUnderControl.Modules.Users.Infrastructure.DataAccess;
 
 namespace BudgetUnderControl.Modules.Users.Infrastructure.Domain
 {

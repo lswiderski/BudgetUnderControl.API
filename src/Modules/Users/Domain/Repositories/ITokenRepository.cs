@@ -1,10 +1,9 @@
-﻿using BudgetUnderControl.Common.Enums;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
+using BudgetUnderControl.Modules.Users.Domain.Entities;
+using BudgetUnderControl.Modules.Users.Domain.Enums;
 
-namespace BudgetUnderControl.Domain.Repositiories
+namespace BudgetUnderControl.Modules.Users.Domain.Repositories
 {
     public interface ITokenRepository
     {

@@ -1,19 +1,13 @@
-﻿using System.IO;
-using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
-using System.Collections.Generic;
-using BudgetUnderControl.Common;
-using System;
-using BudgetUnderControl.Common.Enums;
-
-using System.Data.Common;
+﻿using System;
 using BudgetUnderControl.Modules.Users.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
-namespace BudgetUnderControl.Domain
+namespace BudgetUnderControl.Modules.Users.Infrastructure.DataAccess
 {
     public class UsersDbContext : DbContext, IDisposable
     {
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Token> Tokens { get; set; }
 
 
         public UsersDbContext(DbContextOptions<UsersDbContext> options) : base(options)
@@ -24,6 +18,14 @@ namespace BudgetUnderControl.Domain
         {
             modelBuilder.HasDefaultSchema("users");
             modelBuilder.Entity<User>().ToTable("User");
+            modelBuilder.Entity<Token>().ToTable("Token");
+            
+            
+            modelBuilder.Entity<Token>()
+                .HasOne(x => x.User)
+                .WithMany(y => y.Tokens)
+                .HasForeignKey(x => x.UserId)
+                .HasConstraintName("ForeignKey_Token_User");
         }
 
     }

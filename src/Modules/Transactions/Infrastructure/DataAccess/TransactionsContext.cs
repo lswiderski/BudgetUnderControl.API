@@ -21,12 +21,13 @@ namespace BudgetUnderControl.Domain
         public virtual DbSet<ExchangeRate> ExchangeRates { get; set; }
         public virtual DbSet<File> Files { get; set; }
         public virtual DbSet<FileToTransaction> FilesToTransactions { get; set; }
+        
         public virtual DbSet<Icon> Icons { get; set; }
         public virtual DbSet<Tag> Tags { get; set; }
         public virtual DbSet<TagToTransaction> TagsToTransactions { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
         public virtual DbSet<Transfer> Transfers { get; set; }
-        public virtual DbSet<Token> Tokens { get; set; }
+       
         public virtual DbSet<Synchronization> Synchronizations { get; set; }
 
         protected TransactionsContext()
@@ -55,7 +56,7 @@ namespace BudgetUnderControl.Domain
             modelBuilder.Entity<Transaction>().ToTable("Transaction");
             modelBuilder.Entity<Transfer>().ToTable("Transfer");
             modelBuilder.Entity<Synchronization>().ToTable("Synchronization");
-            modelBuilder.Entity<Token>().ToTable("Token");
+
 
             modelBuilder.Entity<Account>()
                 .HasOne(x => x.AccountGroup)
