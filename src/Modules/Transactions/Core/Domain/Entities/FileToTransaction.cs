@@ -12,8 +12,7 @@ namespace BudgetUnderControl.Domain
         public Guid Id { get; set; }
         public Guid FileId { get; set; }
         public int TransactionId { get; set; }
-
-        public File File { get; set; }
+        
         public Transaction Transaction { get; set; }
 
         public DateTime? ModifiedOn { get; set; }

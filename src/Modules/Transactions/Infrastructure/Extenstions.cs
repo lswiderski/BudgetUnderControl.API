@@ -8,6 +8,8 @@ using BudgetUnderControl.Modules.Transactions.Infrastructure.Clients;
 using BudgetUnderControl.Modules.Transactions.Application.Clients.Users;
 using Microsoft.EntityFrameworkCore;
 using BudgetUnderControl.Domain;
+using BudgetUnderControl.Modules.Transactions.Application.Clients.Files;
+using BudgetUnderControl.Modules.Transactions.Infrastructure.Clients.Files;
 using BudgetUnderControl.Modules.Transactions.Infrastructure.Profiles.Transaction;
 
 namespace BudgetUnderControl.Modules.Transactions.Infrastructure
@@ -20,6 +22,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure
             services
                  .AddAutoMapper(typeof(TransactionsFilterProfile))
                 .AddSingleton<IUsersApiClient, UsersApiClient>()
+                 .AddSingleton<IFilesApiClient, FilesApiClient>()
                 .AddDbContext<TransactionsContext>(x => x.UseSqlServer(connectionString));
 
             return services;

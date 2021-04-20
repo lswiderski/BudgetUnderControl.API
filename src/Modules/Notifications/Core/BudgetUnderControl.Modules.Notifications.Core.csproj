@@ -5,7 +5,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Folder Include="DAL\Migrations" />
+      <Folder Include="DAL\Repositories" />
       <Folder Include="DTO" />
+      <Folder Include="Entities" />
     </ItemGroup>
 
     <ItemGroup>

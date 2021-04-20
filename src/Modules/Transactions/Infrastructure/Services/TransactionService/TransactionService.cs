@@ -14,6 +14,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using BudgetUnderControl.Modules.Transactions.Core.ValueObjects;
 using AutoMapper;
+using BudgetUnderControl.Modules.Transactions.Application.Clients.Files;
 using BudgetUnderControl.Modules.Transactions.Application.Transactions.EditTransaction;
 using BudgetUnderControl.Modules.Transactions.Application.Transactions.AddTransaction;
 using BudgetUnderControl.Modules.Transactions.Application.Services;
@@ -27,29 +28,27 @@ namespace BudgetUnderControl.Infrastructure.Services
     {
         private readonly ITransactionRepository transactionRepository;
         private readonly ITagRepository tagRepository;
-        private readonly IFileService fileService;
         private readonly ICurrencyService currencyService;
         private readonly ICurrencyRepository currencyRepository;
         private readonly IMapper mapper;
         private readonly TransactionsContext transactionsContext;
         private readonly IContext context;
+        private readonly IFilesApiClient _filesApiClient;
 
         public TransactionService(TransactionsContext transactionsContext,
             ITransactionRepository transactionRepository,
             ITagRepository tagRepository,
-            IFileService fileService,
             ICurrencyService currencyService,
             ICurrencyRepository currencyRepository,
             IMapper mapper,
-            IContext context
-             )
+            IContext context, IFilesApiClient filesApiClient)
         {
             this.transactionRepository = transactionRepository;
             this.tagRepository = tagRepository;
-            this.fileService = fileService;
             this.currencyService = currencyService;
             this.currencyRepository = currencyRepository;
             this.context = context;
+            _filesApiClient = filesApiClient;
             this.transactionsContext = transactionsContext;
             this.mapper = mapper;
         }
@@ -244,39 +243,37 @@ namespace BudgetUnderControl.Infrastructure.Services
 
         private async Task MergeFiles(string fileGuid, Transaction firstTransaction)
         {
-            var _fileGuid = !string.IsNullOrWhiteSpace(fileGuid) ? Guid.Parse(fileGuid) : (Guid?)null;
+            var fileId = !string.IsNullOrWhiteSpace(fileGuid) ? Guid.Parse(fileGuid) : (Guid?)null;
             var now = DateTime.UtcNow;
-            var file = await this.transactionsContext.Files.Where(x => x.Id == _fileGuid).FirstOrDefaultAsync();
-            var currentFile = firstTransaction.FilesToTransaction?.Where(x => !x.IsDeleted).Select(x => x.File).FirstOrDefault();
+            var currentFileId = firstTransaction.FilesToTransaction?.Where(x => !x.IsDeleted).Select(x => x.FileId).FirstOrDefault();
 
-            if (file != null && currentFile != null)
+            if (fileId != null && currentFileId != null)
             {
-                if (file.ExternalId != currentFile.ExternalId)
+                if (fileId != currentFileId)  //remove local physical file
                 {
-                    currentFile.Delete();
-                    var f2ts = this.transactionsContext.FilesToTransactions.Where(x => x.FileId == currentFile.Id || x.TransactionId == firstTransaction.Id).ToList();
-                    f2ts.ForEach(x => x.Delete());
+                    await _filesApiClient.DeleteFileAsync(currentFileId.Value);
+                    var f2Ts = this.transactionsContext.FilesToTransactions.Where(x => x.FileId == currentFileId || x.TransactionId == firstTransaction.Id).ToList();
+                    f2Ts.ForEach(x => x.Delete());
                     var guid = Guid.NewGuid();
                     this.transactionsContext.FilesToTransactions.Add(new FileToTransaction
                     {
-                        FileId = file.Id,
+                        FileId = fileId.Value,
                         TransactionId = firstTransaction.Id,
                         ModifiedOn = now,
                         IsDeleted = false,
                         ExternalId = guid,
                         Id = guid,
                     });
-
-                    //remove local physical file
+                   
                 }
             }
-            else if (file != null && currentFile == null)
+            else if (fileId != null) //assign to transaction
             {
                 var guid = Guid.NewGuid();
-                //assign to transaction
+                
                 this.transactionsContext.FilesToTransactions.Add(new FileToTransaction
                 {
-                    FileId = file.Id,
+                    FileId = fileId.Value,
                     TransactionId = firstTransaction.Id,
                     ModifiedOn = now,
                     IsDeleted = false,
@@ -284,18 +281,12 @@ namespace BudgetUnderControl.Infrastructure.Services
                     Id = guid,
                 });
             }
-            else if (file == null && currentFile != null)
+            else if (currentFileId != null) //remove old
             {
-                //remove old
-                currentFile.Delete();
-                var f2ts = this.transactionsContext.FilesToTransactions.Where(x => x.FileId == currentFile.Id || x.TransactionId == firstTransaction.Id).ToList();
-                f2ts.ForEach(x => x.Delete());
+                await _filesApiClient.DeleteFileAsync(currentFileId.Value);
+                var f2Ts = this.transactionsContext.FilesToTransactions.Where(x => x.FileId == currentFileId || x.TransactionId == firstTransaction.Id).ToList();
+                f2Ts.ForEach(x => x.Delete());
             }
-            else // both null
-            {
-
-            }
-
             await this.transactionsContext.SaveChangesAsync();
         }
 
@@ -314,7 +305,7 @@ namespace BudgetUnderControl.Infrastructure.Services
             var files = this.transactionsContext.FilesToTransactions.Where(x => x.TransactionId == firstTransaction.Id && !x.IsDeleted).Select(x => x.FileId).ToList();
             foreach (var fileId in files)
             {
-                await fileService.RemoveFileAsync(fileId);
+                await this.RemoveFileAsync(fileId);
             }
 
             if (transfer != null)
@@ -426,6 +417,16 @@ namespace BudgetUnderControl.Infrastructure.Services
             }
 
             return transaction;
+        }
+        
+        public async Task RemoveFileAsync(Guid id)
+        {
+            //check if user hass access
+            //TODO call filesModule to deletee= file
+            
+            var f2t = this.transactionsContext.FilesToTransactions.Where(x => x.FileId == id).ToList();
+            f2t.ForEach(x => x.Delete());
+            await this.transactionsContext.SaveChangesAsync();
         }
 
     }

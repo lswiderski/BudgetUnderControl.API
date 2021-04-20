@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BudgetUnderControl.Modules.Transactions.Application.Services;
 using BudgetUnderControl.Domain;
+using BudgetUnderControl.Modules.Transactions.Application.Clients.Files;
 using Microsoft.EntityFrameworkCore;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
 using BudgetUnderControl.Modules.Transactions.Core.ValueObjects;
@@ -28,9 +29,9 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         private readonly IContext context;
         private readonly ITagRepository tagRepository;
         private readonly GeneralSettings settings;
-        private readonly IFileService fileService;
         private readonly TransactionsContext transactionsContext;
         private readonly IUsersApiClient userApiClient;
+        private readonly IFilesApiClient _filesApiClient;
 
         private readonly int _oldHardcodedUserIdForXamarinSyncWork = 1; // remove after change xamarin code
 
@@ -44,8 +45,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             ITagRepository tagRepository,
             ILogger<SyncRequestBuilder> logger,
             GeneralSettings settings,
-            IFileService fileService,
-            IUsersApiClient userApiClient) 
+            IUsersApiClient userApiClient, IFilesApiClient filesApiClient) 
         {
             this.transactionRepository = transactionRepository;
             this.accountRepository = accountRepository;
@@ -57,9 +57,9 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             this.settings = settings;
             this.tagRepository = tagRepository;
             this.logger = logger;
-            this.fileService = fileService;
             this.transactionsContext = transactionContext;
             this.userApiClient = userApiClient;
+            _filesApiClient = filesApiClient;
         }
 
         public async Task<SyncRequest> CreateSyncRequestAsync(SynchronizationComponent source, SynchronizationComponent target)
@@ -296,25 +296,26 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 
         private async Task<IEnumerable<FileSyncDTO>> GetFilesToSyncAsync(DateTime changedSince)
         {
-            var files = await this.transactionsContext.Files
-                .Where(x => x.ModifiedOn >= changedSince && x.UserId == context.Identity.Id)
+            var files = (await this._filesApiClient.GetFilesAsync(context.Identity.Id, changedSince))
                 .Select(x => new FileSyncDTO
                 {
                     Id = x.Id,
-                    ExternalId = x.ExternalId,
-                    FileName = x.FileName,
+                    ExternalId = x.Id,
+                    FileName = x.Name,
                     ContentType = x.ContentType,
-                    UserId = x.UserId,
                     CreatedOn = x.CreatedOn,
                     ModifiedOn = x.ModifiedOn,
                     IsDeleted = x.IsDeleted,
-                }).ToListAsync();
+                    UserId = context.Identity.Id,
+                })
+                .ToList();
 
             for (int i = 0; i < files.Count; i++)
             {
                 if(!files[i].IsDeleted)
                 {
-                    files[i].Content = await fileService.GetFileBytesAsync(files[i].Id);
+                    //TODO get file form filesAPI or rather get files by range ids or just publish events
+                    files[i].Content = await _filesApiClient.GetFileContentAsync(files[i].Id);
                 }
                 
             }

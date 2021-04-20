@@ -38,4 +38,8 @@
     <ProjectReference Include="..\Application\BudgetUnderControl.Modules.Transactions.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\FileService" />
+  </ItemGroup>
+
 </Project>

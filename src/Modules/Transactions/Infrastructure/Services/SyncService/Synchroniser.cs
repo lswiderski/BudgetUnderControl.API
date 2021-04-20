@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BudgetUnderControl.Modules.Transactions.Application.Clients.Files;
+using BudgetUnderControl.Modules.Transactions.Application.Clients.Files.DTO;
 using BudgetUnderControl.Modules.Transactions.Application.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -24,9 +26,9 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         private readonly IContext context;
         private readonly ITagRepository tagRepository;
         private readonly ITransactionService transactionService;
-        private readonly IFileService fileService;
         private Dictionary<Guid, int> _tags;
         private readonly TransactionsContext transactionsContext;
+        private readonly IFilesApiClient _filesApiClient;
 
         public Synchroniser(TransactionsContext transactionsContext, ITransactionRepository transactionRepository,
             IAccountRepository accountRepository,
@@ -37,8 +39,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             IContext context,
             ITagRepository tagRepository,
             ITransactionService transactionService,
-            ILogger<Synchroniser> logger,
-            IFileService fileService)
+            ILogger<Synchroniser> logger, IFilesApiClient filesApiClient)
         {
             this.transactionRepository = transactionRepository;
             this.accountRepository = accountRepository;
@@ -50,7 +51,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             this.tagRepository = tagRepository;
             this.transactionService = transactionService;
             this.logger = logger;
-            this.fileService = fileService;
+            _filesApiClient = filesApiClient;
             this.transactionsContext = transactionsContext;
         }
 
@@ -420,42 +421,31 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             foreach (var file in files)
             {
 
-                var fileToUpdate = await this.transactionsContext.Files.Where(x => x.Id == file.ExternalId).FirstOrDefaultAsync();
+                var fileToUpdate = await this.transactionsContext.FilesToTransactions.Where(x => x.FileId == file.ExternalId).FirstOrDefaultAsync();
                 if (fileToUpdate != null)
                 {
                     if (fileToUpdate.ModifiedOn < file.ModifiedOn)
                     {
                         if (file.IsDeleted)
                         {
-                            this.fileService.RemoveFileContent(file.Id, context.Identity.Id, file.CreatedOn);
-                        }
-                        fileToUpdate.FileName = file.FileName;
-                        fileToUpdate.ContentType = file.ContentType;
-                        fileToUpdate.Delete(file.IsDeleted);
-                        fileToUpdate.SetModifiedOn(file.ModifiedOn);
-                        this.transactionsContext.Files.Update(fileToUpdate);
+                            // TODO removeFile from filesAPI
+                            await _filesApiClient.DeleteFileAsync(file.ExternalId);
+                        } 
+                        //there is no update
+                      //  fileToUpdate.FileName = file.FileName;
+                      //  fileToUpdate.ContentType = file.ContentType;
+                      //  fileToUpdate.Delete(file.IsDeleted);
+                      //  fileToUpdate.SetModifiedOn(file.ModifiedOn);
+                      //  this.transactionsContext.Files.Update(fileToUpdate);
                     }
                 }
                 else
                 {
-                    var fileToAdd = new File
-                    {
-                        ContentType = file.ContentType,
-                        IsDeleted = file.IsDeleted,
-                        CreatedOn = file.CreatedOn,
-                        ExternalId = file.ExternalId,
-                        FileName = file.FileName,
-                        ModifiedOn = file.ModifiedOn,
-                        UserId = context.Identity.Id,
-                        Id = file.Id,
-                    };
-                    fileToAdd.Delete(file.IsDeleted);
-                    fileToAdd.SetModifiedOn(file.ModifiedOn);
-                    await this.transactionsContext.Files.AddAsync(fileToAdd);
-
+                  
                     if(!file.IsDeleted && file.Content != null)
                     {
-                        await fileService.SaveFileAsync(file.Content, fileToAdd.Id, fileToAdd.CreatedOn);
+                        await  _filesApiClient.CreateFileAsync(new CreateFileRequest(file.Id, file.FileName,
+                            context.Identity.Id, file.CreatedOn, file.ContentType, file.Content, file.ModifiedOn));
                     }
                    
                 }

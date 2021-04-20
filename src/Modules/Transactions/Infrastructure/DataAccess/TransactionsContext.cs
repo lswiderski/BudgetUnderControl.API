@@ -19,7 +19,6 @@ namespace BudgetUnderControl.Domain
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Currency> Currencies { get; set; }
         public virtual DbSet<ExchangeRate> ExchangeRates { get; set; }
-        public virtual DbSet<File> Files { get; set; }
         public virtual DbSet<FileToTransaction> FilesToTransactions { get; set; }
         
         public virtual DbSet<Icon> Icons { get; set; }
@@ -48,7 +47,6 @@ namespace BudgetUnderControl.Domain
             modelBuilder.Entity<Category>().ToTable("Category");
             modelBuilder.Entity<Currency>().ToTable("Currency");
             modelBuilder.Entity<ExchangeRate>().ToTable("ExchangeRate");
-            modelBuilder.Entity<File>().ToTable("File");
             modelBuilder.Entity<FileToTransaction>().ToTable("FileToTransaction");
             modelBuilder.Entity<Icon>().ToTable("Icon");
             modelBuilder.Entity<Tag>().ToTable("Tag");
@@ -140,12 +138,6 @@ namespace BudgetUnderControl.Domain
                 .HasOne(x => x.PreviousAccountSnapshot)
                 .WithMany()
                 .HasForeignKey(e => e.PreviousAccountSnapshotId);
-
-            modelBuilder.Entity<FileToTransaction>()
-              .HasOne(x => x.File)
-              .WithMany(y => y.FileToTransactions)
-              .HasForeignKey(x => x.FileId)
-              .HasConstraintName("ForeignKey_FileToTransaction_File");
 
             modelBuilder.Entity<FileToTransaction>()
                .HasOne(x => x.Transaction)
