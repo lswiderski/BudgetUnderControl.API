@@ -45,7 +45,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             ITagRepository tagRepository,
             ILogger<SyncRequestBuilder> logger,
             GeneralSettings settings,
-            IUsersApiClient userApiClient, IFilesApiClient filesApiClient) 
+            IUsersApiClient userApiClient, IFilesApiClient filesApiClient)
         {
             this.transactionRepository = transactionRepository;
             this.accountRepository = accountRepository;
@@ -296,31 +296,37 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 
         private async Task<IEnumerable<FileSyncDTO>> GetFilesToSyncAsync(DateTime changedSince)
         {
-            var files = (await this._filesApiClient.GetFilesAsync(context.Identity.Id, changedSince))
-                .Select(x => new FileSyncDTO
-                {
-                    Id = x.Id,
-                    ExternalId = x.Id,
-                    FileName = x.Name,
-                    ContentType = x.ContentType,
-                    CreatedOn = x.CreatedOn,
-                    ModifiedOn = x.ModifiedOn,
-                    IsDeleted = x.IsDeleted,
-                    UserId = context.Identity.Id,
-                })
-                .ToList();
-
-            for (int i = 0; i < files.Count; i++)
+            var filesFromModule = (await this._filesApiClient.GetFilesAsync(context.Identity.Id, changedSince));
+            if (filesFromModule != null)
             {
-                if(!files[i].IsDeleted)
+                var files = filesFromModule
+                    .Select(x => new FileSyncDTO
+                    {
+                        Id = x.Id,
+                        ExternalId = x.Id,
+                        FileName = x.Name,
+                        ContentType = x.ContentType,
+                        CreatedOn = x.CreatedOn,
+                        ModifiedOn = x.ModifiedOn,
+                        IsDeleted = x.IsDeleted,
+                        UserId = context.Identity.Id,
+                    })
+                    .ToList();
+
+                for (int i = 0; i < files.Count; i++)
                 {
-                    //TODO get file form filesAPI or rather get files by range ids or just publish events
-                    files[i].Content = await _filesApiClient.GetFileContentAsync(files[i].Id);
+                    if (!files[i].IsDeleted)
+                    {
+                        //TODO get file form filesAPI or rather get files by range ids or just publish events
+                        files[i].Content = await _filesApiClient.GetFileContentAsync(files[i].Id);
+                    }
+
                 }
-                
+
+                return files;
             }
 
-            return files;
+            return new List<FileSyncDTO>();
         }
 
         private async Task<IEnumerable<ExchangeRateSyncDTO>> GetExhangeRatesToSyncAsync()
