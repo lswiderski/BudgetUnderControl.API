@@ -33,8 +33,6 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         private readonly IUsersApiClient userApiClient;
         private readonly IFilesApiClient _filesApiClient;
 
-        private readonly int _oldHardcodedUserIdForXamarinSyncWork = 1; // remove after change xamarin code
-
         public SyncRequestBuilder(TransactionsContext transactionContext, ITransactionRepository transactionRepository,
             IAccountRepository accountRepository,
             ICurrencyRepository currencyRepository,
@@ -218,7 +216,6 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                     Name = x.Name,
                     ModifiedOn = x.ModifiedOn,
                     IsDeleted = x.IsDeleted,
-                    OwnerId = _oldHardcodedUserIdForXamarinSyncWork,
                 }).ToList();
 
             var userExternalId = context.Identity.Id;
@@ -243,7 +240,6 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                 Email = user.Email,
                 ModifiedOn = user.ModifiedOn,
                 CreatedAt = user.CreatedAt,
-                Id = _oldHardcodedUserIdForXamarinSyncWork,
                 IsDeleted = user.IsDeleted,
                 Role = user.Role.ToString(),
                 Username = user.Username
@@ -265,7 +261,6 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                     ModifiedOn = x.ModifiedOn,
                     IsDeleted = x.IsDeleted,
                     Icon = x.Icon,
-                    OwnerId = _oldHardcodedUserIdForXamarinSyncWork,
                 }).ToList();
 
             var userExternalId = context.Identity.Id;
