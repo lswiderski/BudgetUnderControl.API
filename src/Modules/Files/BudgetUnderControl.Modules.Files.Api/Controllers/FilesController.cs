@@ -20,7 +20,6 @@ namespace BudgetUnderControl.Modules.Files.Api.Controllers
         public FilesController(IFilesModule filesModule)
         {
             this.filesModule = filesModule;
-            filesModule = filesModule;
         }
 
 

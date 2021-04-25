@@ -54,6 +54,20 @@ namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
             return Ok(token);
         }
 
+        [HttpPost("AdminAuthenticate")]
+        public async Task<IActionResult> AdminLogin([FromBody] AuthenticateCommand command)
+        {
+
+            var token = await _usersModule.ExecuteCommandAsync(command);
+
+            if (string.IsNullOrEmpty(token) || string.IsNullOrWhiteSpace(token))
+            {
+                return Unauthorized();
+            }
+
+            return Ok(new { AccessToken = token });
+        }
+
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] CreateNewUserCommand command)
         {
