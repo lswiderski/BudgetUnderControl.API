@@ -13,7 +13,7 @@ namespace BudgetUnderControl.Modules.Users.Application.Commands.Users.UpdateUser
             LastName = lastname;
             Role = role;
             Email = email;
-            ExternalId = userId;
+            UserId = userId;
             IsActivated = isActivated;
         }
 
@@ -27,7 +27,7 @@ namespace BudgetUnderControl.Modules.Users.Application.Commands.Users.UpdateUser
         public string LastName { get; set; }
         public UserRole Role { get; set; }
         public string Email { get; set; }
-        public Guid ExternalId { get; set; }
+        public Guid UserId { get; set; }
         public bool IsActivated { get; set; }
     }
 }

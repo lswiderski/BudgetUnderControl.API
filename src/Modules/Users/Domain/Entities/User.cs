@@ -106,5 +106,18 @@ namespace BudgetUnderControl.Modules.Users.Domain.Entities
 
             return false;
         }
+
+        public bool Deactivate()
+        {
+            if (this.IsActivated)
+            {
+                this.IsActivated = false;
+                this.ActivatedOn = null;
+                this.UpdateModify();
+                return true;
+            }
+
+            return false;
+        }
     }
 }

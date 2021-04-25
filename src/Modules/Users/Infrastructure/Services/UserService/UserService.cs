@@ -142,14 +142,24 @@ namespace BudgetUnderControl.Modules.Users.Infrastructure.Services
 
         public async Task EditUserAsync(UpdateUserCommand command)
         {
-            var user = await this._userRepository.GetAsync(command.ExternalId);
+            var user = await this._userRepository.GetAsync(command.UserId);
 
             user.LastName = command.LastName;
             user.FirstName = command.FirstName;
             user.EditEmail(command.Email);
             user.EditUsername(command.Username);
             user.EditRole(command.Role);
+            if(command.IsActivated)
+            {
+                user.Activate();
+               
+            }
+            else
+            {
+                user.Deactivate();
+            }
 
+            
             await this._userRepository.UpdateUserAsync(user);
         }
     }

@@ -34,7 +34,7 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Users.Upd
         {
             var user = await userRepository.GetAsync(name);
 
-            if (user != null && user.Id != command.ExternalId)
+            if (user != null && user.Id != command.UserId)
             {
                 return false;
             }
@@ -49,7 +49,7 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Users.Upd
             }
             var user = await userRepository.GetByEmailAsync(email.ToLower());
 
-            if (user != null && user.Id != command.ExternalId)
+            if (user != null && user.Id != command.UserId)
             {
                 return false;
             }

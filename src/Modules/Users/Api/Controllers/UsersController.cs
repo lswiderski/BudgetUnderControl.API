@@ -100,6 +100,7 @@ namespace BudgetUnderControl.Modules.Users.Api.Controllers
         [Authorize(Policy = UsersPolicy.Admins)]
         public async Task<IActionResult> Put(Guid id, [FromBody] UpdateUserCommand command)
         {
+            command.UserId = id;
             await _usersModule.ExecuteCommandAsync(command);
             return NoContent();
         }
