@@ -14,8 +14,12 @@ namespace BudgetUnderControl.Modules.Users.Profiles
         {
             CreateMap<User, UserDTO>()
                 .ForMember(dest => dest.Role, opt => opt.MapFrom(s => Enum.Parse<UserRole>(s.Role)))
-                .ForMember(dest => dest.RoleName, opt => opt.MapFrom(s => s.Role));
-            CreateMap<User, UserListItemDTO>();
+                .ForMember(dest => dest.RoleName, opt => opt.MapFrom(s => s.Role))
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(s => s.Id));
+            CreateMap<User, UserListItemDTO>()
+              .ForMember(dest => dest.Role, opt => opt.MapFrom(s => Enum.Parse<UserRole>(s.Role)))
+                .ForMember(dest => dest.RoleName, opt => opt.MapFrom(s => s.Role))
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(s => s.Id));
         }
 
     }
