@@ -36,22 +36,33 @@ namespace BudgetUnderControl.Modules.Users.Infrastructure.Services
             _notificationsApiClient = notificationsApiClient;
         }
 
-        public async Task<string> ValidateLoginAsync(string username, string password)
+        public async Task<Guid?> ValidateLoginAsync(string username, string password)
         {
             var user = await _userRepository.GetAsync(username);
 
             if (user == null)
             {
-                return string.Empty;
+                return null;
             }
 
             var hash = _encryptor.GetHash(password, user.Salt);
 
             if (hash != user.Password)
             {
-                return string.Empty;
+                return null;
             }
 
+            if(user.IsDeleted)
+            {
+                return null;
+            }
+
+            return user.Id;
+        }
+
+        public async Task<string> CreateAccessTokenAsync(Guid userId)
+        {
+            var user = await _userRepository.GetAsync(userId);
             var token = _jwtHandlerService.CreateToken(user);
 
             return token;

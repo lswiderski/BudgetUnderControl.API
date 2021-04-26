@@ -1,4 +1,5 @@
 ﻿using BudgetUnderControl.Modules.Users.Application.Commands.Login.Authenticate;
+using BudgetUnderControl.Modules.Users.Application.Commands.Login.AuthenticateAdmin;
 using BudgetUnderControl.Modules.Users.Application.Commands.Login.CreateNewUser;
 using BudgetUnderControl.Modules.Users.Application.Contracts;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
@@ -55,7 +56,7 @@ namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
         }
 
         [HttpPost("AdminAuthenticate")]
-        public async Task<IActionResult> AdminLogin([FromBody] AuthenticateCommand command)
+        public async Task<IActionResult> AdminLogin([FromBody] AuthenticateAdminCommand command)
         {
 
             var token = await _usersModule.ExecuteCommandAsync(command);

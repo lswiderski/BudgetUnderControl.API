@@ -9,7 +9,9 @@ namespace BudgetUnderControl.Modules.Users.Application.Services
     {
         IUserIdentityContext CreateUserIdentityContext(string userId);
 
-        Task<string> ValidateLoginAsync(string username, string password);
+        Task<Guid?> ValidateLoginAsync(string username, string password);
+
+        Task<string> CreateAccessTokenAsync(Guid userId);
 
         Task<string> RegisterUserAsync(CreateNewUserCommand command);
 
