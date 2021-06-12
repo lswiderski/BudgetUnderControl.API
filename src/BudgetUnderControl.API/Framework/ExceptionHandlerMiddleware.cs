@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BudgetUnderControl.Shared.Infrastructure.Exceptions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
@@ -37,14 +38,21 @@ namespace BudgetUnderControl.API.Framework
         {
             this.logger.LogError(exception, string.Format("{0} Request: {2}{3} | StackTrace: {1}", exception.Message, exception.StackTrace, context.Request.Path.ToString(), context.Request.QueryString.ToString()));
             var errorCode = "error";
-            var statusCode = HttpStatusCode.InternalServerError;
-            var exceptionType = exception.GetType();
 
-            var response = new { code = errorCode, message = exception.Message };
-            var payload = JsonConvert.SerializeObject(response);
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)statusCode;
-            await context.Response.WriteAsJsonAsync(payload);
+
+            if (exception is ValidationCommandException)
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                var validationErrorResponse = new { code = errorCode, errorType = "Validation", message = "Validation Error", errors = ((ValidationCommandException)exception).Errors };
+                await context.Response.WriteAsJsonAsync(validationErrorResponse);
+            }
+            else
+            {
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                var response = new { code = errorCode, message = exception.Message };
+                await context.Response.WriteAsJsonAsync(response);
+            }
         }
     }
 }

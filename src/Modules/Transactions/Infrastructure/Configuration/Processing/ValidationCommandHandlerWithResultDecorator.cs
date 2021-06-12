@@ -1,6 +1,7 @@
 ﻿using BudgetUnderControl.Common.Extensions;
 using BudgetUnderControl.Shared.Application.CQRS.Configuration.Commands;
 using BudgetUnderControl.Shared.Application.CQRS.Contracts;
+using BudgetUnderControl.Shared.Infrastructure.Exceptions;
 using FluentValidation;
 using MediatR;
 using System;
@@ -36,7 +37,13 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration.P
 
             if (errors.Any())
             {
-                throw new InvalidCommandException(errors.Select(x => x.ErrorMessage).ToList());
+                throw new ValidationCommandException(errors.Select(x => new ValidationCommandExceptionError
+                {
+                    AttemptedValue = x.AttemptedValue,
+                    ErrorCode = x.ErrorCode,
+                    ErrorMessage = x.ErrorMessage,
+                    PropertyName = x.PropertyName
+                }).ToList());
             }
 
             return _decorated.Handle(command, cancellationToken);
