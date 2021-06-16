@@ -21,6 +21,7 @@ using BudgetUnderControl.Shared.Abstractions.Modules;
 using System.Reflection;
 using Microsoft.Extensions.Options;
 using BudgetUnderControl.Shared.Infrastructure;
+using System.Text.Json;
 
 namespace BudgetUnderControl.API
 {
@@ -64,11 +65,14 @@ namespace BudgetUnderControl.API
             services.AddMemoryCache();
             services.AddCors();
             services.AddOptions();
+
             services.AddControllers()
                 .SetCompatibilityVersion(CompatibilityVersion.Latest)
                 .AddJsonOptions(x =>
                 {
                     x.JsonSerializerOptions.WriteIndented = true;
+                    x.JsonSerializerOptions.NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowReadingFromString;
+                   // x.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
                 });
 
             Settings = Configuration.ConfigureSettings<GeneralSettings>(services);

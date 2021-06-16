@@ -8,7 +8,9 @@ namespace BudgetUnderControl.Shared.Infrastructure.Modules
     {
         private static readonly JsonSerializerOptions SerializerOptions = new()
         {
-            PropertyNameCaseInsensitive = true
+            PropertyNameCaseInsensitive = true,
+            WriteIndented = true,
+            NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowReadingFromString
         };
 
         public byte[] Serialize<T>(T value)
