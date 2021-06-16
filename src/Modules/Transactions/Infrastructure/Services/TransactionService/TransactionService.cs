@@ -245,7 +245,7 @@ namespace BudgetUnderControl.Infrastructure.Services
         {
             var fileId = !string.IsNullOrWhiteSpace(fileGuid) ? Guid.Parse(fileGuid) : (Guid?)null;
             var now = DateTime.UtcNow;
-            var currentFileId = firstTransaction.FilesToTransaction?.Where(x => !x.IsDeleted).Select(x => x.FileId).FirstOrDefault();
+            var currentFileId = this.transactionsContext.FilesToTransactions.Where(x => x.TransactionId == firstTransaction.Id && !x.IsDeleted).Select(x => (Guid?)x.FileId).FirstOrDefault();
 
             if (fileId != null && currentFileId != null)
             {
