@@ -21,6 +21,8 @@ namespace BudgetUnderControl.Modules.Transactions.Application.DTO
         public AccountType Type { get; set; }
         public int? ParentAccountId { get; set; }
         public int Order { get; set; }
+        
+        public bool IsActive { get; set; }
 
         public string AmountWithCurrency
         {

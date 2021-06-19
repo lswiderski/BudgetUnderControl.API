@@ -108,6 +108,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                 Type = account.Type,
                 ParentAccountId = account.ParentAccountId,
                 Order = account.Order,
+                IsActive= account.IsActive,
                 Income = await accountRepository.GetIncomeAsync(account.Id, filter.FromDate, filter.ToDate),
                 Expense = await accountRepository.GetExpenseAsync(account.Id, filter.FromDate, filter.ToDate),
                 Amount = await accountRepository.GetActualBalanceAsync(account.Id),

@@ -38,9 +38,9 @@ namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
             return Ok(currencies);
         }
 
-        // GET api/currencies/1
+        // GET api/accounts/552cbd7c-e9d9-46c9-ab7e-2b10ae38ab4a
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(AccountDetailsDTO), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(EditAccountDTO), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetById(Guid id)
         {
             var category = await this._transactionsModule.ExecuteQueryAsync(new GetAccountQuery(id));

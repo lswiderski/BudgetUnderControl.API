@@ -17,7 +17,7 @@ namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    class AccountGroupsController : ControllerBase
+    public class AccountGroupsController : ControllerBase
     {
         private readonly ITransactionsModule _transactionsModule;
 
@@ -34,7 +34,7 @@ namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
             return Ok(accounts);
         }
 
-        // GET api/currencies/1
+        // GET api/accountGroups/552cbd7c-e9d9-46c9-ab7e-2b10ae38ab4a
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(AccountGroupItemDTO), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetById(Guid id)
