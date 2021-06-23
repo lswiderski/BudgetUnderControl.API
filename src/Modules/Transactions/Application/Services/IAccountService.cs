@@ -12,7 +12,7 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Services
         Task ActivateAccountAsync(int id);
         Task DeactivateAccountAsync(int id);
 
-        Task<ICollection<AccountListItemDTO>> GetAccountsWithBalanceAsync();
+        Task<ICollection<AccountListItemDTO>> GetAccountsWithBalanceAsync(bool onlyActive);
         Task<EditAccountDTO> GetAccountAsync(Guid id);
         Task<AccountDetailsDTO> GetAccountDetailsAsync(TransactionsFilterDTO filter);
 

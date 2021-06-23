@@ -53,9 +53,9 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             return dto;
         }
 
-        public async Task<ICollection<AccountListItemDTO>> GetAccountsWithBalanceAsync()
+        public async Task<ICollection<AccountListItemDTO>> GetAccountsWithBalanceAsync(bool onlyActive)
         {
-            var accounts = await accountRepository.GetAccountsAsync(true);
+            var accounts = await accountRepository.GetAccountsAsync( onlyActive ? true : null);
 
             var accountsWithBalance = accounts.Select(y => new AccountListItemDTO
             {
@@ -67,6 +67,8 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                 IsIncludedInTotal = y.IsIncludedToTotal,
                 Name = y.Name,
                 ParentAccountId = y.ParentAccountId,
+                Order = y.Order,
+                IsActive =  y.IsActive,
 
             }).ToList();
 

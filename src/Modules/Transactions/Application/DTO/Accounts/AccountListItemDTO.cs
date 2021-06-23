@@ -13,6 +13,10 @@ namespace BudgetUnderControl.Modules.Transactions.Application.DTO
         public decimal Balance { get; set; }
         public bool IsIncludedInTotal { get; set; }
         public int? ParentAccountId { get; set; }
+        
+        public bool IsActive { get; set; }
+        
+        public int Order { get; set; }
         public string AmountWithCurrency
         {
             get

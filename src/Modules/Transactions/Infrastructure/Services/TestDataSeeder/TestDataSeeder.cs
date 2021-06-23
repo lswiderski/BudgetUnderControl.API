@@ -45,7 +45,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             };
            
 
-            var account = (await accountService.GetAccountsWithBalanceAsync()).First();
+            var account = (await accountService.GetAccountsWithBalanceAsync(true)).First();
             var categories = await categoryService.GetCategoriesAsync();
             Random random = new Random();
             for (int i = 0; i < 5; i++)

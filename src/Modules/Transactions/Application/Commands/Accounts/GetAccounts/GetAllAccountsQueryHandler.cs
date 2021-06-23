@@ -21,7 +21,7 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.
 
         public async Task<List<AccountListItemDTO>> Handle(GetAllAccountsQuery request, CancellationToken cancellationToken)
         {
-            var accounts = await this.accountService.GetAccountsWithBalanceAsync();
+            var accounts = await this.accountService.GetAccountsWithBalanceAsync(false);
             return accounts.ToList();
         }
     }
