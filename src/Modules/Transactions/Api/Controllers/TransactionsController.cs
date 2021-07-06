@@ -17,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
 using BudgetUnderControl.Modules.Transactions.Application.Contracts;
+using BudgetUnderControl.Modules.Transactions.Application.DTO.Transaction;
 using BudgetUnderControl.Shared.Abstractions.Contexts;
 
 namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
@@ -38,8 +39,8 @@ namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
         // GET api/Transactions
         [HttpGet]
         [Authorize(Policy = UsersPolicy.AllUsers)]
-        [ProducesResponseType(typeof(List<TransactionListItemDTO>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IEnumerable<TransactionListItemDTO>>> Get([FromQuery] TransactionsFilterDTO filter)
+        [ProducesResponseType(typeof(TransactionListDataSource), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<TransactionListDataSource>> Get([FromQuery] TransactionsFilterDTO filter)
         {
             var transactions = await _transactionsModule.ExecuteQueryAsync(new GetTransactionsQuery(filter));
             return Ok(transactions);
