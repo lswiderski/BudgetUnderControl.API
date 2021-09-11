@@ -30,7 +30,7 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Transactions.GetTr
             var result = new TransactionListDataSource
             {
                 Transactions = transactions,
-                NumberOfTransactions = request.Filters.AccountsIds != null && request.Filters.AccountsIds.Any()
+                NumberOfTransactions = request.Filters?.AccountsIds != null && request.Filters.AccountsIds.Any()
                     ? transactions.Count()
                     : transactions.Where(x => x.IsTransfer == false).Count(),
                 Balance = balance

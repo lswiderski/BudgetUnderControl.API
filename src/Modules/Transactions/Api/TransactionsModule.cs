@@ -2,11 +2,15 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using BudgetUnderControl.Modules.Transactions.Application;
+using BudgetUnderControl.Modules.Transactions.Application.Contracts;
+using BudgetUnderControl.Modules.Transactions.Application.DTO.Transaction;
 using BudgetUnderControl.Modules.Transactions.Application.Services;
+using BudgetUnderControl.Modules.Transactions.Application.Transactions.GetTransactions;
 using BudgetUnderControl.Modules.Transactions.Infrastructure;
 using BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration;
 using BudgetUnderControl.Modules.Transactions.Infrastructure.Services;
 using BudgetUnderControl.Shared.Abstractions.Modules;
+using BudgetUnderControl.Shared.Infrastructure.Modules;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -38,6 +42,10 @@ namespace BudgetUnderControl.Modules.Transactions.Api
         {
             app.UseApplication();
             app.UseInfrastructure();
+            
+            app.UseModuleRequests()
+                .Subscribe<GetTransactionsQuery, TransactionListDataSource> ("transactions/get",
+                (query, sp) => sp.GetRequiredService<ITransactionsModule>().ExecuteQueryAsync(query));
         }
     }
 }

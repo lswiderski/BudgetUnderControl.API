@@ -29,7 +29,7 @@ namespace BudgetUnderControl.Modules.Notifications.Core.Services.NotificationsSe
                 ActivationToken = code
             };
             var email = await emailService.CreateRegistrationEmailAsync(notificationArgs, subject, body);
-            emailService.SendEmail(email);
+            //emailService.SendEmail(email);
         }
     }
 }

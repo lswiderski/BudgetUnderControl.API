@@ -1,8 +1,8 @@
 ﻿using Autofac;
 
-namespace BudgetUnderControl.Modules.Users.Infrastructure.Configuration
+namespace BudgetUnderControl.Modules.Exporter.Application.Configuration
 {
-    internal static class UsersCompositionRoot
+    internal static class ExporterCompositionRoot
     {
         private static IContainer _container;
         private static ILifetimeScope _scope;

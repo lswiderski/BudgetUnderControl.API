@@ -1,7 +1,6 @@
 ﻿
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using NLog;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -68,6 +68,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Modules\Exporter\Api\BudgetUnderControl.Modules.Exporter.Api.csproj" />
     <ProjectReference Include="..\Modules\Files\BudgetUnderControl.Modules.Files.Api\BudgetUnderControl.Modules.Files.Api.csproj" />
     <ProjectReference Include="..\Modules\Notifications\Api\BudgetUnderControl.Modules.Notifications.Api.csproj" />
     <ProjectReference Include="..\Modules\Transactions\Api\BudgetUnderControl.Modules.Transactions.Api.csproj" />
