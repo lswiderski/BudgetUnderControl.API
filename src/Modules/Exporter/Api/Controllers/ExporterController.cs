@@ -2,10 +2,12 @@
 using BudgetUnderControl.Modules.Exporter.Application;
 using BudgetUnderControl.Modules.Exporter.Application.Commands.Transactions;
 using BudgetUnderControl.Modules.Exporter.Core.Clients.Transactions.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BudgetUnderControl.Modules.Exporter.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ExporterController: ControllerBase
