@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using BudgetUnderControl.Modules.Exporter.Core.Clients.Transactions.DTO;
@@ -8,50 +9,61 @@ using ClosedXML.Excel;
 
 namespace BudgetUnderControl.Modules.Exporter.Targets.Excel.Builders.Transactions
 {
-    public class TransactionsExcelCreator :  ITransacationsReportCreator
+    public class TransactionsExcelCreator : ITransacationsReportCreator
     {
-        public async Task<TransactionsReport> CreateReportAsync(ICollection<TransactionDTO> transactions)
+        public async Task<TransactionsReport> CreateReportAsync(ICollection<TransactionExportItemDto> transactions)
         {
             await Task.CompletedTask;
-            
+            var columns = new SortedList()
+            {
+                { 1, "Transaction Id" },
+                { 2, "Local Id" },
+                { 3, "Date" },
+                { 4, "Time" },
+                { 5, "Name" },
+                { 6, "Type" },
+                { 7, "Amount" },
+                { 8, "Currency" },
+                { 9, "Amount in Main Currency" },
+                { 10, "Category" },
+                { 11, "Account" },
+                { 12, "Is Transfer" },
+                { 13, "Comment" },
+                { 14, "Tags" },
+            };
+
             using (var workbook = new XLWorkbook())
             {
                 int row = 1;
                 IXLWorksheet worksheet =
                     workbook.Worksheets.Add("Transactions");
-                worksheet.Cell(row , 1).Value = "Transaction Id";
-                worksheet.Cell(row , 2).Value = "Is Transfer";
-                worksheet.Cell(row , 3).Value = "Date";
-                worksheet.Cell(row , 4).Value = "Times";
-                worksheet.Cell(row , 5).Value = "Name";
-                worksheet.Cell(row , 6).Value = "Amount";
-                worksheet.Cell(row , 7).Value = "Currency Code";
-                worksheet.Cell(row , 8).Value = "Category";
-                worksheet.Cell(row , 9).Value = "Type";
-                worksheet.Cell(row , 10).Value = "Account Name";
-                worksheet.Cell(row , 11).Value = "Tags";
-                for (int index = 1; index <= 11; index++)
+
+                for (int index = 1; index <= columns.Count; index++)
                 {
-                    worksheet.Cell(row , index).Style.Font.Bold = true;
+                    worksheet.Cell(row, index).Value = columns[index];
+                    worksheet.Cell(row, index).Style.Font.Bold = true;
                 }
 
-                
                 foreach (var transaction in transactions)
                 {
                     row++;
-                    worksheet.Cell(row, 1).Value = transaction.Id;
-                    worksheet.Cell(row, 2).Value = transaction.IsTransfer != null && transaction.IsTransfer.Value ? 1 : 0;
-                    worksheet.Cell(row, 3).Value = transaction.Date.ToLocalTime().ToString("dd/MM/yyyy");
-                    worksheet.Cell(row, 4).Value = transaction.Date.ToLocalTime().ToString("HH:mm");
-                    worksheet.Cell(row, 5).Value = transaction.Name;
-                    worksheet.Cell(row, 6).Value = transaction.Value;
-                    worksheet.Cell(row, 7).Value = transaction.CurrencyCode;
-                    worksheet.Cell(row, 8).Value = transaction.Category;
-                    worksheet.Cell(row, 9).Value = transaction.Type.ToString();
-                    worksheet.Cell(row, 10).Value = transaction.Account;
-                    worksheet.Cell(row, 11).Value = transaction.TagsJoined;
+                    var col = 1;
+                    worksheet.Cell(row, col++).Value = transaction.TransactionId;
+                    worksheet.Cell(row, col++).Value = transaction.Id;
+                    worksheet.Cell(row, col++).Value = transaction.Date.ToLocalTime().ToString("dd/MM/yyyy");
+                    worksheet.Cell(row, col++).Value = transaction.Date.ToLocalTime().ToString("HH:mm");
+                    worksheet.Cell(row, col++).Value = transaction.Name;
+                    worksheet.Cell(row, col++).Value = transaction.Type.ToString();
+                    worksheet.Cell(row, col++).Value = transaction.Value;
+                    worksheet.Cell(row, col++).Value = transaction.Currency;
+                    worksheet.Cell(row, col++).Value = transaction.ValueInMainCurrency;
+                    worksheet.Cell(row, col++).Value = transaction.CategoryName;
+                    worksheet.Cell(row, col++).Value = transaction.AccountName;
+                    worksheet.Cell(row, col++).Value = transaction.IsTransfer.ToString();
+                    worksheet.Cell(row, col++).Value = transaction.Comment;
+                    worksheet.Cell(row, col++).Value = transaction.TagsJoined;
                 }
-                
+
                 using (var stream = new MemoryStream())
                 {
                     workbook.SaveAs(stream);

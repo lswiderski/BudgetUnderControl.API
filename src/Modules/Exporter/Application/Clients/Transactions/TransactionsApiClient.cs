@@ -17,8 +17,8 @@ namespace BudgetUnderControl.Modules.Exporter.Application.Clients.Transactions
            _client = client;
        }
        
-       public  async Task<TransactionListDataSource> GetTransactionsAsync(Core.Clients.Transactions.Requests.GetTransactionsQuery query)
-           => await _client.SendAsync<TransactionListDataSource>("transactions/get", query);
+       public  async Task<ICollection<TransactionExportItemDto>> GetTransactionsAsync(Core.Clients.Transactions.Requests.GetTransactionsQuery query)
+           => await _client.SendAsync<ICollection<TransactionExportItemDto>>("transactions/getToExport", query);
        
    }
 }

@@ -26,10 +26,9 @@ namespace BudgetUnderControl.Modules.Exporter.Application.Commands.Transactions
             using (var scope = ExporterCompositionRoot.BeginLifetimeScope())
             {
                 var creator = scope.ResolveKeyed<ITransacationsReportCreator>(request.Type);
-                var result = await apiClient.GetTransactionsAsync(
+                var transactions = await apiClient.GetTransactionsAsync(
                     new Core.Clients.Transactions.Requests.GetTransactionsQuery(request.Filters ??
                         new Core.Clients.Transactions.DTO.TransactionsFilterDTO()));
-                var transactions = result.Transactions;
                 var report = await creator.CreateReportAsync(transactions);
 
                 return report;

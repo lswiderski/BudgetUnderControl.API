@@ -1,19 +1,16 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using BudgetUnderControl.Modules.Transactions.Application;
+using BudgetUnderControl.Modules.Transactions.Application.Commands.Transactions.GetTransactionsToExport;
 using BudgetUnderControl.Modules.Transactions.Application.Contracts;
 using BudgetUnderControl.Modules.Transactions.Application.DTO.Transaction;
-using BudgetUnderControl.Modules.Transactions.Application.Services;
 using BudgetUnderControl.Modules.Transactions.Application.Transactions.GetTransactions;
 using BudgetUnderControl.Modules.Transactions.Infrastructure;
 using BudgetUnderControl.Modules.Transactions.Infrastructure.Configuration;
-using BudgetUnderControl.Modules.Transactions.Infrastructure.Services;
 using BudgetUnderControl.Shared.Abstractions.Modules;
 using BudgetUnderControl.Shared.Infrastructure.Modules;
-using BudgetUnderControl.Shared.Infrastructure.Settings;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -45,6 +42,8 @@ namespace BudgetUnderControl.Modules.Transactions.Api
             
             app.UseModuleRequests()
                 .Subscribe<GetTransactionsQuery, TransactionListDataSource> ("transactions/get",
+                (query, sp) => sp.GetRequiredService<ITransactionsModule>().ExecuteQueryAsync(query))
+                .Subscribe<GetTransactionsToExportQuery, ICollection<TransactionExportItemDto>> ("transactions/getToExport",
                 (query, sp) => sp.GetRequiredService<ITransactionsModule>().ExecuteQueryAsync(query));
         }
     }

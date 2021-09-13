@@ -7,6 +7,6 @@ namespace BudgetUnderControl.Modules.Exporter.Core.Services
 {
     public interface ITransacationsReportCreator
     {
-        Task<TransactionsReport> CreateReportAsync(ICollection<TransactionDTO> transactions);
+        Task<TransactionsReport> CreateReportAsync(ICollection<TransactionExportItemDto> transactions);
     }
 }
