@@ -2,7 +2,6 @@
 using BudgetUnderControl.Common.Enums;
 using BudgetUnderControl.Domain;
 using BudgetUnderControl.Domain.Repositiories;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,9 +10,8 @@ using BudgetUnderControl.Shared.Abstractions.Contexts;
 
 namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 {
-    public partial class SyncService : ISyncService
+    public class SyncService : ISyncService
     {
-
         private readonly ITransactionRepository transactionRepository;
         private readonly IAccountRepository accountRepository;
         private readonly ICurrencyRepository currencyRepository;
@@ -92,23 +90,24 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                 ExternalId = x.ExternalId,
             }).ToList();
 
-            var transactions = (await this.transactionRepository.GetTransactionsAsync()).Select(x => new TransactionSyncDTO
-            {
-                Name = x.Name,
-                Comment = x.Comment,
-                AccountId = x.AccountId,
-                Amount = x.Amount,
-                CategoryId = x.CategoryId,
-                CreatedOn = x.CreatedOn,
-                Date = x.Date,
-                Id = x.Id,
-                ExternalId = x.ExternalId,
-                ModifiedOn = x.ModifiedOn,
-                Type = x.Type,
-                Latitude = x.Latitude,
-                Longitude = x.Longitude,
-                IsDeleted = x.IsDeleted,
-            }).ToList();
+            var transactions = (await this.transactionRepository.GetTransactionsAsync()).Select(x =>
+                new TransactionSyncDTO
+                {
+                    Name = x.Name,
+                    Comment = x.Comment,
+                    AccountId = x.AccountId,
+                    Amount = x.Amount,
+                    CategoryId = x.CategoryId,
+                    CreatedOn = x.CreatedOn,
+                    Date = x.Date,
+                    Id = x.Id,
+                    ExternalId = x.ExternalId,
+                    ModifiedOn = x.ModifiedOn,
+                    Type = x.Type,
+                    Latitude = x.Latitude,
+                    Longitude = x.Longitude,
+                    IsDeleted = x.IsDeleted,
+                }).ToList();
 
             var tags = (await this.tagRepository.GetAsync())
                 .Select(x => new TagSyncDTO
@@ -154,38 +153,6 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             return backUp;
         }
 
-        public async Task<IEnumerable<string>> GenerateCSV()
-        {
-            var transactions = (await this.transactionRepository.GetTransactionsAsync())
-                .Where(t => t.IsDeleted == false)
-               .Select(t => new
-               {
-                   AccountName = t.Account.Name,
-                   CurrencyCode = t.Account.Currency.Code,
-                   Amount = t.Amount,
-                   TransactionId = t.Id,
-                   Category = t.Category != null ? t.Category.Name : "",
-                   TransactionName = t.Name,
-                   Date = t.Date,
-                   Type = t.Type,
-                   Comment = t.Comment,
-                   Tags = string.Join(",",t.TagsToTransaction.Select(x => x.Tag.Name))
-               }).ToList();
-
-            var lines = new List<string>();
-            var firstLine = "TransactionId;Date;Time;Name;Amount;CurrencyCode;Category;Type;AccountName;Comment;Tags";
-            var csv = firstLine + Environment.NewLine;
-            lines.Add(firstLine);
-            foreach (var item in transactions)
-            {
-                var line = string.Format("{0};{1};{2};{3};{4};{5};{6};{7};{8};{9};{10}",
-                    item.TransactionId, item.Date.ToLocalTime().ToString("dd/MM/yyyy"), item.Date.ToLocalTime().ToString("HH:mm"), item.TransactionName, item.Amount, item.CurrencyCode, item.Category, item.Type.ToString(), item.AccountName, item.Comment, item.Tags);
-                lines.Add(line);
-                csv += line + Environment.NewLine;
-            }
-
-            return lines;
-        }
 
         public async Task CleanDataBaseAsync()
         {
@@ -207,10 +174,12 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         private async Task ImportAccountsAsync(List<AccountSyncDTO> accounts)
         {
             accountsMap = new Dictionary<int, int>();
-            
+
             foreach (var item in accounts)
             {
-                var account = Account.Create(item.Name, item.CurrencyId, item.AccountGroupId, item.IsIncludedToTotal, item.Comment, item.Order, item.Type, item.ParentAccountId, true, context.Identity.Id, item.ExternalId);
+                var account = Account.Create(item.Name, item.CurrencyId, item.AccountGroupId, item.IsIncludedToTotal,
+                    item.Comment, item.Order, item.Type, item.ParentAccountId, true, context.Identity.Id,
+                    item.ExternalId);
                 await this.accountRepository.AddAccountAsync(account);
 
                 accountsMap.Add(item.Id, account.Id);
@@ -231,7 +200,6 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                     accounts[i].SetParentAccountId(accountsMap[accounts[i].ParentAccountId.Value]);
 
                     await this.accountRepository.UpdateAsync(accounts[i]);
-
                 }
             }
         }
@@ -244,17 +212,21 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             foreach (var item in transactions)
             {
                 int? categoryId = null;
-                if(categories.Any(x => x.Id == item.CategoryId))
+                if (categories.Any(x => x.Id == item.CategoryId))
                 {
                     categoryId = item.CategoryId;
                 }
-                var transaction = Domain.Transaction.Create(accountsMap[item.AccountId], item.Type, item.Amount, item.Date, item.Name, item.Comment, context.Identity.Id, item.IsDeleted, categoryId, item.ExternalId, item.Latitude, item.Longitude);
+
+                var transaction = Domain.Transaction.Create(accountsMap[item.AccountId], item.Type, item.Amount,
+                    item.Date, item.Name, item.Comment, context.Identity.Id, item.IsDeleted, categoryId,
+                    item.ExternalId, item.Latitude, item.Longitude);
                 transaction.SetCreatedOn(item.CreatedOn);
                 transaction.SetModifiedOn(item.ModifiedOn);
                 tempTransactionsMap.Add(item.Id, transaction);
                 //await this.transactionRepository.AddTransactionAsync(transaction);
                 //transactionsMap.Add(item.Id, transaction.Id);
             }
+
             await this.transactionRepository.AddTransactionsAsync(tempTransactionsMap.Select(x => x.Value));
             transactionsMap = tempTransactionsMap.ToDictionary(x => x.Key, x => x.Value.Id);
         }
@@ -263,9 +235,11 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         {
             foreach (var item in transfers)
             {
-                if(transactionsMap.ContainsKey(item.FromTransactionId) && transactionsMap.ContainsKey(item.ToTransactionId))
+                if (transactionsMap.ContainsKey(item.FromTransactionId) &&
+                    transactionsMap.ContainsKey(item.ToTransactionId))
                 {
-                    var transfer = Transfer.Create(transactionsMap[item.FromTransactionId], transactionsMap[item.ToTransactionId], item.Rate, item.ExternalId);
+                    var transfer = Transfer.Create(transactionsMap[item.FromTransactionId],
+                        transactionsMap[item.ToTransactionId], item.Rate, item.ExternalId);
                     await this.transactionRepository.AddTransferAsync(transfer);
                 }
             }
@@ -289,7 +263,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                 .ToDictionary(x => x.ExternalId, x => x);
             var transactions = (await this.transactionRepository.GetTransactionsAsync())
                 .Where(x => transactionIds.Contains(x.ExternalId)).ToList()
-                 .ToDictionary(x => x.ExternalId, x => x);
+                .ToDictionary(x => x.ExternalId, x => x);
 
             foreach (var item in t2ts)
             {
@@ -308,14 +282,19 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             if (exchangeRates != null && exchangeRates.Any())
             {
                 var currenciesDict = (await this.currencyRepository.GetCurriencesAsync())
-                              .ToDictionary(x => x.Code, x => x.Id);
+                    .ToDictionary(x => x.Code, x => x.Id);
                 foreach (var item in exchangeRates)
                 {
-                    var fromCurrencyId = currenciesDict.ContainsKey(item.FromCurrency) ? currenciesDict[item.FromCurrency] : (int?)null;
-                    var toCurrencyId = currenciesDict.ContainsKey(item.ToCurrency) ? currenciesDict[item.ToCurrency] : (int?)null;
+                    var fromCurrencyId = currenciesDict.ContainsKey(item.FromCurrency)
+                        ? currenciesDict[item.FromCurrency]
+                        : (int?)null;
+                    var toCurrencyId = currenciesDict.ContainsKey(item.ToCurrency)
+                        ? currenciesDict[item.ToCurrency]
+                        : (int?)null;
                     if (fromCurrencyId.HasValue && toCurrencyId.HasValue)
                     {
-                        var exchangeRate = ExchangeRate.Create(fromCurrencyId.Value, toCurrencyId.Value, item.Rate, context.Identity.Id, item.ExternalId, item.IsDeleted, item.Date);
+                        var exchangeRate = ExchangeRate.Create(fromCurrencyId.Value, toCurrencyId.Value, item.Rate,
+                            context.Identity.Id, item.ExternalId, item.IsDeleted, item.Date);
                         await this.currencyRepository.AddExchangeRateAsync(exchangeRate);
                     }
                 }
@@ -335,7 +314,9 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         public async Task<SyncRequest> SyncAsync(SyncRequest request)
         {
             //get requst
-            var newRequest = await this.syncRequestBuilder.CreateSyncRequestAsync(SynchronizationComponent.Api, request.Component); // source = this. TODO on future. For now allow sync only on route mobile -> api -> mobile
+            var newRequest =
+                await this.syncRequestBuilder.CreateSyncRequestAsync(SynchronizationComponent.Api,
+                    request.Component); // source = this. TODO on future. For now allow sync only on route mobile -> api -> mobile
             //update own collection
             await this.synchroniser.SynchroniseAsync(request);
             //send responserequest

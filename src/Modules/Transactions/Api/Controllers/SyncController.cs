@@ -1,18 +1,11 @@
 ﻿using BudgetUnderControl.Modules.Transactions.Application.DTO;
-using BudgetUnderControl.Modules.Transactions.Application.DTO;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Sync.GetBackup;
-using BudgetUnderControl.Modules.Transactions.Application.Commands.Sync.GetCSV;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Sync.ImportBackup;
 using BudgetUnderControl.Modules.Transactions.Application.Commands.Sync.Sync;
-using BudgetUnderControl.Shared.Application.CQRS.Contracts;
 using BudgetUnderControl.Shared.Infrastructure.Settings;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using BudgetUnderControl.Modules.Transactions.Application.Contracts;
 
@@ -47,14 +40,6 @@ namespace BudgetUnderControl.Modules.Transactions.Api.Controllers
         {
             await _transactionsModule.ExecuteCommandAsync(new ImportBackupCommand(json));
             return Ok();
-        }
-
-        // GET api/sync/csv
-        [HttpGet("csv")]
-        public async Task<ContentResult> GenerateCSV()
-        {
-            var csv = await _transactionsModule.ExecuteQueryAsync(new GetCSVQuery());
-            return Content(string.Join(System.Environment.NewLine, csv));
         }
 
         // POST api/sync/sync

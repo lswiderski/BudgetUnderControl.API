@@ -9,8 +9,6 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Services
         Task ImportBackUpAsync(BackUpDTO backupDto);
         Task CleanDataBaseAsync();
         Task<BackUpDTO> GetBackUpAsync();
-        Task<IEnumerable<string>> GenerateCSV();
-
         Task<SyncRequest> SyncAsync(SyncRequest request);
     }
 }
