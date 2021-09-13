@@ -39,7 +39,7 @@ namespace BudgetUnderControl.Modules.Exporter.Targets.CSV.Creators.Transactions
 
             return new TransactionsReport
             {
-                Stream = stream,
+                Content = stream.ToArray(),
                 ContentType = "text/csv",
                 Name = "Report.csv",
             };

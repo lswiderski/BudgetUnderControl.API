@@ -25,11 +25,11 @@ namespace BudgetUnderControl.Modules.Exporter.Api.Controllers
 
             var report = await this.exporterModule.ExecuteQueryAsync(new GetTransactionsQuery(request));
 
-            if (report == null || report.Stream == null)
+            if (report == null || report.Content == null)
             {
                 return NotFound();
             }
-            return File(report.Stream.ToArray(), report.ContentType, report.Name);
+            return File(report.Content, report.ContentType, report.Name);
         }
         
     }

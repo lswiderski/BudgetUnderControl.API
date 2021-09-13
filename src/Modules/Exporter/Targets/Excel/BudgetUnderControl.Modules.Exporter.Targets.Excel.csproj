@@ -10,4 +10,8 @@
       <ProjectReference Include="..\..\Core\BudgetUnderControl.Modules.Exporter.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="ClosedXML" Version="0.95.4" />
+    </ItemGroup>
+
 </Project>

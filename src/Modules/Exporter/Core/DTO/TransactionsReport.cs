@@ -4,7 +4,7 @@ namespace BudgetUnderControl.Modules.Exporter.Core.DTO
 {
     public class TransactionsReport
     {
-        public MemoryStream Stream { get; set; }
+        public byte [] Content { get; set; }
         
         public string ContentType { get; set; }
         
