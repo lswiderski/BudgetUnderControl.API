@@ -330,7 +330,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                 {
                     if(accountToUpdate.ModifiedOn < account.ModifiedOn)
                     {
-                        accountToUpdate.Edit(account.Name, account.CurrencyId, accountGroupId, account.IsIncludedToTotal, account.Comment, account.Order, account.Type, parentAccountId, !account.IsDeleted, userId, account.Icon);
+                        accountToUpdate.Edit(account.Name, account.CurrencyId, accountGroupId, account.IsIncludedToTotal, account.Comment, account.Order, account.Type, parentAccountId, !account.IsDeleted, account.IsDeleted, userId, account.Icon);
                         accountToUpdate.Delete(account.IsDeleted);
                         accountToUpdate.SetModifiedOn(account.ModifiedOn);
                         await this.accountRepository.UpdateAsync(accountToUpdate);

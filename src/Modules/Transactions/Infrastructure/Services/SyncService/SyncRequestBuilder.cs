@@ -188,7 +188,8 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                     Type = x.Type,
                     ModifiedOn = x.ModifiedOn,
                     Icon = x.Icon,
-                    IsDeleted = x.IsDeleted
+                    IsDeleted = x.IsDeleted,
+                    IsActive = x.IsActive,
                 }).ToList();
 
             var allAccounts = (await this.accountRepository.GetAccountsAsync()).ToDictionary(x => x.Id, x => x.ExternalId);

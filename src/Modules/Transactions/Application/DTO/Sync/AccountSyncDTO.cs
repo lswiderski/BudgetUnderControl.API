@@ -21,6 +21,7 @@ namespace BudgetUnderControl.Modules.Transactions.Application.DTO
         public Guid? ParentAccountExternalId { get; set; }
         public DateTime? ModifiedOn { get; set; }
         public bool IsDeleted { get; set; }
+        public bool IsActive { get; set; }
 
     }
 }

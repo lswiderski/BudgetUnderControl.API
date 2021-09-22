@@ -44,7 +44,7 @@ namespace BudgetUnderControl.Domain
 
         public static Account Create(string name, int currencyId, int accountGroupId,
             bool isIncludedToTotal, string comment, int order, AccountType type, 
-            int? parentAccountId, bool isActive, Guid ownerId, Guid? externalId = null, string icon = null)
+            int? parentAccountId, bool isActive, bool isDeleted, Guid ownerId, Guid? externalId = null, string icon = null)
         {
             return new Account()
             {
@@ -60,14 +60,14 @@ namespace BudgetUnderControl.Domain
                 ExternalId = externalId ?? Guid.NewGuid(),
                 UserId = ownerId,
                 ModifiedOn = DateTime.UtcNow,
-                IsDeleted = !isActive,
+                IsDeleted = isDeleted,
                 Icon = icon,
             };
         }
 
         public void Edit(string name, int currencyId, int accountGroupId,
             bool isIncludedToTotal, string comment, int order, AccountType type,
-            int? parentAccountId, bool isActive, Guid? ownerId = null, string icon = null )
+            int? parentAccountId, bool isActive, bool? isDeleted = null, Guid? ownerId = null, string icon = null )
         {
             this.Name = name;
             this.CurrencyId = currencyId;
@@ -78,11 +78,15 @@ namespace BudgetUnderControl.Domain
             this.Order = order;
             this.Type = type;
             this.ParentAccountId = parentAccountId;
-            this.IsDeleted = !isActive;
+           
             this.Icon = icon;
             if(ownerId != null)
             {
                 this.UserId = ownerId.Value;
+            }
+            if(isDeleted.HasValue)
+            {
+                this.IsDeleted = isDeleted.Value;
             }
 
             this.UpdateModify();
@@ -113,13 +117,13 @@ namespace BudgetUnderControl.Domain
         public void SetActive(bool isActive)
         {
             this.IsActive = isActive;
-            this.IsDeleted = isActive;
+            this.IsDeleted = !isActive;
             this.UpdateModify();
         }
 
         public void Delete(bool delete = true)
         {
-            this.SetActive(delete);
+            this.SetActive(!delete);
             this.UpdateModify();
         }
 
