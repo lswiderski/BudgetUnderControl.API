@@ -122,7 +122,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         public async Task AddAccountAsync(CreateAccountCommand command)
         {
             var identity = this.context.Identity;
-            var account = Account.Create(command.Name, command.CurrencyId, command.AccountGroupId, command.IsIncludedInTotal, command.Comment, command.Order, command.Type, command.ParentAccountId, true, identity.Id, command.ExternalId);
+            var account = Account.Create(command.Name, command.CurrencyId, command.AccountGroupId, command.IsIncludedInTotal, command.Comment, command.Order, command.Type, command.ParentAccountId, true, false, identity.Id, command.ExternalId);
             await accountRepository.AddAccountAsync(account);
 
             if (account.Id <= 0)

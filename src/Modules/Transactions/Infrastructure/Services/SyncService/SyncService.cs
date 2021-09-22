@@ -178,7 +178,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             foreach (var item in accounts)
             {
                 var account = Account.Create(item.Name, item.CurrencyId, item.AccountGroupId, item.IsIncludedToTotal,
-                    item.Comment, item.Order, item.Type, item.ParentAccountId, true, context.Identity.Id,
+                    item.Comment, item.Order, item.Type, item.ParentAccountId, item.IsActive, item.IsDeleted, context.Identity.Id,
                     item.ExternalId);
                 await this.accountRepository.AddAccountAsync(account);
 
