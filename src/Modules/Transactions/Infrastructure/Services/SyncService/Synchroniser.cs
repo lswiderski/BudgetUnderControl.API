@@ -60,7 +60,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             await this.UpdateUsersAsync(syncRequest.Users);
             await this.UpdateTagsAsync(syncRequest.Tags);
             await this.UpdateCategoriesAsync(syncRequest.Categories);
-            await this.UpdateAccountGroupsAsync(syncRequest.AccountGroups);
+            // await this.UpdateAccountGroupsAsync(syncRequest.AccountGroups);
             await this.UpdateAccountsAsync(syncRequest.Accounts);
             await this.UpdateFilesAsync(syncRequest.Files);
             _tags = (await this.tagRepository.GetAsync()).ToDictionary(x => x.ExternalId, x => x.Id);
