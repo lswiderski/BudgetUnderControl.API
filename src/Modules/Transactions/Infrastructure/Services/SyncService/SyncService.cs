@@ -207,7 +207,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         private async Task ImportTransactionsAsync(List<TransactionSyncDTO> transactions)
         {
             var tempTransactionsMap = new Dictionary<int, Domain.Transaction>();
-            var categories = await categoryRepository.GetAllCategoriesAsync();
+            var categories = await categoryRepository.GetCategoriesAsync();
             transactionsMap = new Dictionary<int, int>();
             foreach (var item in transactions)
             {

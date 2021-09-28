@@ -26,7 +26,7 @@ namespace BudgetUnderControl.Infrastructure
 
         public async Task<ICollection<Category>> GetCategoriesAsync()
         {
-            var list = await this.Context.Categories/*Where(x => x.OwnerId == userIdentityContext.Identity.Id)*/.ToListAsync();
+            var list = await this.Context.Categories.Where(x => x.UserId == userIdentityContext.Identity.Id).ToListAsync();
             return list;
         }
 
@@ -38,13 +38,13 @@ namespace BudgetUnderControl.Infrastructure
 
         public async Task<Category> GetCategoryAsync(Guid id)
         {
-            var category = await this.Context.Categories.Where(x => x.ExternalId == id).FirstOrDefaultAsync();
+            var category = await this.Context.Categories.Where(x => x.ExternalId == id && x.UserId == userIdentityContext.Identity.Id).FirstOrDefaultAsync();
             return category;
         }
 
         public async Task<Category> GetCategoryAsync(string name)
         {
-            var category = await this.Context.Categories.Where(x => x.Name == name).FirstOrDefaultAsync();
+            var category = await this.Context.Categories.Where(x => x.Name == name && x.UserId == userIdentityContext.Identity.Id).FirstOrDefaultAsync();
             return category;
         }
 
