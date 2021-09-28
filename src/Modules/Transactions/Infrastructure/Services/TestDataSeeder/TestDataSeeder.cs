@@ -14,28 +14,24 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
     public class TestDataSeeder : ITestDataSeeder
     {
         private readonly IAccountService accountService;
-        private readonly IAccountGroupService accountGroupService;
         private readonly ITransactionService transactionService;
         private readonly ICurrencyService currencyService;
         private readonly ICategoryService categoryService;
 
         public TestDataSeeder(IAccountService accountService, ITransactionService transactionService,
-            IAccountGroupService accountGroupService, ICurrencyService currencyService, ICategoryService categoryService)
+            ICurrencyService currencyService, ICategoryService categoryService)
         {
             this.accountService = accountService;
             this.transactionService = transactionService;
-            this.accountGroupService = accountGroupService;
             this.currencyService = currencyService;
             this.categoryService = categoryService;
         }
 
         public async Task SeedAsync()
         {
-            var accountGroup = (await this.accountGroupService.GetAccountGroupsAsync()).First();
             var currencies = await this.currencyService.GetCurriencesAsync();
             var addAccountCommand = new CreateAccountCommand
             {
-                AccountGroupId = accountGroup.Id,
                 Amount = 0,
                 CurrencyId = currencies.First().Id,
                 IsIncludedInTotal = true,

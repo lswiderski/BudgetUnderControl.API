@@ -14,7 +14,6 @@ namespace BudgetUnderControl.Domain
     public class TransactionsContext : DbContext, IDisposable
     {
         public virtual DbSet<Account> Accounts { get; set; }
-        public virtual DbSet<AccountGroup> AccountGroup { get; set; }
         public virtual DbSet<AccountSnapshot> AccountSnapshot { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Currency> Currencies { get; set; }
@@ -42,7 +41,6 @@ namespace BudgetUnderControl.Domain
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Account>().ToTable("Account");
-            modelBuilder.Entity<AccountGroup>().ToTable("AccountGroup");
             modelBuilder.Entity<AccountSnapshot>().ToTable("AccountSnapshot");
             modelBuilder.Entity<Category>().ToTable("Category");
             modelBuilder.Entity<Currency>().ToTable("Currency");
@@ -54,13 +52,6 @@ namespace BudgetUnderControl.Domain
             modelBuilder.Entity<Transaction>().ToTable("Transaction");
             modelBuilder.Entity<Transfer>().ToTable("Transfer");
             modelBuilder.Entity<Synchronization>().ToTable("Synchronization");
-
-
-            modelBuilder.Entity<Account>()
-                .HasOne(x => x.AccountGroup)
-                .WithMany(y => y.Accounts)
-                .HasForeignKey(x => x.AccountGroupId)
-                .HasConstraintName("ForeignKey_Account_AccountGroup");
 
             modelBuilder.Entity<Account>()
                 .HasOne(x => x.Currency)

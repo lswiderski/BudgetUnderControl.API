@@ -10,7 +10,6 @@ namespace BudgetUnderControl.Modules.Transactions.Application.DTO
         public int CurrencyId { get; set; }
         public string Currency { get; set; }
         public string CurrencySymbol { get; set; }
-        public int AccountGroupId { get; set; }
         public string Name { get; set; }
         public decimal Amount { get; set; }
         public bool IsIncludedInTotal { get; set; }

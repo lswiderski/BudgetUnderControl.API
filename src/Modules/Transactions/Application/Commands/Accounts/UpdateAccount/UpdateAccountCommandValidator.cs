@@ -10,7 +10,7 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.
 {
     internal class UpdateAccountCommandValidator : AbstractValidator<UpdateAccountCommand>
     {
-        public UpdateAccountCommandValidator(ICurrencyService currencyService, IAccountGroupService accountGroupService, IAccountService accountService)
+        public UpdateAccountCommandValidator(ICurrencyService currencyService, IAccountService accountService)
         {
             RuleFor(t => t.Id).NotEmpty();
             RuleFor(t => t.ExternalId).NotEmpty();
@@ -34,16 +34,6 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Commands.Accounts.
                         context.AddFailure("This user do not own that Account");
                     }
                 }
-            });
-
-            RuleFor(t => t.AccountGroupId).NotEmpty().CustomAsync(async (id, context, cancel) =>
-            {
-                var isValid = await accountGroupService.IsValidAsync(id);
-                if (!isValid)
-                {
-                    context.AddFailure("This user do not own that Account Group");
-                }
-
             });
         }
     }

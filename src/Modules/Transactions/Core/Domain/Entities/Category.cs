@@ -34,6 +34,11 @@ namespace BudgetUnderControl.Domain
             }
         }
 
+        protected Category()
+        {
+
+        }
+
         public static Category Create(string name, Guid ownerId, Guid? externalId, string icon = null)
         {
             return new Category

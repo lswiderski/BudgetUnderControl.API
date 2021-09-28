@@ -71,7 +71,6 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             {
                 Id = x.Id,
                 ExternalId = x.ExternalId,
-                AccountGroupId = x.AccountGroupId,
                 Comment = x.Comment,
                 CurrencyId = x.CurrencyId,
                 IsIncludedToTotal = x.IsIncludedToTotal,
@@ -177,7 +176,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 
             foreach (var item in accounts)
             {
-                var account = Account.Create(item.Name, item.CurrencyId, item.AccountGroupId, item.IsIncludedToTotal,
+                var account = Account.Create(item.Name, item.CurrencyId, item.IsIncludedToTotal,
                     item.Comment, item.Order, item.Type, item.ParentAccountId, item.IsActive, item.IsDeleted, context.Identity.Id,
                     item.ExternalId);
                 await this.accountRepository.AddAccountAsync(account);

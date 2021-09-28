@@ -17,7 +17,6 @@ namespace BudgetUnderControl.Domain
         [StringLength(250)]
         public string Name { get; protected set; }
         public int CurrencyId { get; protected set; }
-        public int AccountGroupId { get; protected set; }
         public bool IsIncludedToTotal { get; protected set; }
         public string Comment { get; protected set; }
         public int Order { get; protected set; }
@@ -31,7 +30,6 @@ namespace BudgetUnderControl.Domain
         public Guid ExternalId { get; protected set; }
         public bool IsDeleted { get; protected set; }
 
-        public AccountGroup AccountGroup { get; protected set; }
         public Currency Currency { get;  set; }
         public List<AccountSnapshot> AccountSnapshots { get; protected set; }
         public List<Transaction> Transactions { get; protected set; }
@@ -42,7 +40,7 @@ namespace BudgetUnderControl.Domain
 
         }
 
-        public static Account Create(string name, int currencyId, int accountGroupId,
+        public static Account Create(string name, int currencyId, 
             bool isIncludedToTotal, string comment, int order, AccountType type, 
             int? parentAccountId, bool isActive, bool isDeleted, Guid ownerId, Guid? externalId = null, string icon = null)
         {
@@ -50,7 +48,6 @@ namespace BudgetUnderControl.Domain
             {
                 Name = name,
                 CurrencyId = currencyId,
-                AccountGroupId = accountGroupId,
                 IsActive = isActive,
                 IsIncludedToTotal = isIncludedToTotal,
                 Comment = comment,
@@ -65,13 +62,12 @@ namespace BudgetUnderControl.Domain
             };
         }
 
-        public void Edit(string name, int currencyId, int accountGroupId,
+        public void Edit(string name, int currencyId,
             bool isIncludedToTotal, string comment, int order, AccountType type,
             int? parentAccountId, bool isActive, bool? isDeleted = null, Guid? ownerId = null, string icon = null )
         {
             this.Name = name;
             this.CurrencyId = currencyId;
-            this.AccountGroupId = accountGroupId;
             this.IsActive = isActive;
             this.IsIncludedToTotal = isIncludedToTotal;
             this.Comment = comment;
