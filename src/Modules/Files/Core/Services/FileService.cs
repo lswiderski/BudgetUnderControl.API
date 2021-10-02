@@ -32,6 +32,13 @@ namespace BudgetUnderControl.Modules.Files.Core.Services
 
         public async Task<Guid> SaveFileAsync(IFormFile file)
         {
+            var id = Guid.NewGuid();
+
+            if (file == null)
+            {
+                return id; // TODO tmp solution
+            }
+
             var createdOn = DateTime.UtcNow;
             var rootPath = settings.FileRootPath;
             var uploadsRootFolder = Path.Combine(rootPath, _uploadCatalog, context.Identity.Id.ToString(), createdOn.Year.ToString(), createdOn.Month.ToString());
@@ -39,8 +46,6 @@ namespace BudgetUnderControl.Modules.Files.Core.Services
             {
                 Directory.CreateDirectory(uploadsRootFolder);
             }
-
-            var id = Guid.NewGuid();
 
             var fileEntity = new Entities.File
             {
@@ -184,7 +189,9 @@ namespace BudgetUnderControl.Modules.Files.Core.Services
 
             if (fileEntity.UserId != context.Identity.Id)
             {
-                throw new UnauthorizedAccessException();
+                // temporary
+                return;
+               // throw new UnauthorizedAccessException();
             }
 
             fileEntity.Delete();
