@@ -39,7 +39,7 @@ namespace BudgetUnderControl.Domain
 
         }
 
-        public static Category Create(string name, Guid ownerId, Guid? externalId, string icon = null)
+        public static Category Create(string name, Guid ownerId, Guid? externalId = null, string icon = null)
         {
             return new Category
             {
@@ -75,6 +75,17 @@ namespace BudgetUnderControl.Domain
         public void UpdateModify()
         {
             this.ModifiedOn = DateTime.UtcNow;
+        }
+        public Category SetDefault(bool isDefault = true)
+        {
+            this.IsDefault = true;
+            return this;
+        }
+
+        public Category SetIcon(string icon)
+        {
+            this.Icon = icon;
+            return this;
         }
     }
 }

@@ -10,5 +10,9 @@ namespace BudgetUnderControl.Modules.Transactions.Application.Services
         Task<ICollection<CategoryListItemDTO>> GetCategoriesAsync();
         Task<CategoryListItemDTO> GetCategoryAsync(Guid id);
         Task<bool> IsValidAsync(int categoryId);
+
+        Task SeedCategoriesAsync(Guid userId);
+
+        Task<CategoryListItemDTO> GetDefaultCategoryAsync();
     }
 }

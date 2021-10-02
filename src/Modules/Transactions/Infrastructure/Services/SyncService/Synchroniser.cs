@@ -28,6 +28,8 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
         private Dictionary<Guid, int> _tags;
         private readonly TransactionsContext transactionsContext;
         private readonly IFilesApiClient _filesApiClient;
+        private Dictionary<Guid, Guid> _externalCategories;
+        private readonly ICategoryService categoryService;
 
         public Synchroniser(TransactionsContext transactionsContext, ITransactionRepository transactionRepository,
             IAccountRepository accountRepository,
@@ -38,6 +40,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             IContext context,
             ITagRepository tagRepository,
             ITransactionService transactionService,
+            ICategoryService categoryService,
             ILogger<Synchroniser> logger, IFilesApiClient filesApiClient)
         {
             this.transactionRepository = transactionRepository;
@@ -51,6 +54,8 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             this.logger = logger;
             _filesApiClient = filesApiClient;
             this.transactionsContext = transactionsContext;
+            this.categoryService = categoryService;
+            _externalCategories = new Dictionary<Guid, Guid>();
         }
 
         public async Task SynchroniseAsync(SyncRequest syncRequest)
@@ -106,6 +111,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
             var categories = (await this.categoryRepository.GetCategoriesAsync()).GroupBy(x => x.ExternalId).Select(x => x.FirstOrDefault()).ToList();
             var dictCategories = categories
                 .ToDictionary(c => c.ExternalId, c => c.Id);
+            var defaultCategory = await this.categoryService.GetDefaultCategoryAsync();
 
             var accounts = (await this.accountRepository.GetAccountsAsync()).Distinct().ToList();
             var dictAccounts = accounts
@@ -118,7 +124,11 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 
                 foreach (var transaction in package)
                 {
-                    int? categoryId = transaction.CategoryExternalId.HasValue ? dictCategories.ContainsKey(transaction.CategoryExternalId.Value) ? dictCategories[transaction.CategoryExternalId.Value]: (int?)null : (int?)null;
+                    int? categoryId = transaction.CategoryExternalId.HasValue ?
+                       ( dictCategories.ContainsKey(transaction.CategoryExternalId.Value) ? dictCategories[transaction.CategoryExternalId.Value]
+                           : (_externalCategories.ContainsKey(transaction.CategoryExternalId.Value) ? dictCategories[_externalCategories[transaction.CategoryExternalId.Value]] :
+                           defaultCategory?.Id) )
+                        : defaultCategory?.Id;
                     var accountId = dictAccounts[transaction.AccountExternalId.Value];
                     var transactionToUpdate = await this.transactionRepository.GetTransactionAsync(transaction.ExternalId.Value);
 
@@ -274,6 +284,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
 
         private async Task UpdateCategoriesAsync(IEnumerable<CategorySyncDTO> categories)
         {
+            _externalCategories = new Dictionary<Guid, Guid>();
             if (categories == null || !categories.Any())
             {
                 return;
@@ -287,13 +298,19 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.Services
                 var categoryToUpdate = await this.categoryRepository.GetCategoryAsync(category.Name);
                 if (categoryToUpdate != null)
                 {
-                    if(categoryToUpdate.ModifiedOn < category.ModifiedOn)
+                    if(categoryToUpdate.ModifiedOn < category.ModifiedOn||
+                       categoryToUpdate.ExternalId != category.ExternalId)
                     {
                         categoryToUpdate.Edit(category.Name, userId, category.Icon);
                         categoryToUpdate.Delete(category.IsDeleted);
                         categoryToUpdate.SetModifiedOn(category.ModifiedOn);
                         await this.categoryRepository.UpdateAsync(categoryToUpdate);
                         logger.LogInformation("Category Updated:" + category.ExternalId.ToString());
+
+                        if (categoryToUpdate.ExternalId != category.ExternalId)
+                        {
+                            _externalCategories.Add(category.ExternalId, categoryToUpdate.ExternalId);
+                        }
                     }
                     
                 }

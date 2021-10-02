@@ -60,5 +60,16 @@ namespace BudgetUnderControl.Infrastructure
             this.Context.Categories.Add(category);
             await this.Context.SaveChangesAsync();
         }
+        public async Task AddCategoriesAsync(IEnumerable<Category> categories)
+        {
+            this.Context.Categories.AddRange(categories);
+            await this.Context.SaveChangesAsync();
+        }
+
+        public async Task HardRemoveCategoriesAsync(IEnumerable<Category> categories)
+        {
+            this.Context.Categories.RemoveRange(categories);
+            await this.Context.SaveChangesAsync();
+        }
     }
 }
