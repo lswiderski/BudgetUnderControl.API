@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using BudgetUnderControl.Shared.Application.CQRS.Contracts;
 using BudgetUnderControl.Shared.Application.CQRS.Configuration.Commands;
 using System.Threading.Tasks;
+using BudgetUnderControl.Shared.Abstractions.Events;
 
 namespace BudgetUnderControl.Shared.Infrastructure.Modules
 {
@@ -59,46 +60,25 @@ namespace BudgetUnderControl.Shared.Infrastructure.Modules
         {
             var registry = new ModuleRegistry();
             var types = assemblies.SelectMany(x => x.GetTypes()).ToArray();
-
-
-            services.AddSingleton<IModuleRegistry>(sp =>
-            {
-                return registry;
-            });
-
-              var commandTypes = types
-                  .Where(t => t.IsClass && typeof(ICommand).IsAssignableFrom(t))
-                  .ToArray();
-
-             /* var eventTypes = types
+            
+            var eventTypes = types
                   .Where(x => x.IsClass && typeof(IEvent).IsAssignableFrom(x))
                   .ToArray();
-             */
+           
 
               services.AddSingleton<IModuleRegistry>(sp =>
               {
-                  //var commandDispatcher = sp.GetRequiredService<ICommandDispatcher>();
-                //  var commandDispatcherType = commandDispatcher.GetType();
+                  var eventDispatcher = sp.GetRequiredService<IEventDispatcher>();
+                  var eventDispatcherType = eventDispatcher.GetType();
 
-                //  var eventDispatcher = sp.GetRequiredService<IEventDispatcher>();
-                //  var eventDispatcherType = eventDispatcher.GetType();
-
-               /*   foreach (var type in commandTypes)
-                  {
-                      registry.AddBroadcastAction(type, @event =>
-                          (Task)commandDispatcherType.GetMethod(nameof(commandDispatcher.ExecuteCommandAsync))
-                              ?.MakeGenericMethod(type)
-                              .Invoke(commandDispatcher, new[] { @event }));
-                  }
-               */
-               /*   foreach (var type in eventTypes)
+                  foreach (var type in eventTypes)
                   {
                       registry.AddBroadcastAction(type, @event =>
                           (Task)eventDispatcherType.GetMethod(nameof(eventDispatcher.PublishAsync))
                               ?.MakeGenericMethod(type)
                               .Invoke(eventDispatcher, new[] { @event }));
                   }
-               */
+               
                   return registry;
               });
               
