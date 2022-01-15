@@ -116,12 +116,10 @@ namespace BudgetUnderControl.API
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, ILogger<Startup> logger)
         {
             logger.LogInformation("Connection string: " + TransactionsModuleSettings.Database.ConnectionString);
-            logger.LogInformation("Application Type:  " + Settings.ApplicationType.ToString());
-            logger.LogInformation("DB Name:  " + TransactionsModuleSettings.Database.BUC_DB_Name);
             logger.LogInformation($"Modules: {string.Join(", ", _modules.Select(x => x.Name))}");
             this.AutofacContainer = app.ApplicationServices.GetAutofacRoot();
 
-            if (env.IsDevelopment())
+            if (env.IsDevelopment() || env.IsEnvironment("Docker"))
             {
                 app.UseDeveloperExceptionPage();
             }

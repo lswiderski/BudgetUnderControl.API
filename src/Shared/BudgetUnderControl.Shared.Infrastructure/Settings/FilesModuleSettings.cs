@@ -9,5 +9,7 @@ namespace BudgetUnderControl.Shared.Infrastructure.Settings
     public class FilesModuleSettings
     {
         public string FileRootPath { get; set; }
+
+        public DatabaseConfig Database { get; set; }
     }
 }

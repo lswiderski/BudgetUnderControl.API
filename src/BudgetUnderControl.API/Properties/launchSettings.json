@@ -17,12 +17,22 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "BudgetUnderControl.API": {
+    "development": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "api/values",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:5000"
+    },
+    "docker": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "api/values",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Docker"
+        // "transactionsModule:database:ConnectionString": "Data Source=db,1433;Initial Catalog=dbBUC-dev;User ID=sa;Password=NASsql123"
       },
       "applicationUrl": "http://localhost:5000"
     }

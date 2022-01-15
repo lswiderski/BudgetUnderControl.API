@@ -8,7 +8,6 @@ namespace BudgetUnderControl.Shared.Infrastructure.Settings
 {
     public class DatabaseConfig
     {
-        public string BUC_DB_Name { get; set; }
         public string ConnectionString { get; set; }
     }
 }

@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29926.136
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetUnderControl.Tests", "..\tests\BudgetUnderControl.Tests\BudgetUnderControl.Tests.csproj", "{5061A042-5EEE-4F19-9827-CBB8AC8666F6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetUnderControl.API", "BudgetUnderControl.API\BudgetUnderControl.API.csproj", "{7EAC3AFA-BB03-49F7-AE33-1E61409E534B}"
-EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{4BD57CC2-6D0D-4B40-9260-970728503282}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{750E39CA-CCBF-43D5-A7A5-AE30F9FE11CB}"
 EndProject
@@ -45,29 +43,34 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetUnderControl.Shared.A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notifications", "Notifications", "{4037367F-5EE0-4BFA-A8E5-74DA21DC1DE8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetUnderControl.Modules.Notifications.Api", "Modules\Notifications\Api\BudgetUnderControl.Modules.Notifications.Api.csproj", "{B2E7C25D-4ADB-41CA-BA25-04399DB33DD0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetUnderControl.Modules.Notifications.Api", "Modules\Notifications\Api\BudgetUnderControl.Modules.Notifications.Api.csproj", "{B2E7C25D-4ADB-41CA-BA25-04399DB33DD0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetUnderControl.Modules.Notifications.Core", "Modules\Notifications\Core\BudgetUnderControl.Modules.Notifications.Core.csproj", "{89291145-549C-4880-A354-1F38D370E8D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetUnderControl.Modules.Notifications.Core", "Modules\Notifications\Core\BudgetUnderControl.Modules.Notifications.Core.csproj", "{89291145-549C-4880-A354-1F38D370E8D2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{D8623509-A1F8-48D1-9F33-3F3D2C8C3948}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetUnderControl.Modules.Files.Api", "Modules\Files\BudgetUnderControl.Modules.Files.Api\BudgetUnderControl.Modules.Files.Api.csproj", "{2E95E30A-71B7-4B6F-88AF-DF1CAB388598}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetUnderControl.Modules.Files.Api", "Modules\Files\BudgetUnderControl.Modules.Files.Api\BudgetUnderControl.Modules.Files.Api.csproj", "{2E95E30A-71B7-4B6F-88AF-DF1CAB388598}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetUnderControl.Modules.Files.Core", "Modules\Files\Core\BudgetUnderControl.Modules.Files.Core.csproj", "{559A8F3C-73D6-438C-BF98-450A04C88268}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetUnderControl.Modules.Files.Core", "Modules\Files\Core\BudgetUnderControl.Modules.Files.Core.csproj", "{559A8F3C-73D6-438C-BF98-450A04C88268}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Exporter", "Exporter", "{2B0D72AF-E496-4899-A51B-5789AA963834}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetUnderControl.Modules.Exporter.Api", "Modules\Exporter\Api\BudgetUnderControl.Modules.Exporter.Api.csproj", "{9C480BA1-FC02-407F-B667-431FF8AFCC08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetUnderControl.Modules.Exporter.Api", "Modules\Exporter\Api\BudgetUnderControl.Modules.Exporter.Api.csproj", "{9C480BA1-FC02-407F-B667-431FF8AFCC08}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Targets", "Targets", "{492A2756-56CB-4D0D-A59D-436C0B09758E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetUnderControl.Modules.Exporter.Targets.Excel", "Modules\Exporter\Targets\Excel\BudgetUnderControl.Modules.Exporter.Targets.Excel.csproj", "{EE53E274-CAD3-4553-ACB9-A0411B1FAD5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetUnderControl.Modules.Exporter.Targets.Excel", "Modules\Exporter\Targets\Excel\BudgetUnderControl.Modules.Exporter.Targets.Excel.csproj", "{EE53E274-CAD3-4553-ACB9-A0411B1FAD5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetUnderControl.Modules.Exporter.Application", "Modules\Exporter\Application\BudgetUnderControl.Modules.Exporter.Application.csproj", "{784C699E-DA73-403F-B75B-CCD29E1F3FED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetUnderControl.Modules.Exporter.Application", "Modules\Exporter\Application\BudgetUnderControl.Modules.Exporter.Application.csproj", "{784C699E-DA73-403F-B75B-CCD29E1F3FED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetUnderControl.Modules.Exporter.Targets.CSV", "Modules\Exporter\Targets\CSV\BudgetUnderControl.Modules.Exporter.Targets.CSV.csproj", "{78FC0F38-F0B0-4C3A-A3E1-EFE6A6C1BE7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetUnderControl.Modules.Exporter.Targets.CSV", "Modules\Exporter\Targets\CSV\BudgetUnderControl.Modules.Exporter.Targets.CSV.csproj", "{78FC0F38-F0B0-4C3A-A3E1-EFE6A6C1BE7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BudgetUnderControl.Modules.Exporter.Core", "Modules\Exporter\Core\BudgetUnderControl.Modules.Exporter.Core.csproj", "{66862BAC-C8CA-4B07-8C4D-828CE0795EDD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BudgetUnderControl.Modules.Exporter.Core", "Modules\Exporter\Core\BudgetUnderControl.Modules.Exporter.Core.csproj", "{66862BAC-C8CA-4B07-8C4D-828CE0795EDD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B8CFEF91-6741-42DF-8BFE-6CC0FA5BBB5B}"
+	ProjectSection(SolutionItems) = preProject
+		Dockerfile = Dockerfile
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -133,30 +136,6 @@ Global
 		{7EAC3AFA-BB03-49F7-AE33-1E61409E534B}.Release|iPhone.Build.0 = Release|Any CPU
 		{7EAC3AFA-BB03-49F7-AE33-1E61409E534B}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{7EAC3AFA-BB03-49F7-AE33-1E61409E534B}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.Ad-Hoc|Any CPU.ActiveCfg = Debug|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.Ad-Hoc|Any CPU.Build.0 = Debug|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.Ad-Hoc|iPhone.ActiveCfg = Debug|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.Ad-Hoc|iPhone.Build.0 = Debug|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Debug|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.Ad-Hoc|iPhoneSimulator.Build.0 = Debug|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.AppStore|Any CPU.ActiveCfg = Debug|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.AppStore|Any CPU.Build.0 = Debug|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.AppStore|iPhone.ActiveCfg = Debug|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.AppStore|iPhone.Build.0 = Debug|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.AppStore|iPhoneSimulator.ActiveCfg = Debug|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.AppStore|iPhoneSimulator.Build.0 = Debug|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.Debug|iPhone.ActiveCfg = Debug|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.Debug|iPhone.Build.0 = Debug|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.Release|iPhone.ActiveCfg = Release|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.Release|iPhone.Build.0 = Release|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
-		{4BD57CC2-6D0D-4B40-9260-970728503282}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{2C4788CC-3476-46A8-9C6F-C3CB7AE72C5E}.Ad-Hoc|Any CPU.ActiveCfg = Debug|Any CPU
 		{2C4788CC-3476-46A8-9C6F-C3CB7AE72C5E}.Ad-Hoc|Any CPU.Build.0 = Debug|Any CPU
 		{2C4788CC-3476-46A8-9C6F-C3CB7AE72C5E}.Ad-Hoc|iPhone.ActiveCfg = Debug|Any CPU

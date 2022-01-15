@@ -31,7 +31,7 @@ namespace BudgetUnderControl.Modules.Users.Infrastructure.Configuration
               .As<IUsersModule>()
               .InstancePerLifetimeScope();
 
-            var contextConfig = new ContextConfig() { DbName = configuration["transactionsModule:database:BUC_DB_Name"], ConnectionString = configuration["transactionsModule:database:ConnectionString"] };
+            var contextConfig = new ContextConfig() { ConnectionString = configuration["transactionsModule:database:ConnectionString"] };
 
             builder.RegisterInstance(contextConfig).As<IContextConfig>();
 
