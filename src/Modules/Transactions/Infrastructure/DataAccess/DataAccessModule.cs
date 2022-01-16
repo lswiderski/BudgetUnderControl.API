@@ -21,18 +21,11 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure.DataAccess
 
         protected override void Load(ContainerBuilder builder)
         {
-            /*
-            builder.RegisterType<SqlConnectionFactory>()
-                .As<ISqlConnectionFactory>()
-                .WithParameter("connectionString", _databaseConnectionString)
-                .InstancePerLifetimeScope();
-            */
-
             builder
                 .Register(c =>
                 {
                     var dbContextOptionsBuilder = new DbContextOptionsBuilder<TransactionsContext>();
-                    dbContextOptionsBuilder.UseSqlServer(contextConfig.ConnectionString);
+                    dbContextOptionsBuilder.UseNpgsql(contextConfig.ConnectionString);
 
 
                     return new TransactionsContext(dbContextOptionsBuilder.Options, contextConfig);

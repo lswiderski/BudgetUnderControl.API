@@ -23,8 +23,7 @@ namespace BudgetUnderControl.Modules.Transactions.Infrastructure
                  .AddAutoMapper(typeof(TransactionsFilterProfile))
                 .AddSingleton<IUsersApiClient, UsersApiClient>()
                  .AddSingleton<IFilesApiClient, FilesApiClient>()
-                .AddDbContext<TransactionsContext>(x => x.UseSqlServer(connectionString));
-
+                .AddDbContext<TransactionsContext>(x => x.UseNpgsql(connectionString));
             return services;
         }
 

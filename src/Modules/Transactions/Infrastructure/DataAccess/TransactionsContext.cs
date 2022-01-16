@@ -40,6 +40,7 @@ namespace BudgetUnderControl.Domain
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasDefaultSchema("transactions");
             modelBuilder.Entity<Account>().ToTable("Account");
             modelBuilder.Entity<AccountSnapshot>().ToTable("AccountSnapshot");
             modelBuilder.Entity<Category>().ToTable("Category");

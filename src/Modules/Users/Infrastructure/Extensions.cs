@@ -20,8 +20,7 @@ namespace BudgetUnderControl.Modules.Users.Infrastructure
 
                .AddAutoMapper(typeof(UserProfile))
                .AddSingleton<INotificationsApiClient, NotificationsApiClient>()
-               .AddDbContext<UsersDbContext>(x => x.UseSqlServer(connectionString));
-
+            .AddDbContext<UsersDbContext>(x => x.UseNpgsql(connectionString));
             return services;
         }
 

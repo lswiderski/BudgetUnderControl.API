@@ -1,6 +1,7 @@
 ﻿using System;
 using BudgetUnderControl.Modules.Users.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace BudgetUnderControl.Modules.Users.Infrastructure.DataAccess
 {

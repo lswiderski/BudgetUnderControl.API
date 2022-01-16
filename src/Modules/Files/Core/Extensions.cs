@@ -12,7 +12,7 @@ namespace BudgetUnderControl.Modules.Files.Core
         public static IServiceCollection AddCore(this IServiceCollection services, string connectionString)
         {
             services
-            .AddDbContext<FilesDbContext>(x => x.UseSqlServer(connectionString));
+            .AddDbContext<FilesDbContext>(x => x.UseNpgsql(connectionString));
             return services;
         }
 

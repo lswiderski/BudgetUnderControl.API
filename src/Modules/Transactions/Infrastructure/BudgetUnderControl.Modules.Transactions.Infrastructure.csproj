@@ -30,6 +30,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.5" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
     <PackageReference Include="morelinq" Version="3.3.2" />
+    <PackageReference Include="Npgsql" Version="5.0.11" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.5" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.10.0" />
   </ItemGroup>
 
@@ -39,6 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DataAccess\Migrations\" />
     <Folder Include="Services\FileService" />
   </ItemGroup>
 

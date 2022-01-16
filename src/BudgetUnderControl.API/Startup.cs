@@ -7,7 +7,6 @@ using BudgetUnderControl.API.Framework;
 using BudgetUnderControl.API.IoC;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,9 +18,7 @@ using BudgetUnderControl.Shared.Infrastructure.Settings;
 using System.IO;
 using BudgetUnderControl.Shared.Abstractions.Modules;
 using System.Reflection;
-using Microsoft.Extensions.Options;
 using BudgetUnderControl.Shared.Infrastructure;
-using System.Text.Json;
 
 namespace BudgetUnderControl.API
 {
@@ -65,7 +62,6 @@ namespace BudgetUnderControl.API
             services.AddMemoryCache();
             services.AddCors();
             services.AddOptions();
-
             services.AddControllers()
                 .SetCompatibilityVersion(CompatibilityVersion.Latest)
                 .AddJsonOptions(x =>
