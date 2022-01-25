@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Commands" />
+      <Folder Include="DataAccess\Migrations" />
+      <Folder Include="DataAccess\Migrations\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Autofac" Version="6.1.0" />
+      <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+      <PackageReference Include="Npgsql" Version="5.0.11" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.5" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\..\..\Shared\BudgetUnderControl.Shared.Abstractions\BudgetUnderControl.Shared.Abstractions.csproj" />
+      <ProjectReference Include="..\..\..\..\..\Shared\BudgetUnderControl.Shared.Application\BudgetUnderControl.Shared.Application.csproj" />
+      <ProjectReference Include="..\..\..\..\..\Shared\BudgetUnderControl.Shared.Infrastructure\BudgetUnderControl.Shared.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>

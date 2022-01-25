@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\..\..\Shared\BudgetUnderControl.Shared.Abstractions\BudgetUnderControl.Shared.Abstractions.csproj" />
+      <ProjectReference Include="..\..\..\..\..\Shared\BudgetUnderControl.Shared.Application\BudgetUnderControl.Shared.Application.csproj" />
+      <ProjectReference Include="..\..\..\..\..\Shared\BudgetUnderControl.Shared.Infrastructure\BudgetUnderControl.Shared.Infrastructure.csproj" />
+      <ProjectReference Include="..\Core\BudgetUnderControl.Modules.Notifications.Core.csproj" />
+    </ItemGroup>
+
+</Project>

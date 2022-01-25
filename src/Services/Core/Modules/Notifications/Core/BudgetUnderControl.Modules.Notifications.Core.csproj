@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="DAL\Migrations" />
+      <Folder Include="DAL\Repositories" />
+      <Folder Include="DTO" />
+      <Folder Include="Entities" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="7.1.0" />
+      <PackageReference Include="morelinq" Version="3.3.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\..\..\Shared\BudgetUnderControl.Shared.Abstractions\BudgetUnderControl.Shared.Abstractions.csproj" />
+      <ProjectReference Include="..\..\..\..\..\Shared\BudgetUnderControl.Shared.Application\BudgetUnderControl.Shared.Application.csproj" />
+      <ProjectReference Include="..\..\..\..\..\Shared\BudgetUnderControl.Shared.Infrastructure\BudgetUnderControl.Shared.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>

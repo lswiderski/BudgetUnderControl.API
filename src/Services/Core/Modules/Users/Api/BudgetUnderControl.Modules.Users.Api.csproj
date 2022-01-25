@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Shared\BudgetUnderControl.Shared.Abstractions\BudgetUnderControl.Shared.Abstractions.csproj" />
+    <ProjectReference Include="..\..\..\..\..\Shared\BudgetUnderControl.Shared.Application\BudgetUnderControl.Shared.Application.csproj" />
+    <ProjectReference Include="..\..\..\..\..\Shared\BudgetUnderControl.Shared.Infrastructure\BudgetUnderControl.Shared.Infrastructure.csproj" />
+    <ProjectReference Include="..\Application\BudgetUnderControl.Modules.Users.Application.csproj" />
+    <ProjectReference Include="..\Infrastructure\BudgetUnderControl.Modules.Users.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
