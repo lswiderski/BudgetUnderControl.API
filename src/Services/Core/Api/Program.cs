@@ -28,8 +28,7 @@ namespace BudgetUnderControl.API
                     .ConfigureWebHostDefaults(webHostBuilder =>
                     {
                         webHostBuilder
-                         .UseUrls("http://*:5000", "http://*:45455")
-                       .UseStartup<Startup>();
+                            .UseStartup<Startup>();
                     });
 
 
